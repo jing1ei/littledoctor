@@ -1,0 +1,413 @@
+# Adult record-review observations; not diagnostic criteria.
+version: 1
+rules:
+- id: prediabetes
+  system: metabolic
+  severity: act
+  title: Glucose result warrants confirmation
+  title_zh: 血糖结果需要复核
+  when:
+    all:
+    - any:
+      - m: hba1c
+        op: '>='
+        v: 5.7
+      - m: glucose_fasting
+        op: '>='
+        v: 5.6
+    - none:
+      - m: hba1c
+        op: '>='
+        v: 6.5
+      - m: glucose_fasting
+        op: '>='
+        v: 7.0
+  says: A recorded HbA1c or fasting glucose is above a commonly used screening threshold. This is not
+    a diagnosis. Diabetes-range values need separate assessment; anaemia, pregnancy, medications and sample
+    conditions can affect interpretation.
+  says_zh: 记录中的糖化血红蛋白或空腹血糖超过常用筛查阈值，并不等于确诊。达到糖尿病范围时需单独评估；贫血、妊娠、药物和采样条件可影响判断。
+  do:
+  - Review the dated result and relevant symptoms with a clinician before treatment changes.
+  do_zh:
+  - 先与医生核对结果日期和相关症状，再决定是否调整治疗。
+  next:
+  - test: hba1c
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+  - test: glucose_fasting
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+- id: hyperuricemia
+  system: metabolic
+  severity: watch
+  title: Urate outside the reference interval
+  title_zh: 尿酸超出参考范围
+  when:
+    m: uric_acid
+    status: out_of_range
+  says: Urate is influenced by kidney function, medicines, genetics, alcohol and diet. A raised value
+    alone does not diagnose gout or establish a need for urate-lowering treatment.
+  says_zh: 尿酸受肾功能、药物、遗传、饮酒及饮食影响。单次升高不能诊断痛风，也不能单独决定降尿酸治疗。
+  do:
+  - Discuss gout attacks, kidney stones and medicines; avoid starting supplements solely for this number.
+  do_zh:
+  - 讨论痛风发作、结石及用药情况，不要仅为此数值自行加用补充剂。
+  next: []
+- id: bmi_high
+  system: metabolic
+  severity: watch
+  title: Body-size measurements need context
+  title_zh: 体格测量需结合背景
+  when:
+    m: bmi
+    op: '>='
+    v: 25
+  says: BMI is a screening measure, not body composition or a judgment about health. Interpretation depends
+    on age, ethnicity, pregnancy, muscle mass, waist and weight history. This flag uses a general adult
+    threshold of 25; local thresholds may differ.
+  says_zh: BMI是筛查指标，不等于体成分，也不是健康评价。需结合年龄、族群、妊娠、肌肉量、腰围和体重变化；此提示采用一般成人25的阈值，当地标准可能不同。
+  do:
+  - If useful to you, agree on sustainable food and activity changes; avoid automatic calorie restriction
+    or a fixed protein target.
+  do_zh:
+  - 如对你有帮助，可共同制定可持续的饮食和活动调整；不要自动限制热量或套用固定蛋白质目标。
+  next: []
+- id: ldl_elevated
+  system: cardiovascular
+  severity: act
+  title: LDL result merits risk review
+  title_zh: LDL结果值得评估整体风险
+  when:
+    any:
+    - m: ldl_c
+      status: out_of_range
+    - m: ldl_c
+      op: '>='
+      v: 3.4
+  says: LDL contributes to cardiovascular risk, but the treatment target depends on overall risk and established
+    disease. This cutoff is a review prompt, not a universal target.
+  says_zh: LDL与心血管风险有关，但治疗目标取决于整体风险及已确诊疾病。此阈值仅提示复核，不是人人适用的治疗目标。
+  do:
+  - Discuss blood pressure, smoking, diabetes, family history and medicines; favour fibre-rich foods and
+    unsaturated fats as appropriate.
+  do_zh:
+  - 结合血压、吸烟、糖尿病、家族史及用药评估；按自身情况增加富含纤维食物及不饱和脂肪。
+  next: []
+- id: atherogenic_dyslipidemia
+  system: cardiovascular
+  severity: watch
+  title: Triglyceride and HDL pattern merits review
+  title_zh: 甘油三酯与HDL组合值得复核
+  when:
+    all:
+    - m: triglycerides
+      op: '>='
+      v: 1.7
+    - m: hdl_c
+      status: low
+  says: The combination can accompany metabolic risk but does not establish particle size, insulin resistance
+    or a diagnosis. Fasting status, alcohol, medicines and other causes matter.
+  says_zh: 此组合可伴随代谢风险，但不能确定脂蛋白颗粒大小、胰岛素抵抗或具体诊断。需考虑空腹状态、饮酒、药物及其他原因。
+  do:
+  - Review secondary causes and overall cardiovascular risk. Do not start high-dose fish oil from this
+    result alone.
+  do_zh:
+  - 复核继发原因及整体心血管风险，不要仅凭此结果自行使用大剂量鱼油。
+  next: []
+- id: lipids_optimal
+  system: cardiovascular
+  severity: info
+  title: Recorded lipids within the reference intervals
+  title_zh: 已记录血脂处于参考范围
+  when:
+    all:
+    - m: ldl_c
+      status: steady
+    - m: triglycerides
+      status: steady
+    - m: hdl_c
+      status: steady
+  says: These measurements do not rule out cardiovascular risk. Blood pressure, smoking, diabetes, family
+    history and prior disease still matter.
+  says_zh: 这些结果不能排除心血管风险；血压、吸烟、糖尿病、家族史及既往疾病仍然重要。
+  do:
+  - Review the dated result and relevant symptoms with a clinician before treatment changes.
+  do_zh:
+  - 先与医生核对结果日期和相关症状，再决定是否调整治疗。
+  next: []
+- id: bp_elevated
+  system: cardiovascular
+  severity: act
+  title: Blood-pressure reading needs confirmation
+  title_zh: 血压读数需确认
+  when:
+    any:
+    - m: bp_systolic
+      op: '>='
+      v: 130
+    - m: bp_diastolic
+      op: '>='
+      v: 85
+  says: One reading cannot diagnose hypertension. Measurement technique, setting and repeated home or
+    ambulatory readings matter; targets differ by guideline and clinical circumstances.
+  says_zh: 一次读数不能诊断高血压。测量方法、场景及重复家庭或动态血压很重要；目标随指南及临床情况而异。
+  do:
+  - Use a validated upper-arm cuff, rest before measuring, and review a series of readings with your clinician.
+  - Discuss salt intake and activity; potassium or fluid advice must account for kidney disease and medicines.
+  do_zh:
+  - 使用经验证的上臂式血压计，测量前休息，并与医生复核多次读数。
+  - 讨论盐摄入及活动；补钾或饮水建议必须结合肾病及药物。
+  next: []
+- id: crp_elevated
+  system: inflammation
+  severity: watch
+  title: CRP is a nonspecific finding
+  title_zh: CRP为非特异性结果
+  when:
+    m: hs_crp
+    status: out_of_range
+  says: CRP cannot identify the cause of inflammation or diagnose stress, poor sleep, obesity or autoimmune
+    disease. Interpret the result with symptoms and recent illness.
+  says_zh: CRP不能确定炎症原因，也不能诊断压力、睡眠问题、肥胖或自身免疫病，需结合症状及近期疾病。
+  do:
+  - Review the dated result and relevant symptoms with a clinician before treatment changes.
+  do_zh:
+  - 先与医生核对结果日期和相关症状，再决定是否调整治疗。
+  next: []
+- id: homocysteine_high
+  system: cardiovascular
+  severity: watch
+  title: Homocysteine outside the reference interval
+  title_zh: 同型半胱氨酸超出参考范围
+  when:
+    m: homocysteine
+    status: out_of_range
+  says: Potential contributors include vitamin status, kidney function, thyroid disease and medicines.
+    Lowering this number with vitamins does not by itself establish cardiovascular benefit.
+  says_zh: 可能与维生素状态、肾功能、甲状腺疾病及药物有关。用维生素降低该数值本身并不能证明能降低心血管风险。
+  do:
+  - Discuss the cause before supplementation; avoid high-dose B6 and exclude B12 deficiency before folate-only
+    treatment.
+  do_zh:
+  - 补充前先讨论原因；避免大剂量B6，单用叶酸前应排查B12缺乏。
+  next:
+  - test: b12
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+  - test: folate
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+- id: liver_enzymes_suboptimal
+  system: liver
+  severity: watch
+  title: Liver enzyme result merits review
+  title_zh: 肝酶结果值得复核
+  when:
+    any:
+    - m: alt
+      status: out_of_range
+    - m: ast
+      status: out_of_range
+    - m: ggt
+      status: out_of_range
+  says: Enzyme elevation has several causes and cannot confirm liver fat, fibrosis or medication injury.
+    Exercise, alcohol, medicines, infection and sample context may matter.
+  says_zh: 肝酶升高有多种原因，不能据此确认脂肪肝、纤维化或药物性肝损伤；运动、饮酒、药物、感染及采样背景都可能相关。
+  do:
+  - Review the dated result and relevant symptoms with a clinician before treatment changes.
+  do_zh:
+  - 先与医生核对结果日期和相关症状，再决定是否调整治疗。
+  next:
+  - test: alt
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+  - test: ast
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+- id: egfr_declining
+  system: kidney
+  severity: watch
+  title: Estimated kidney filtration has changed
+  title_zh: 估算肾小球滤过率有所变化
+  when:
+    all:
+    - m: egfr
+      trend: down
+      pct: 12
+      years: 8
+    - m: egfr
+      op: <
+      v: 100
+  says: eGFR is an estimate influenced by age, muscle mass, illness and creatinine measurement. Chronic
+    kidney disease requires persistent abnormality or other kidney-damage evidence, not a slope alone.
+  says_zh: eGFR受年龄、肌肉量、疾病及肌酐检测影响。慢性肾病需要持续异常或其他肾损伤证据，不能仅凭斜率诊断。
+  do:
+  - Review dated results, urine albumin when indicated and all medicines, including nonprescription pain
+    medicines. Do not stop prescribed treatment on this page alone.
+  do_zh:
+  - 复核各日期结果、适用时检测尿白蛋白，并审查包括非处方止痛药在内的用药；不要仅凭本页停用处方药。
+  next:
+  - test: urine_acr
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+  - test: creatinine
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+- id: iron_deficiency
+  system: hematology
+  severity: act
+  title: Possible iron deficiency or microcytic anaemia
+  title_zh: 可能缺铁或存在小细胞性贫血
+  when:
+    any:
+    - m: ferritin
+      op: <
+      v: 30
+    - all:
+      - m: hemoglobin
+        status: low
+      - m: mcv
+        status: low
+  says: Low ferritin supports depleted iron stores, but inflammation and the laboratory context affect
+    interpretation. Low haemoglobin with small red cells has other causes, including thalassaemia. The
+    cause of blood loss or low intake also needs assessment.
+  says_zh: 低铁蛋白支持铁储备不足，但需结合炎症和实验室背景。低血红蛋白伴小红细胞也可见于地中海贫血等情况，并需评估失血或摄入不足原因。
+  do:
+  - Discuss confirmation and the cause before iron treatment. Dose, formulation and follow-up should be
+    individualized.
+  do_zh:
+  - 补铁前讨论确认诊断及原因；剂量、剂型及复查应个体化。
+  next:
+  - test: ferritin
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+  - test: transferrin_sat
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+- id: b12_lowish
+  system: nutrition
+  severity: watch
+  title: B12 result merits review
+  title_zh: B12结果值得复核
+  when:
+    all:
+    - m: b12
+      op: <
+      v: 350
+  says: A low or borderline B12 result needs interpretation with symptoms, assay range, diet and medicines.
+    Neurological symptoms can occur without anaemia; confirmatory testing may be appropriate.
+  says_zh: B12偏低或临界时应结合症状、检测范围、饮食及药物判断。神经症状可不伴贫血，可能需要确认性检查。
+  do:
+  - Review the dated result and relevant symptoms with a clinician before treatment changes.
+  do_zh:
+  - 先与医生核对结果日期和相关症状，再决定是否调整治疗。
+  next:
+  - test: b12
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+- id: subclinical_hypothyroid
+  system: thyroid
+  severity: act
+  title: Raised TSH needs free T4 and clinical review
+  title_zh: TSH升高需结合FT4及临床复核
+  when:
+    all:
+    - m: tsh
+      op: '>'
+      v: 4.2
+  says: Raised TSH alone cannot distinguish subclinical from overt hypothyroidism. FT4, repeat results,
+    symptoms, pregnancy and medicines affect interpretation.
+  says_zh: 仅TSH升高无法区分亚临床与显性甲减；需结合FT4、复查、症状、妊娠及用药。
+  do:
+  - Review the dated result and relevant symptoms with a clinician before treatment changes.
+  do_zh:
+  - 先与医生核对结果日期和相关症状，再决定是否调整治疗。
+  next:
+  - test: ft4
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+  - test: tsh
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+- id: vitamin_d_low
+  system: bone
+  severity: watch
+  title: Low vitamin D result merits contextual review
+  title_zh: 维生素D偏低需结合背景复核
+  when:
+    m: vitamin_d
+    op: <
+    v: 20
+  says: A value below the stored reference interval should be reviewed with bone health, calcium, kidney
+    function and risk factors. A universal target above 30 ng/mL is not established for otherwise healthy
+    adults, and this result cannot explain mood or fatigue by itself.
+  says_zh: 低于内置参考范围时，应结合骨健康、钙、肾功能及风险因素判断。一般健康成人并无公认的统一30 ng/mL以上目标，也不能仅凭此结果解释情绪或疲劳。
+  do:
+  - Discuss whether treatment or repeat testing is indicated. Avoid automatic high-dose vitamin D, K2
+    or sun-exposure prescriptions.
+  do_zh:
+  - 讨论是否需要治疗或复查；避免自动使用大剂量维生素D、K2或固定日晒处方。
+  next: []
+- id: short_sleep
+  system: neuro_sleep
+  severity: watch
+  title: Recorded sleep duration is short
+  title_zh: 记录的睡眠时长偏短
+  when:
+    any:
+    - m: sleep_duration
+      op: <
+      v: 7
+  says: A short self-reported duration is a prompt to discuss sleep opportunity, daytime function, shift
+    work and symptoms. One entry does not establish habitual sleep deprivation or explain abnormal blood
+    tests.
+  says_zh: 自报睡眠时长偏短时，可讨论睡眠机会、日间功能、轮班及症状。一次记录不能确定长期睡眠不足，也不能据此解释化验异常。
+  do:
+  - Aim for a sustainable sleep schedule. Persistent insomnia merits assessment; CBT-I is a first-line
+    option, and a sleep study is not automatic.
+  do_zh:
+  - 尝试可持续的作息安排。持续失眠值得评估，失眠认知行为治疗是首选方案之一，并非自动需要睡眠监测。
+  next: []
+- id: sleep_apnea_suspicion
+  system: neuro_sleep
+  severity: watch
+  title: Sleep symptoms merit a breathing assessment
+  title_zh: 睡眠症状值得评估呼吸问题
+  when:
+    any:
+    - flag: witnessed_apneas
+    - all:
+      - flag: snoring
+      - flag: daytime_sleepiness
+  says: Snoring, witnessed pauses and daytime sleepiness can warrant assessment. BMI, blood pressure or
+    a sleep-quality score alone cannot diagnose obstructive sleep apnoea.
+  says_zh: 打鼾、目击呼吸暂停及日间嗜睡可提示需要评估；BMI、血压或睡眠评分本身不能诊断阻塞性睡眠呼吸暂停。
+  do:
+  - Review the dated result and relevant symptoms with a clinician before treatment changes.
+  do_zh:
+  - 先与医生核对结果日期和相关症状，再决定是否调整治疗。
+  next:
+  - test: sleep_study
+    why: Discuss whether this test would change care; timing depends on symptoms and prior results.
+    why_zh: 与医生讨论此检查是否会改变处理方案；时机取决于症状及既往结果。
+- id: diabetes_range
+  system: metabolic
+  severity: act
+  title: Glucose result in a diabetes diagnostic range
+  title_zh: 血糖结果达到糖尿病诊断范围
+  when:
+    any:
+    - m: hba1c
+      op: '>='
+      v: 6.5
+    - m: glucose_fasting
+      op: '>='
+      v: 7.0
+  says: Arrange clinical review and confirmation. This result alone does not establish diabetes type or
+    a confirmed diagnosis; symptoms and repeat testing matter.
+  says_zh: 请安排临床复核及确认。这一结果本身不能确定糖尿病类型或确诊；需结合症状及复查。
+  do:
+  - Review the dated result and relevant symptoms with a clinician before treatment changes.
+  do_zh:
+  - 先与医生核对结果日期和相关症状，再决定是否调整治疗。
+  next: []

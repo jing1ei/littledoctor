@@ -1,0 +1,65 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Who this record is about.
+#
+# Everything here is optional, but two fields do real work:
+#   sex          selects the correct reference ranges (haemoglobin, ferritin, …)
+#   birth_date   selects the right screening schedule (or use `age:` if you
+#                would rather not write a birth date)
+# Leave one out and the page will say so instead of guessing.
+#
+# Copy this file to profile.yaml before editing:
+#   cp data/profile.example.yaml data/profile.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Demo Record
+sex: female            # female | male
+birth_date: 1992-03-14
+# age: 34              # use this instead if you prefer not to give a birth date
+
+# set to false once you point this at your own reports
+demo: true
+
+# ── what you already live with ───────────────────────────────────────────────
+# Anything listed here is treated as KNOWN AND UNDER CARE: the record files it
+# under the right body system, says so at the top of that system, and marks the
+# system "known · under care" instead of raising it as a fresh alarm every time
+# the page is opened. Numbers, dates and findings are all still shown — only the
+# alarm colour calms down. Something urgent is never quietened.
+#
+# The simplest form is a plain line; a trailing year becomes "since".
+conditions: []
+# conditions:
+#   - hypertension since 2011
+#   - type 2 diabetes (2016)
+#   - 甲状腺结节 2019
+#   # the long form, when you want to be exact:
+#   - name: chronic kidney disease, stage 3
+#     system: kidney          # only needed if the short name is not recognised
+#     since: 2019
+#     managed: true           # false = diagnosed but nobody is following it
+#     note: nephrology every 6 months
+
+medications: []         # e.g. [amlodipine 5 mg, metformin 500 mg twice daily]
+
+family_history:         # drives a few screening entries
+  - type 2 diabetes (father)
+  - hypertension (mother)
+
+# ── booleans used by the screening schedule ─────────────────────────────────
+flags:
+  smoker: false
+  heavy_secondhand_smoke: false
+  snoring: true
+  daytime_sleepiness: true
+  planning_pregnancy: false
+  vegetarian: false
+  high_alcohol: false
+
+notes: >
+  Replace this file with your own details, drop your reports into reports/ and
+  run `python3 littledocter.py run`. Nothing leaves this folder.
+
+# Screening is off until a clinician-reviewed regional schedule is selected.
+# The bundled reference is US-specific, not a universal screening checklist.
+# screening_guideline: USPSTF
+# Some tests also require explicit eligibility/selection flags; see docs/CLINICAL_SCOPE.md.

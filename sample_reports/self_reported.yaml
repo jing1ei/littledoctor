@@ -1,0 +1,32 @@
+# Anything a lab report will never contain: home measurements, self-report,
+# and results you were told verbally. Same shape for your own use.
+#
+#   entries:
+#     - date: 2026-07-02
+#       note: optional context (cycle day, illness, new medication…)
+#       measurements: {marker or Chinese name: value, other: {value: x, unit: mmHg}}
+#       exams: {exam name: "the impression, as you were told"}
+
+entries:
+  - date: 2026-07-05
+    note: 7-day home morning average, seated, two readings each
+    measurements:
+      收缩压: 126
+      舒张压: 82
+      静息心率: 78
+      体重: 64.8
+      腰围: 83.0
+      睡眠时长: 6.2
+      睡眠质量: 5.0
+      压力自评: 7.0
+      月经规律性: 规律
+
+  - date: 2024-11-22
+    note: dental visit — no imaging, cleaning only
+    exams:
+      口腔检查: 牙龈轻度炎症，已洁牙，无龋齿
+
+  - date: 2022-09-10
+    note: verbal result from gynaecology visit
+    exams:
+      宫颈细胞学TCT: 未见上皮内病变（NILM）

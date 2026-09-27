@@ -1,0 +1,505 @@
+# Reference schedule, active only with screening_guideline: USPSTF.
+version: 1
+schedule:
+- id: s_cbc
+  target: hemoglobin
+  label: Complete blood count
+  label_zh: 血常规
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 18
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_hemoglobin
+- id: s_lipids
+  target: ldl_c
+  label: Full lipid panel
+  label_zh: 血脂全套
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 20
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_ldl_c
+- id: s_glucose
+  target: hba1c
+  label: HbA1c + fasting glucose
+  label_zh: HbA1c+空腹血糖
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 20
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_hba1c
+- id: s_liver
+  target: alt
+  label: Liver panel (ALT/AST/GGT)
+  label_zh: 肝功能（ALT/AST/GGT）
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 18
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_alt
+- id: s_kidney
+  target: creatinine
+  label: Kidney panel (creatinine/eGFR)
+  label_zh: 肾功能（肌酐/eGFR）
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 18
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_creatinine
+- id: s_acr
+  target: urine_acr
+  label: Urine albumin/creatinine ratio
+  label_zh: 尿白蛋白/肌酐比
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 25
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_urine_acr
+- id: s_tsh
+  target: tsh
+  label: TSH (+ FT4)
+  label_zh: TSH（+FT4）
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 20
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_tsh
+- id: s_ferritin
+  target: ferritin
+  label: Ferritin
+  label_zh: 铁蛋白
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 18
+    sex: female
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_ferritin
+- id: s_vitd
+  target: vitamin_d
+  label: Vitamin D (25-OH)
+  label_zh: 维生素D（25-OH）
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 18
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_vitamin_d
+- id: s_hscrp
+  target: hs_crp
+  label: hs-CRP
+  label_zh: hs-CRP
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 25
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_hs_crp
+- id: s_uric
+  target: uric_acid
+  label: Uric acid
+  label_zh: 尿酸
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 20
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_uric_acid
+- id: s_bp
+  target: bp_systolic
+  label: Blood pressure (home series)
+  label_zh: 血压（家庭连续测量）
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 18
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+- id: s_lpa
+  target: lp_a
+  label: Lipoprotein(a) — once, ever
+  label_zh: 脂蛋白(a)——终身一次
+  cadence_months: 600
+  priority: recommended
+  applies:
+    age_min: 20
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_lp_a
+- id: s_apob
+  target: apo_b
+  label: ApoB
+  label_zh: ApoB
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 25
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_apo_b
+- id: s_hbv
+  target: hbsag
+  label: Hepatitis B surface antigen + antibody
+  label_zh: 乙肝表面抗原+抗体
+  cadence_months: 600
+  priority: recommended
+  applies:
+    age_min: 18
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_hbsag
+- id: s_hcv
+  target: anti_hcv
+  label: Hepatitis C antibody
+  label_zh: 丙肝抗体
+  cadence_months: 600
+  priority: recommended
+  applies:
+    age_min: 18
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_anti_hcv
+- id: s_hpylori
+  target: h_pylori
+  label: H. pylori breath test
+  label_zh: 幽门螺杆菌呼气试验
+  cadence_months: 60
+  priority: recommended
+  applies:
+    age_min: 20
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_h_pylori
+- id: s_tpo
+  target: tpo_ab
+  label: TPO antibodies — once
+  label_zh: TPO抗体——一次
+  cadence_months: 600
+  priority: recommended
+  applies:
+    age_min: 20
+    sex: female
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_tpo_ab
+- id: s_abdo_us
+  target: abdominal_ultrasound
+  label: Abdominal ultrasound
+  label_zh: 腹部超声
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 25
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_abdominal_ultrasound
+- id: s_thyroid_us
+  target: thyroid_ultrasound
+  label: Thyroid ultrasound
+  label_zh: 甲状腺超声
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 25
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_thyroid_ultrasound
+- id: s_ecg
+  target: ecg
+  label: Resting ECG
+  label_zh: 静息心电图
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 30
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_ecg
+- id: s_dental
+  target: dental_exam
+  label: Dental exam & cleaning
+  label_zh: 口腔检查与洁牙
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 18
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_dental_exam
+- id: s_eye
+  target: dilated_eye_exam
+  label: Dilated fundus examination
+  label_zh: 散瞳眼底检查
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 30
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_dilated_eye_exam
+- id: s_cervical
+  target: cervical_cytology
+  label: Cervical cytology (one screening option)
+  label_zh: 宫颈细胞学（筛查选项之一）
+  cadence_months: 36
+  priority: recommended
+  applies:
+    age_min: 21
+    age_max: 65
+    sex: female
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  alternative_group: cervical
+  requires_flag: cervical_cytology_selected
+- id: s_breast_us
+  target: breast_ultrasound
+  label: Breast ultrasound
+  label_zh: 乳腺超声
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 30
+    sex: female
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_breast_ultrasound
+- id: s_mammo
+  target: mammography
+  label: Mammography
+  label_zh: 乳腺钼靶
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 40
+    age_max: 74
+    sex: female
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+- id: s_pelvic_us
+  target: pelvic_ultrasound
+  label: Pelvic ultrasound
+  label_zh: 盆腔超声
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 25
+    sex: female
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_pelvic_ultrasound
+- id: s_gastro
+  target: gastroscopy
+  label: Gastroscopy — baseline
+  label_zh: 胃镜——基线
+  cadence_months: 60
+  priority: recommended
+  applies:
+    age_min: 40
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_gastroscopy
+- id: s_colon
+  target: colonoscopy
+  label: Colonoscopy — baseline
+  label_zh: 肠镜——基线
+  cadence_months: 120
+  priority: recommended
+  applies:
+    age_min: 45
+    age_max: 75
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  alternative_group: colorectal
+  requires_flag: colorectal_colonoscopy_selected
+- id: s_fob
+  target: fecal_occult_blood
+  label: Faecal occult blood
+  label_zh: 大便隐血
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 45
+    age_max: 75
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  alternative_group: colorectal
+  requires_flag: colorectal_stool_selected
+- id: s_dxa
+  target: dxa_scan
+  label: DXA bone density — baseline
+  label_zh: DXA骨密度——基线
+  cadence_months: 60
+  priority: recommended
+  applies:
+    age_min: 65
+    sex: female
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+- id: s_dxa_m
+  target: dxa_scan
+  label: DXA bone density — baseline
+  label_zh: DXA骨密度——基线
+  cadence_months: 60
+  priority: recommended
+  applies:
+    age_min: 70
+    sex: male
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_dxa_scan
+- id: s_ldct
+  target: low_dose_ct
+  label: Low-dose chest CT
+  label_zh: 低剂量胸部CT
+  cadence_months: 12
+  priority: recommended
+  applies:
+    age_min: 50
+    age_max: 80
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: ldct_eligibility_confirmed
+- id: s_psa
+  target: psa
+  label: PSA
+  label_zh: PSA
+  cadence_months: 24
+  priority: recommended
+  applies:
+    age_min: 55
+    age_max: 69
+    sex: male
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: psa_shared_decision
+- id: s_sleep
+  target: sleep_study
+  label: Sleep apnoea screening
+  label_zh: 睡眠呼吸暂停筛查
+  cadence_months: 60
+  priority: recommended
+  applies:
+    age_min: 30
+    if_flags:
+    - snoring
+    - daytime_sleepiness
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_sleep_study
+- id: s_carotid
+  target: carotid_ultrasound
+  label: Carotid ultrasound
+  label_zh: 颈动脉超声
+  cadence_months: 36
+  priority: recommended
+  applies:
+    age_min: 40
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  requires_flag: clinician_requested_carotid_ultrasound
+- id: s_cervical_hpv
+  target: hpv_test
+  label: High-risk HPV (one screening option)
+  label_zh: 高危HPV（筛查选项之一）
+  cadence_months: 60
+  priority: recommended
+  applies:
+    age_min: 30
+    age_max: 65
+    sex: female
+  why: Discuss eligibility, benefits, harms and an individual interval with a clinician; missing data
+    alone is not an indication.
+  why_zh: 与医生讨论适用条件、获益、风险及个体化间隔；缺少数据本身不构成检查适应证。
+  guideline: USPSTF
+  alternative_group: cervical
+  requires_flag: cervical_hpv_selected

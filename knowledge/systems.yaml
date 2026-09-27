@@ -1,0 +1,413 @@
+version: 1
+systems:
+- id: metabolic
+  name: Metabolic & Glycemic
+  name_zh: 代谢与血糖
+  order: 1
+  essence: How your body handles fuel — sugar, insulin, weight, purines.
+  essence_zh: 身体如何处理燃料——糖、胰岛素、体重、嘌呤。
+  core:
+  - glucose_fasting
+  - hba1c
+  - bmi
+  extended:
+  - insulin_fasting
+  - homa_ir
+  - uric_acid
+  - waist
+  - weight
+  - height
+  - glucose_2h
+  - c_peptide
+  exams: []
+  maintenance:
+  - Build meals around a varied mix of vegetables, fruit, whole grains and pulses; include suitable protein
+    foods and favour unsaturated fats. Adapt choices for allergies, kidney disease, swallowing problems
+    and access to food.
+  - Discuss appetite, unintended weight change, food insecurity and supplement use. A laboratory result
+    alone does not determine a restrictive diet or supplement dose.
+  maintenance_zh:
+  - 餐食可包括多样的蔬菜、水果、全谷物及豆类，搭配合适的蛋白质来源，优先不饱和脂肪；需按过敏、肾病、吞咽问题及食物可及性调整。
+  - 讨论食欲、非主动体重变化、食物保障及补充剂使用；单项化验不能决定限制性饮食或补充剂剂量。
+- id: cardiovascular
+  name: Cardiovascular & Lipids
+  name_zh: 心血管与血脂
+  order: 2
+  essence: Heart and blood-vessel measurements, interpreted with overall cardiovascular risk.
+  essence_zh: 心脏与血管相关测量，需结合整体心血管风险。
+  core:
+  - ldl_c
+  - hdl_c
+  - triglycerides
+  - total_cholesterol
+  - bp_systolic
+  - bp_diastolic
+  extended:
+  - apo_b
+  - apo_a1
+  - lp_a
+  - non_hdl_c
+  - hs_crp
+  - homocysteine
+  - tc_hdl_ratio
+  - tg_hdl_ratio
+  - resting_hr
+  exams:
+  - ecg
+  - carotid_ultrasound
+  - echocardiogram
+  - coronary_cta
+  maintenance:
+  - Build meals around a varied mix of vegetables, fruit, whole grains and pulses; include suitable protein
+    foods and favour unsaturated fats. Adapt choices for allergies, kidney disease, swallowing problems
+    and access to food.
+  - Discuss appetite, unintended weight change, food insecurity and supplement use. A laboratory result
+    alone does not determine a restrictive diet or supplement dose.
+  maintenance_zh:
+  - 餐食可包括多样的蔬菜、水果、全谷物及豆类，搭配合适的蛋白质来源，优先不饱和脂肪；需按过敏、肾病、吞咽问题及食物可及性调整。
+  - 讨论食欲、非主动体重变化、食物保障及补充剂使用；单项化验不能决定限制性饮食或补充剂剂量。
+- id: liver
+  name: Liver & Biliary
+  name_zh: 肝脏与胆道
+  order: 3
+  essence: The metabolic clearing house; quietly reflects diet, alcohol, medication and visceral fat.
+  essence_zh: 代谢的清算中心；安静地反映饮食、酒精、用药和内脏脂肪。
+  core:
+  - alt
+  - ast
+  - ggt
+  extended:
+  - alp
+  - bilirubin_total
+  - albumin
+  - total_protein
+  - platelets
+  - fib4
+  - ast_alt_ratio
+  - hbsag
+  - hbsab
+  - anti_hcv
+  exams:
+  - abdominal_ultrasound
+  - liver_elastography
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。
+- id: kidney
+  name: Kidney & Urinary
+  name_zh: 肾脏与泌尿
+  order: 4
+  essence: Filtration reserve. Decline is silent and mostly detected by two cheap tests.
+  essence_zh: 滤过储备。下降是无声的，主要靠两项便宜的检查发现。
+  core:
+  - creatinine
+  - egfr
+  - urine_protein
+  extended:
+  - urea
+  - uric_acid
+  - cystatin_c
+  - urine_acr
+  - urine_blood
+  - potassium
+  - sodium
+  exams:
+  - urinary_ultrasound
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。
+- id: hematology
+  name: Blood & Iron
+  name_zh: 血液与铁代谢
+  order: 5
+  essence: Oxygen delivery and marrow health — the most common cause of unexplained fatigue in women.
+  essence_zh: 氧的输送与骨髓状态——女性不明原因疲劳最常见的原因。
+  core:
+  - hemoglobin
+  - mcv
+  - platelets
+  - wbc
+  extended:
+  - ferritin
+  - serum_iron
+  - transferrin_sat
+  - rbc
+  - hematocrit
+  - mch
+  - rdw
+  - neutrophils
+  - lymphocytes
+  - b12
+  - folate
+  exams: []
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。
+- id: thyroid
+  name: Thyroid & Endocrine
+  name_zh: 甲状腺与内分泌
+  order: 6
+  essence: The metabolic thermostat; small deviations produce large subjective effects.
+  essence_zh: 代谢的恒温器；小幅偏离就能带来明显的主观感受变化。
+  core:
+  - tsh
+  extended:
+  - ft4
+  - ft3
+  - tpo_ab
+  - tg_ab
+  - prolactin
+  - cortisol_am
+  exams:
+  - thyroid_ultrasound
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。
+- id: hormonal
+  name: Reproductive & Hormonal
+  name_zh: 生殖与性激素
+  order: 7
+  essence: Cycle, fertility window and the bone/heart protection that oestrogen provides.
+  essence_zh: 周期、生育窗口，以及雌激素给骨骼和心脏的那份保护。
+  core:
+  - cycle_regularity
+  extended:
+  - estradiol
+  - fsh
+  - lh
+  - amh
+  - progesterone
+  - testosterone_total
+  - shbg
+  - dheas
+  - prolactin
+  exams:
+  - pelvic_ultrasound
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。
+- id: bone
+  name: Bone & Mineral
+  name_zh: 骨骼与矿物质
+  order: 8
+  essence: Bone and mineral health depend on age, hormones, nutrition, movement and clinical history.
+  essence_zh: 骨与矿物质健康受年龄、激素、营养、活动及病史共同影响。
+  core:
+  - vitamin_d
+  - calcium
+  extended:
+  - phosphorus
+  - alp
+  - magnesium
+  - pth
+  - bmd_tscore
+  exams:
+  - dxa_scan
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。
+- id: nutrition
+  name: Nutrition & Micronutrients
+  name_zh: 营养与微量元素
+  order: 9
+  essence: The inputs layer — deficiencies here masquerade as mood, energy and cognition problems.
+  essence_zh: 输入层——这里的缺乏常伪装成情绪、精力和认知问题。
+  core:
+  - vitamin_d
+  - b12
+  - ferritin
+  extended:
+  - folate
+  - homocysteine
+  - magnesium
+  - zinc
+  - albumin
+  - prealbumin
+  exams: []
+  maintenance:
+  - Build meals around a varied mix of vegetables, fruit, whole grains and pulses; include suitable protein
+    foods and favour unsaturated fats. Adapt choices for allergies, kidney disease, swallowing problems
+    and access to food.
+  - Discuss appetite, unintended weight change, food insecurity and supplement use. A laboratory result
+    alone does not determine a restrictive diet or supplement dose.
+  maintenance_zh:
+  - 餐食可包括多样的蔬菜、水果、全谷物及豆类，搭配合适的蛋白质来源，优先不饱和脂肪；需按过敏、肾病、吞咽问题及食物可及性调整。
+  - 讨论食欲、非主动体重变化、食物保障及补充剂使用；单项化验不能决定限制性饮食或补充剂剂量。
+- id: inflammation
+  name: Inflammation & Immunity
+  name_zh: 炎症与免疫
+  order: 10
+  essence: Background fire. Chronically raised markers precede metabolic and vascular disease by years.
+  essence_zh: 背景里的火。指标长期升高，会比代谢病和血管病早出现数年。
+  core:
+  - hs_crp
+  extended:
+  - esr
+  - wbc
+  - neutrophil_lymphocyte_ratio
+  - ige
+  - ana
+  - rf
+  - complement_c3
+  exams: []
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。
+- id: gastrointestinal
+  name: Digestive & Gut
+  name_zh: 消化与胃肠
+  order: 11
+  essence: Where symptoms are loud but evidence is usually missing; two one-off tests settle most of it.
+  essence_zh: 症状很响、证据通常缺席的地方；两项一次性检查能解决大半。
+  core:
+  - h_pylori
+  extended:
+  - fecal_occult_blood
+  - amylase
+  - lipase
+  - calprotectin
+  exams:
+  - gastroscopy
+  - colonoscopy
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。
+- id: respiratory
+  name: Respiratory
+  name_zh: 呼吸系统
+  order: 12
+  essence: Usually fine and usually unmeasured; one baseline gives you something to compare against later.
+  essence_zh: 通常没事，也通常没测；一次基线，日后才有对照。
+  core: []
+  extended:
+  - spo2
+  - fev1_fvc
+  exams:
+  - chest_xray
+  - low_dose_ct
+  - spirometry
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。
+- id: neuro_sleep
+  name: Sleep, Mood & Nervous System
+  name_zh: 睡眠、情绪与神经
+  order: 13
+  essence: The upstream regulator of nearly every other system, and the least often measured.
+  essence_zh: 几乎所有其他系统的上游调节者，也是最少被测量的一个。
+  core:
+  - sleep_duration
+  - sleep_quality
+  extended:
+  - resting_hr
+  - hrv
+  - stress_score
+  - phq9
+  - gad7
+  exams:
+  - sleep_study
+  maintenance:
+  - Discuss how sleep, mood and anxiety affect daily function, how long changes have lasted, and available
+    support. Questionnaire totals and wearable readings do not replace a conversation or establish a diagnosis.
+  - Persistent insomnia can be assessed for CBT-I. If there are thoughts of self-harm or immediate danger,
+    seek urgent local help; a total score cannot establish safety.
+  maintenance_zh:
+  - 讨论睡眠、情绪及焦虑如何影响日常功能、变化持续多久，以及可获得的支持；问卷总分及穿戴设备读数不能替代交流或确诊。
+  - 持续失眠可评估是否适合失眠认知行为治疗。如有自伤想法或紧迫危险，应及时寻求当地紧急帮助；总分不能判断安全。
+- id: senses_dental
+  name: Eyes, Ears & Teeth
+  name_zh: 眼、耳与口腔
+  order: 14
+  essence: High-impact, low-cost surveillance that people postpone for a decade at a time.
+  essence_zh: 收益高、成本低的监测，人们却动辄一推十年。
+  core: []
+  extended:
+  - intraocular_pressure
+  - visual_acuity
+  exams:
+  - dilated_eye_exam
+  - dental_exam
+  - hearing_test
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。
+- id: cancer_screening
+  name: Cancer Screening
+  name_zh: 肿瘤筛查
+  order: 15
+  essence: Not a body part but a schedule; the value is entirely in doing it on time.
+  essence_zh: 它不是某个器官，而是一张时间表；价值全在按时完成。
+  core: []
+  extended:
+  - afp
+  - cea
+  - ca125
+  - ca153
+  - ca199
+  - psa
+  exams:
+  - hpv_test
+  - cervical_cytology
+  - breast_ultrasound
+  - mammography
+  - gastroscopy
+  - colonoscopy
+  - low_dose_ct
+  maintenance:
+  - Use this record to prepare questions and agree on priorities with your clinician. Unrecorded tests
+    are not automatically needed.
+  - Choose sustainable food, movement and sleep habits that fit your health, resources and preferences;
+    treatment and supplement decisions need individual review.
+  maintenance_zh:
+  - 用这份记录整理问题，并与医生共同确定优先事项。未记录的检查并非都需要补做。
+  - 选择适合自身健康、资源及偏好的可持续饮食、活动和睡眠习惯；治疗与补充剂应个体化评估。

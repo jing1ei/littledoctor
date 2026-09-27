@@ -1,0 +1,145 @@
+# Report shapes the parser must survive. Each case is a raw line (or block) as it
+# arrives from a PDF export, a photographed lab slip, an OCR pass or a hospital
+# portal copy-paste. Run:  python3 littledocter.py selftest
+#
+# rows:  expected [name, value] pairs (subset match — extra rows are allowed)
+# none:  the line must yield no rows at all
+# date:  expected report date
+# impression: expected classification of a conclusion sentence
+
+rows:
+  - line: "ALT (谷丙转氨酶)	52	U/L	9-50	H"
+    expect: [["ALT (谷丙转氨酶)", "52"]]
+  - line: "谷丙转氨酶 ALT   52   U/L   9 - 50   ↑"
+    expect: [["谷丙转氨酶 ALT", "52"]]
+  - line: "TSH: 4.9 mIU/L (0.55-4.78)"
+    expect: [["TSH", "4.9"]]
+  - line: "低密度脂蛋白胆固醇：3.86mmol/L"
+    expect: [["低密度脂蛋白胆固醇", "3.86"]]
+  - line: "血压 126/82 mmHg"
+    expect: [["血压", "126/82"]]
+  - line: "Blood pressure 138/88 mmHg"
+    expect: [["Blood pressure", "138/88"]]
+  - line: "铁蛋白 18 ng/mL 参考值 13-150"
+    expect: [["铁蛋白", "18"]]
+  - line: "Ferritin | 18 | ng/mL | 13 - 150 | L"
+    expect: [["Ferritin", "18"]]
+  - line: "25-OH-VitD  17.4  ng/mL  30-100  ↓↓"
+    expect: [["25-OH-VitD", "17.4"]]
+  - line: "1. 空腹血糖 5.9 mmol/L"
+    expect: [["空腹血糖", "5.9"]]
+  - line: "HBsAg 阴性"
+    expect: [["HBsAg", "阴性"]]
+  - line: "幽门螺旋杆菌抗体  阳性(+)"
+    expect: [["幽门螺旋杆菌抗体", "阳性"]]
+  - line: "身高 168cm  体重 71.4kg"
+    expect: [["身高", "168"], ["体重", "71.4"]]
+  - line: "eGFR 96 mL/min/1.73m2"
+    expect: [["eGFR", "96"]]
+  - line: "Hemoglobin      11.9    g/dL    12.0-15.5   L"
+    expect: [["Hemoglobin", "11.9"]]
+  - line: "尿酸(UA) 428 umol/L 155-357 高"
+    expect: [["尿酸(UA)", "428"]]
+  - line: "甘油三酯 2,18 mmol/L"
+    expect: [["甘油三酯", "2,18"]]
+  - line: "TG   1,850   mg/dL"
+    expect: [["TG", "1,850"]]
+  - line: "hs-CRP <0.5 mg/L"
+    expect: [["hs-CRP", "<0.5"]]
+  - line: "腰围: 96 cm; 臀围: 101 cm"
+    expect: [["腰围", "96"], ["臀围", "101"]]
+  - line: "白细胞计数 WBC 6.2 10^9/L 3.5-9.5"
+    expect: [["白细胞计数 WBC", "6.2"]]
+  - line: "HbA1c 5.9 %"
+    expect: [["HbA1c", "5.9"]]
+  - line: "sleep_hours 6.2"
+    expect: [["sleep_hours", "6.2"]]
+
+none:
+  - "检验科 报告医师: 张三  审核医师: 李四"
+  - "第 2 页 / 共 3 页"
+  - "===================="
+  - "【生化检验】"
+  - "本报告仅供临床参考"
+  - "条形码: 8823119004"
+
+dates:
+  - text: "报告日期: 2025-05-09"
+    expect: "2025-05-09"
+  - text: "体检日期：2023年4月18日"
+    expect: "2023-04-18"
+  - text: "采样时间 2026/06/18 08:12"
+    expect: "2026-06-18"
+  - text: "Collected: 2021-05-20 09:30"
+    expect: "2021-05-20"
+  - text: "2019年6月"
+    expect: "2019-06-01"
+  - text: "Date: 08/22/2024"
+    expect: "2024-08-22"
+  - text: "Collected 13/05/2024"
+    expect: "2024-05-13"
+  - text: "采样时间 24-08-22 09:12"
+    expect: "2024-08-22"
+  - text: "Study date: 22 Aug 2024"
+    expect: "2024-08-22"
+  - text: "Collected Aug 22, 2024"
+    expect: "2024-08-22"
+  - text: "20240822_lab_slip"
+    expect: "2024-08-22"
+  - text: "报告日期：2024年8月22日  姓名 示例  出生日期 1961-03-02"
+    expect: "2024-08-22"
+  - text: "钾 4.22 mmol/L 3.5-5.3"          # a lab row is not a date
+    expect: null
+  - text: "血压 120/78 mmHg 90-140"
+    expect: null
+
+impressions:
+  - text: "轻度脂肪肝"
+    expect: abnormal
+  - text: "肝胆胰脾双肾未见明显异常"
+    expect: normal
+  - text: "甲状腺右侧叶结节 TI-RADS 3类"
+    expect: abnormal
+  - text: "甲状腺双侧叶回声均匀，TI-RADS 1类"
+    expect: normal
+  - text: "No focal hepatic lesion identified."
+    expect: normal
+  - text: "Small right lower lobe pulmonary nodule, 4 mm."
+    expect: abnormal
+  - text: "颈动脉内膜稍增厚"
+    expect: abnormal
+  - text: "窦性心律，正常心电图"
+    expect: normal
+  - text: "Unremarkable study."
+    expect: normal
+  - text: "未见占位性病变"
+    expect: normal
+
+modality:
+  - text: "甲状腺及颈部淋巴结彩色多普勒超声检查"
+    expect: ultrasound
+  - text: "胸部低剂量CT扫描"
+    expect: ct
+  - text: "Chest X-ray, PA view"
+    expect: xray
+  - text: "胃镜检查报告"
+    expect: endoscopy
+  - text: "十二导联心电图"
+    expect: ecg
+  - text: "骨密度检测 DXA"
+    expect: dexa
+  - text: "乳腺钼靶"
+    expect: mammography
+  - text: "宫颈液基细胞学 TCT"
+    expect: pathology
+
+conclusions:
+  - text: |
+      超声所见：肝脏形态饱满，回声增强。
+      结论：轻度脂肪肝；胆囊壁光滑。
+    expect_contains: ["轻度脂肪肝"]
+  - text: |
+      IMPRESSION:
+      1. Mild hepatic steatosis.
+      2. No focal lesion.
+    expect_contains: ["Mild hepatic steatosis."]

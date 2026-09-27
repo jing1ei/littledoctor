@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>__TITLE__</title>
+<style>
+/* ─────────────────────────────────────────────────────────────────────────
+   littledocter — the body view.
+   The body on the left, the report on the right. Point at an organ and the
+   report becomes that organ's report; click to hold it there.
+   Colour only where something is actually wrong — and a calmer colour still
+   for what is already known and already being treated.
+   ───────────────────────────────────────────────────────────────────────── */
+:root{
+  --paper:#F4F1EB;   --paper-2:#EDE8E0;   --card:#FAF8F4;
+  --ink:#17150F;     --ink-2:#453F34;     --ink-3:#625C50;   --ink-4:#71695C;
+  --hair:rgba(23,21,15,.12); --hair-2:rgba(23,21,15,.06);
+  --gold:#8E6E3E;
+  /* Muted on purpose. A page about your own body should not use the colours of
+     a fire alarm; these still read clearly as green / amber / red, at about
+     two thirds of the saturation. --managed is the quiet blue-grey of a file
+     already opened by a doctor. */
+  --steady:#5E7059;  --watch:#977434;     --attention:#8C4634;  --unknown:#A29B8E;
+  --managed:#5A6B78;
+  --serif:"Cormorant Garamond",Cormorant,Georgia,"Songti SC","Noto Serif SC",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Helvetica Neue","PingFang SC",sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --pad:clamp(18px,3.2vw,52px);
+}
+/* Reading comfort, remembered between visits. The zoom is applied inside the
+   surfaces that scroll — the report, the sheets, the legend and the footer —
+   because zooming the whole page would push this one-screen layout past the
+   bottom of the window and hide the very words it just enlarged. */
+html[data-text="l"] #report,html[data-text="l"] #sheet-body,
+html[data-text="l"] .sheet header h2,html[data-text="l"] .legend,
+html[data-text="l"] .p-foot{zoom:1.15}
+html[data-text="xl"] #report,html[data-text="xl"] #sheet-body,
+html[data-text="xl"] .sheet header h2,html[data-text="xl"] .legend,
+html[data-text="xl"] .p-foot{zoom:1.32}
+*{box-sizing:border-box}
+html,body{height:100%}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-weight:300; font-size:14px; line-height:1.6;
+  letter-spacing:.004em; overflow:hidden;
+}
+body::before{ /* grain, barely there */
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:60; opacity:.03;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
+}
+body::after{ /* warm light from above */
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:59;
+  background:radial-gradient(120% 62% at 50% -12%,rgba(255,252,245,.9),rgba(255,252,245,0) 62%);
+}
+::selection{background:rgba(154,122,74,.18)}
+h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;letter-spacing:-.014em}
+.label{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-4);font-weight:400}
+.num{font-variant-numeric:lining-nums tabular-nums}
+a{color:inherit;text-decoration:none}
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:2px}
+button,a{-webkit-tap-highlight-color:rgba(142,110,62,.12)}
+
+/* ── frame ────────────────────────────────────────────────────────────── */
+.frame{height:100dvh;display:flex;flex-direction:column;padding:0 var(--pad) var(--footh,76px);position:relative;z-index:2}
+
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;
+  padding:clamp(20px,3.4vh,34px) 0 clamp(12px,2vh,20px);border-bottom:1px solid var(--hair-2)}
+header.top .who h1{font-size:clamp(21px,2.5vw,30px);line-height:1;margin-top:9px}
+header.top .who .meta{margin-top:9px;color:var(--ink-4);font-size:10.5px;letter-spacing:.1em}
+header.top .who .meta b{color:var(--ink-3);font-weight:400}
+.overall{text-align:right;flex:0 0 auto}
+.overall .val{font-family:var(--serif);font-size:clamp(22px,2.6vw,30px);line-height:1}
+.overall .val i{font-style:normal;font-size:.44em;color:var(--ink-4);margin-left:1px;letter-spacing:.01em}
+.overall .segs{display:flex;gap:2px;margin-top:9px;height:3px;width:clamp(120px,15vw,190px);margin-left:auto}
+.overall .segs i{flex:1;background:rgba(23,21,15,.11);border-radius:2px;overflow:hidden;position:relative}
+.overall .segs i span{position:absolute;inset:0;background:var(--gold);transform-origin:left;
+  transform:scaleX(0);transition:transform 1.5s var(--ease)}
+.overall .cap{margin-top:8px}
+
+/* ── display controls: reading size, then language ─────────────────────── */
+.ctl{display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-bottom:11px}
+.ctl > s{width:1px;height:9px;background:var(--hair);text-decoration:none}
+.lang{display:flex;align-items:center;gap:8px}
+.lang button{appearance:none;background:none;border:0;padding:0;cursor:pointer;
+  font-family:var(--sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-4);transition:color .4s var(--ease)}
+.lang button:hover{color:var(--ink-2)}
+.lang button.on{color:var(--ink)}
+.lang s{width:1px;height:9px;background:var(--hair);text-decoration:none}
+/* ── reading size ─────────────────────────────────────────────────────── */
+.txt{display:flex;align-items:baseline;gap:9px}
+.txt button{appearance:none;background:none;border:0;padding:0 1px;cursor:pointer;
+  font-family:var(--serif);color:var(--ink-4);line-height:1;
+  transition:color .4s var(--ease)}
+.txt button:nth-child(1){font-size:11px}
+.txt button:nth-child(2){font-size:14px}
+.txt button:nth-child(3){font-size:17px}
+.txt button:hover{color:var(--ink-2)}
+.txt button.on{color:var(--ink)}
+.txt button,.lang button{min-width:32px;min-height:36px}
+.lang button{font-size:11px}
+.txt button:focus-visible,.lang button:focus-visible{outline:1px dashed var(--ink-4);
+  outline-offset:3px}
+html[lang="zh"] body{font-size:13.6px;letter-spacing:0}
+html[lang="zh"] .label,html[lang="zh"] .legend div,html[lang="zh"] .tbtn,
+html[lang="zh"] .irow .tr,html[lang="zh"] .mile .what u,html[lang="zh"] .quote time,
+html[lang="zh"] .trow .pr,html[lang="zh"] .trow .st,html[lang="zh"] .tline .nm em,
+html[lang="zh"] .item .sys,html[lang="zh"] .traj .arc,html[lang="zh"] .p-cert .lbl,
+html[lang="zh"] .lang button{letter-spacing:.1em;text-transform:none}
+
+/* ── stage: figure | report ───────────────────────────────────────────── */
+.stage{flex:1;min-height:0;display:grid;
+  grid-template-columns:minmax(260px,.82fr) minmax(0,1.18fr);
+  gap:clamp(16px,3vw,54px)}
+
+/* figure ---------------------------------------------------------------- */
+.plate{min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;padding:clamp(8px,1.6vh,20px) 0}
+.plate .fig-wrap{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
+.plate svg#fig{height:100%;width:100%;max-height:100%;overflow:visible}
+.figure-hint{font-size:11px;color:var(--ink-3);margin:8px 0 0;letter-spacing:.08em}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;padding-top:clamp(6px,1.4vh,16px)}
+.legend div{display:flex;align-items:center;gap:7px;font-size:8.6px;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--ink-4);white-space:nowrap}
+.legend .mk{width:6px;height:6px;border-radius:50%}
+/* Each state has a shape as well as a colour, so the page still reads without
+   colour vision — solid, ringed, hollow. */
+.mk.attention{background:var(--attention);box-shadow:0 0 0 2px rgba(140,70,52,.22)}
+.mk.watch{background:var(--watch)}
+.mk.managed{background:var(--paper);box-shadow:inset 0 0 0 2px var(--managed)}
+.mk.steady{background:var(--steady);opacity:.75}
+.mk.unknown{background:transparent;box-shadow:inset 0 0 0 1px var(--unknown)}
+
+/* svg ------------------------------------------------------------------- */
+.chrome{fill:none;stroke:var(--ink);stroke-width:1.05;stroke-linecap:round;stroke-linejoin:round;
+  opacity:.3}
+.chrome.faint{opacity:.17;stroke-width:.9}
+.chrome.hairline{opacity:.13;stroke-width:.8}
+.sil{fill:url(#skin);fill-rule:evenodd;stroke:#AAAFA3;stroke-width:1.1;stroke-linejoin:round}
+.anatomy{stroke:#8E9689;opacity:.4;stroke-width:.8}
+.sysg{cursor:pointer;transition:opacity .5s var(--ease)}
+.sysg .organ{fill:none;stroke:var(--ink);stroke-width:.95;opacity:.5;
+  stroke-linejoin:round;stroke-linecap:round;
+  transition:opacity .5s var(--ease),stroke .5s var(--ease),fill .5s var(--ease),stroke-width .5s var(--ease)}
+.sysg[data-state="attention"] .organ{stroke:var(--attention);opacity:.72;fill:rgba(140,70,52,.085)}
+.sysg[data-state="watch"]     .organ{stroke:var(--watch);opacity:.64;fill:rgba(151,116,52,.075)}
+.sysg[data-state="managed"]   .organ{stroke:var(--managed);opacity:.62;fill:rgba(90,107,120,.07)}
+.sysg[data-state="steady"]    .organ{stroke:var(--steady);opacity:.48;fill:rgba(94,112,89,.05)}
+.sysg[data-state="unknown"]   .organ{stroke:var(--unknown);fill:none;opacity:.42;
+  stroke-dasharray:2.5 4}
+.sysg .organ.line{fill:none!important}
+.sysg.dial .lead{fill:none;stroke:var(--ink);stroke-width:.8;opacity:.2;stroke-dasharray:1.6 3.4}
+.sysg.dial .cap{font-family:var(--sans);font-size:7.2px;letter-spacing:.19em;text-transform:uppercase;
+  fill:var(--ink-4);text-anchor:middle;transition:opacity .4s var(--ease)}
+.sysg.dial.on .lead{opacity:.34}
+.sysg.dial.on .cap{opacity:0}
+.sysg.on[data-state="attention"] .organ{fill:rgba(140,70,52,.15)}
+.sysg.on[data-state="watch"]     .organ{fill:rgba(151,116,52,.14)}
+.sysg.on[data-state="managed"]   .organ{fill:rgba(90,107,120,.13)}
+.sysg.on[data-state="steady"]    .organ{fill:rgba(94,112,89,.1)}
+.sysg .node{stroke:var(--paper);stroke-width:1.4;transition:r .5s var(--ease)}
+.sysg[data-state="attention"] .node{fill:var(--attention)}
+.sysg[data-state="watch"] .node{fill:var(--watch)}
+.sysg[data-state="managed"] .node{fill:var(--paper);stroke:var(--managed);stroke-width:1.6}
+.sysg[data-state="steady"] .node{fill:var(--steady)}
+.sysg[data-state="unknown"] .node{fill:var(--paper);stroke:var(--unknown);stroke-width:1;r:3.1}
+.hit{fill:transparent;cursor:pointer;outline:none}
+.hit:focus{outline:none}
+.hit:focus-visible{outline:none;stroke:var(--ink-3);stroke-width:1.1;stroke-dasharray:2 3}
+/* Dimming the rest of the body while you point at one organ: enough to guide
+   the eye, never enough to feel like the page is being taken away. */
+body.hovering .sysg:not(.on),body.peeking .sysg:not(.on){opacity:.5}
+.sysg.on .organ{opacity:1;stroke-width:1.35}
+.sysg.on .node{r:5.4}
+.sysg .organ{stroke-width:1.1}
+#tag{opacity:0;transition:opacity .45s var(--ease)}
+#tag.show{opacity:1}
+#tag text{font-family:var(--sans);font-size:9.4px;letter-spacing:.14em;text-transform:uppercase;
+  fill:var(--ink-2);font-weight:400;
+  paint-order:stroke;stroke:var(--paper);stroke-width:2.6px;stroke-linejoin:round}
+#tag line{stroke:var(--ink);stroke-width:.75;opacity:.24}
+#tag circle{fill:var(--ink);opacity:.34}
+
+/* report --------------------------------------------------------------- */
+.report{min-height:0;display:flex;flex-direction:column;padding:clamp(14px,2.4vh,26px) 0;
+  border-left:1px solid var(--hair-2);padding-left:clamp(18px,2.4vw,38px)}
+.report .scroll{position:relative;min-height:0;display:flex;flex-direction:column;flex:1}
+.report .scroll::after{content:"";position:absolute;left:0;right:3px;bottom:0;height:46px;
+  pointer-events:none;opacity:0;transition:opacity .45s var(--ease);
+  background:linear-gradient(to top,var(--paper) 26%,rgba(244,241,235,.66) 62%,rgba(244,241,235,0))}
+.report.scrolls .scroll::after{opacity:1}
+.report.scrolls.at-end .scroll::after{opacity:0}
+.report .body{min-height:0;overflow:hidden auto;padding-bottom:10px;padding-right:6px;
+  scrollbar-width:thin;scrollbar-color:rgba(23,21,15,.16) transparent}
+.report .body::-webkit-scrollbar{width:3px}
+.report .body::-webkit-scrollbar-thumb{background:rgba(23,21,15,.16)}
+.fade-in{animation:fade .62s var(--ease)}
+@keyframes fade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+.r-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.p-name{font-size:clamp(20px,2.3vw,27px);line-height:1.06;margin-top:10px;
+  font-variant-numeric:lining-nums}
+.overview-title{font-size:clamp(26px,3vw,40px);line-height:1.2;max-width:19ch;margin:12px 0 24px}
+.status-strip{display:flex;gap:clamp(16px,2.4vw,34px);padding:0 0 24px;border-bottom:1px solid var(--hair)}
+.status-strip strong{display:block;font-family:var(--serif);font-size:30px;font-weight:400;line-height:1.1}
+.status-strip span{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-3);margin-top:8px}
+.status-strip .mk,.system-status .mk{display:inline-block;width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.priority-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px}
+.text-link{border:0;background:none;padding:10px 0;font:inherit;font-size:11px;color:var(--ink-3);cursor:pointer}
+.text-link:hover{color:var(--gold)}
+.priority-card{display:grid;grid-template-columns:24px minmax(0,1fr) 16px;gap:12px;align-items:center;
+  width:100%;border:0;border-bottom:1px solid var(--hair-2);background:none;text-align:left;
+  padding:14px 0;color:var(--ink);cursor:pointer;font-family:var(--sans)}
+.priority-card:hover{background:var(--paper-2)}
+.priority-number{font-family:var(--serif);font-size:18px;color:var(--gold)}
+.priority-card small{font-size:10px;color:var(--ink-3);display:block;margin-bottom:4px}
+.priority-card b{font-size:13px;line-height:1.5;font-weight:400}
+.overview-actions{display:flex;gap:24px;margin:10px 0}
+.layer{border-top:1px solid var(--hair);margin-top:0}
+.layer>summary{display:grid;grid-template-columns:minmax(0,1fr) 18px;gap:3px 12px;padding:17px 0;cursor:pointer;list-style:none}
+.layer>summary::-webkit-details-marker{display:none}
+.layer>summary>span{font-size:14px;color:var(--ink-2)}
+.layer>summary>small{grid-column:1;font-size:10.5px;color:var(--ink-3)}
+.layer>summary>i{grid-column:2;grid-row:1/3;place-self:center;width:18px;height:22px;line-height:22px;text-align:center;font-size:19px;font-style:normal;color:var(--gold)}
+.layer[open]>summary>i{transform:rotate(45deg)}
+.layer>summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.layer-content{padding:0 0 20px;min-width:0}
+.layer-content .line b{white-space:normal}
+.layer-content .line>span{min-width:0;overflow-wrap:anywhere}
+.layer-content>.blk:first-child{margin-top:0;border-top:0;padding-top:0}
+.layer-content .cols{columns:1}
+.system-status{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);margin:14px 0}
+.system-glance{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:18px 0 24px;font-size:11px;color:var(--ink-3)}
+.p-name em{font-style:normal;display:block;font-size:.45em;letter-spacing:.14em;color:var(--ink-4);
+  margin-top:9px;font-family:var(--sans)}
+.p-ess{color:var(--ink-3);font-size:12.6px;line-height:1.64;margin:14px 0 0;max-width:62ch}
+.p-cert{margin:20px 0 0;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.p-cert .lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-4)}
+.p-cert .v{font-family:var(--serif);font-size:17px}
+.bar{height:2px;background:rgba(23,21,15,.1);margin-top:8px;position:relative;overflow:hidden}
+.bar span{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:var(--gold);
+  animation:grow 1.1s var(--ease) forwards}
+@keyframes grow{to{transform:scaleX(var(--w,0))}}
+
+.blk{margin-top:22px;padding-top:16px;border-top:1px solid var(--hair-2)}
+.blk > .label{display:block;margin-bottom:12px}
+.blk .label i{font-style:normal;color:var(--ink-4);letter-spacing:.1em;margin-left:6px}
+.cols{columns:2 258px;column-gap:clamp(22px,2.8vw,42px)}
+.cols .blk{break-inside:avoid;-webkit-column-break-inside:avoid;margin-top:0;margin-bottom:20px}
+
+/* trend ---------------------------------------------------------------- */
+.traj{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.traj .word{font-family:var(--serif);font-size:17px}
+.traj .arc{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-4)}
+.traj.worsening .word,.traj.new .word{color:var(--attention)}
+.traj.improving .word,.traj.resolved .word{color:var(--steady)}
+.traj.mixed .word,.traj.drifting .word{color:var(--watch)}
+/* under care: the trajectory is still true, it just isn't news */
+.report.managed .traj.worsening .word,.report.managed .traj.new .word{color:var(--managed)}
+/* what the reader already knows, said once, at the top, before any alarm */
+.known{margin:16px 0 0;padding:11px 13px;border:1px solid var(--hair-2);border-radius:3px;
+  background:rgba(90,107,120,.045)}
+.known .label{display:block;margin-bottom:6px;color:var(--managed)}
+.known p{margin:0;font-size:12.2px;color:var(--ink-2);line-height:1.6}
+.known b{font-weight:400;color:var(--ink)}
+.story{margin:11px 0 0;color:var(--ink-2);font-size:12.6px;line-height:1.7;max-width:64ch}
+.story span{display:block}
+.story span + span{margin-top:3px;color:var(--ink-3)}
+.mile{display:grid;grid-template-columns:82px minmax(0,1fr);gap:3px 14px;padding:8px 0;position:relative}
+.mile + .mile{border-top:1px solid var(--hair-2)}
+a.mile{color:inherit;transition:background .4s var(--ease)}
+a.mile:hover{background:rgba(142,110,62,.06)}
+a.mile:hover .what u{color:var(--gold)}
+a.mile .what u::after{content:" ↗";opacity:.5}
+.mile time{font-size:10.5px;color:var(--ink-3);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.mile .what{font-size:11.8px;color:var(--ink-2);line-height:1.55}
+.mile .what u{text-decoration:none;display:block;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-4);margin-top:3px}
+.mile.onset time{color:var(--gold)}
+.mile.onset .what{color:var(--ink)}
+.mile.sev2 .what b{color:var(--attention);font-weight:400}
+.quote{margin-top:10px;padding-left:13px;border-left:1px solid var(--hair);color:var(--ink-2);
+  font-family:var(--serif);font-size:14px;line-height:1.55}
+.quote time{display:block;font-family:var(--sans);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink-4);margin-bottom:4px}
+.quote.abnormal{border-left-color:rgba(150,63,41,.42)}
+.quote a{border-bottom:1px solid var(--hair);font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;font-family:var(--sans);color:var(--ink-4)}
+.quote a:hover{color:var(--ink)}
+
+.mrow{display:grid;grid-template-columns:1fr auto;gap:3px 12px;padding:7px 0;align-items:baseline}
+.mrow + .mrow{border-top:1px solid var(--hair-2)}
+.mrow .nm{font-size:12px;color:var(--ink-2)}
+.mrow .vv{font-family:var(--serif);font-size:15px;text-align:right;white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+.mrow .vv u{text-decoration:none;font-family:var(--sans);font-size:8.6px;color:var(--ink-4);
+  letter-spacing:.06em;margin-left:3px}
+.mrow .sub{grid-column:1/2;font-size:9.6px;letter-spacing:.06em;color:var(--ink-4)}
+.mrow .spark{grid-column:2/3;justify-self:end;opacity:.75;margin:1px 1px 3px 0}
+.mrow.out .vv{color:var(--attention)} .mrow.sub-opt .vv{color:var(--watch)}
+.mrow.stale .nm{color:var(--ink-3)}
+.chips{display:flex;flex-wrap:wrap;gap:5px 7px}
+.chip{font-size:10.5px;color:var(--ink-3);border:1px solid var(--hair);border-radius:20px;
+  padding:2px 9px;letter-spacing:.02em}
+.chip.dash{border-style:dashed;color:var(--ink-4)}
+.line{display:flex;gap:9px;font-size:11.8px;color:var(--ink-2);padding:6px 0;line-height:1.55}
+.line + .line{border-top:1px solid var(--hair-2)}
+.line b{font-weight:400;color:var(--ink);white-space:nowrap}
+.line.col{display:block}
+.line.col b{display:block;white-space:normal}
+.line.col .why{display:block;color:var(--ink-4);font-size:11px;line-height:1.55;margin-top:1px}
+.line .dot{width:5px;height:5px;border-radius:50%;flex:0 0 auto;margin-top:6px}
+.dot.act{background:var(--attention)} .dot.watch{background:var(--watch)}
+.dot.info{background:var(--unknown)}
+/* urgent still stands out, with a ring rather than a glow */
+.dot.urgent{background:var(--attention);box-shadow:0 0 0 2px rgba(140,70,52,.28)}
+.quiet{color:var(--ink-4);font-size:11.5px;line-height:1.6}
+.srcs{display:flex;flex-wrap:wrap;gap:6px 8px}
+.srcs a{font-size:10.5px;color:var(--ink-3);border:1px solid var(--hair);border-radius:20px;
+  padding:2px 10px;transition:border-color .4s,color .4s}
+.srcs a:hover{color:var(--ink);border-color:var(--gold)}
+
+/* the system index, inside the summary report ------------------------- */
+.idx{margin-top:2px}
+.irow{display:grid;grid-template-columns:9px 1fr auto auto;align-items:baseline;gap:10px;width:100%;
+  background:none;border:0;padding:7px 0;cursor:pointer;text-align:left;color:var(--ink-2);
+  font-family:var(--sans);font-size:12.2px;font-weight:300;letter-spacing:.008em;
+  border-top:1px solid var(--hair-2);transition:color .4s var(--ease)}
+.irow:first-child{border-top:0}
+.irow .mk{width:7px;height:7px;border-radius:50%;transform:translateY(-1px);
+  transition:transform .4s var(--ease)}
+.irow .nm{min-width:0}
+.irow .tr{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-4);
+  white-space:nowrap}
+.irow .pct{font-size:9.5px;color:var(--ink-4);text-align:right;font-variant-numeric:tabular-nums;
+  min-width:26px}
+.irow:hover,.irow.on{color:var(--ink)}
+.irow:focus-visible{outline:1px dashed var(--ink-4);outline-offset:3px;color:var(--ink)}
+.irow:hover .mk,.irow.on .mk{transform:translateY(-1px) scale(1.34)}
+.irow.worse .tr{color:var(--attention)}
+.irow.care .tr{color:var(--managed)}
+/* the index stays fully legible while you point at the body — a list of your
+   own organs is not something to fade out under the cursor */
+
+.p-foot:not(.live){border:0;padding:0;margin:0;height:0;overflow:hidden}
+.p-foot{padding-top:13px;margin-top:13px;border-top:1px solid var(--hair-2);
+  display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tbtn{appearance:none;background:none;border:0;padding:0;cursor:pointer;color:var(--ink-3);
+  font-family:var(--sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  border-bottom:1px solid transparent;transition:color .4s,border-color .4s}
+.tbtn:hover{color:var(--ink);border-color:var(--gold)}
+.tbtn{min-height:36px;font-size:11px;letter-spacing:.1em;display:inline-flex;align-items:center;justify-content:center}
+body.pinned .p-foot .pin{color:var(--gold)}
+
+/* ── footer ───────────────────────────────────────────────────────────── */
+footer.foot{position:fixed;inset:auto 0 0;z-index:80;background:var(--card);
+  padding:8px max(12px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+  border-top:1px solid var(--hair);box-shadow:0 -6px 24px rgba(23,21,15,.05)}
+.record-meta{color:var(--ink-4);font-size:9.5px;letter-spacing:.08em;margin:0;padding:10px 0;flex-shrink:0}
+footer.foot nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;max-width:1100px;margin:auto}
+footer.foot nav .tbtn{min-height:44px;padding:4px 8px;border:1px solid transparent;border-radius:6px;letter-spacing:.06em;font-size:12px}
+footer.foot nav .tbtn:hover{background:var(--paper-2)}
+html[data-text="l"] footer.foot nav .tbtn{font-size:13px}
+html[data-text="xl"] footer.foot nav .tbtn{font-size:14px}
+footer.foot nav .tbtn i{font-style:normal;color:var(--ink-4);margin-left:6px;font-size:8.6px}
+/* which drawer is open, said quietly but unmistakably */
+footer.foot nav .tbtn.on{color:var(--ink);border-color:var(--gold);background:var(--paper-2)}
+
+/* ── sheets ───────────────────────────────────────────────────────────── */
+/* A drawer here is a panel, not a trapdoor. It sits inside the same band as
+   the report, so the name at the top, the text-size and language switches and
+   the row of tabs at the bottom all stay where they were and stay usable. */
+.scrim{position:fixed;inset:var(--headh,0px) 0 var(--footh,0px) 0;
+  background:rgba(20,18,13,.22);backdrop-filter:blur(2px);
+  opacity:0;pointer-events:none;transition:opacity .6s var(--ease);z-index:70}
+.scrim.open{opacity:1;pointer-events:auto}
+/* the drawer stops above the footer too, so the tabs below it never disappear —
+   the reader always sees where they are and how to get out */
+.sheet{position:fixed;top:var(--headh,0px);right:0;visibility:hidden;
+  height:calc(100% - var(--headh,0px) - var(--footh,0px));
+  width:min(600px,94vw);background:var(--card);
+  border-left:1px solid var(--hair);border-top:1px solid var(--hair-2);transform:translateX(100%);
+  transition:transform .28s var(--ease),visibility 0s .28s;z-index:71;display:flex;flex-direction:column;
+  box-shadow:-40px 0 80px -50px rgba(20,18,13,.5)}
+.sheet.open{transform:none;visibility:visible;transition-delay:0s}
+.more-menu .priority-card{grid-template-columns:minmax(0,1fr) 18px;padding:22px 0}
+.sheet-actions{display:flex;gap:14px;flex-shrink:0}
+.sheet [hidden]{display:none}
+.sheet .scroll{overscroll-behavior:contain;overflow-wrap:anywhere}
+.sheet::after{content:"";position:absolute;left:0;right:3px;bottom:0;height:52px;z-index:2;
+  pointer-events:none;background:linear-gradient(to top,var(--card) 22%,rgba(250,248,244,0))}
+.sheet header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  padding:clamp(18px,3vh,30px) clamp(22px,3.4vw,44px) 16px;border-bottom:1px solid var(--hair-2)}
+.sheet header h2{font-size:clamp(20px,2.4vw,27px)}
+.sheet .scroll{flex:1;min-height:0;overflow:auto;padding:6px clamp(22px,3.4vw,44px) 46px;
+  scrollbar-width:thin;scrollbar-color:rgba(23,21,15,.16) transparent}
+.sheet .scroll::-webkit-scrollbar{width:3px}
+.sheet .scroll::-webkit-scrollbar-thumb{background:rgba(23,21,15,.16)}
+.item{padding:22px 0;border-bottom:1px solid var(--hair-2)}
+.item h3{font-size:17px;display:flex;align-items:baseline;gap:10px}
+.item h3 .dot{margin-top:7px}
+.item .sys{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-4);
+  margin-top:7px}
+.item p{margin:11px 0 0;color:var(--ink-2);font-size:12.6px;line-height:1.68;max-width:62ch}
+.item ul{margin:12px 0 0;padding:0;list-style:none}
+.item li{position:relative;padding-left:15px;font-size:12.2px;color:var(--ink-2);
+  line-height:1.62;margin-top:6px}
+.item li::before{content:"";position:absolute;left:0;top:8.5px;width:5px;height:1px;
+  background:var(--gold);opacity:.6}
+/* the small chips: used inside findings and inside the doctor's sheet, so the
+   rule is not tied to one container */
+.ev{display:flex;flex-wrap:wrap;gap:6px 8px;margin-top:12px}
+.ev span{font-size:10.5px;color:var(--ink-3);border:1px solid var(--hair);padding:2px 9px;
+  border-radius:20px;font-variant-numeric:tabular-nums}
+.ev span.bad{border-color:rgba(150,63,41,.4);color:var(--attention)}
+.trow{display:grid;grid-template-columns:16px 1fr auto;gap:5px 14px;padding:16px 0;
+  border-bottom:1px solid var(--hair-2);align-items:baseline}
+.trow .rk{font-family:var(--serif);font-size:12px;color:var(--ink-4)}
+.trow .nm{font-family:var(--serif);font-size:16.5px}
+.trow .pr{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-4)}
+.trow .why{grid-column:2/-1;color:var(--ink-3);font-size:12px;line-height:1.6;max-width:58ch}
+.trow .st{grid-column:2/-1;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-4);margin-top:4px}
+.trow.essential .rk{color:var(--attention)}
+.vrow{display:grid;grid-template-columns:88px 1fr;gap:14px;padding:13px 0;
+  border-bottom:1px solid var(--hair-2);align-items:baseline}
+.vrow time{font-size:11px;letter-spacing:.06em;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.vrow .what{font-size:12px;color:var(--ink-2)}
+.vrow .what em{font-style:normal;color:var(--ink-4);font-size:10.5px;display:block;margin-top:3px}
+.ask{margin:2px 0 0;padding:0;list-style:none}
+.ask li{position:relative;padding:9px 0 9px 15px;font-size:12.6px;color:var(--ink);
+  line-height:1.6;border-bottom:1px solid var(--hair-2)}
+.ask li::before{content:"";position:absolute;left:0;top:17px;width:6px;height:1px;
+  background:var(--gold);opacity:.6}
+.ask li em{font-style:normal;display:block;color:var(--ink-4);font-size:11.4px;margin-top:2px}
+.sheet .note{color:var(--ink-4);font-size:11px;line-height:1.66;padding:22px 0 0;max-width:60ch}
+.tline{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:15px 0;
+  border-bottom:1px solid var(--hair-2);align-items:baseline}
+.tline .nm{font-family:var(--serif);font-size:15.5px}
+.tline .nm em{display:block;font-style:normal;font-family:var(--sans);font-size:9px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-4);margin-top:4px}
+.tline .st{font-size:12px;color:var(--ink-2);line-height:1.62}
+.tline .st em{font-style:normal;color:var(--ink-4);display:block;margin-top:3px;font-size:11.4px}
+.tline .docs{display:flex;flex-wrap:wrap;gap:5px 7px;margin-top:10px}
+.tline .docs a{font-size:10px;color:var(--ink-3);border:1px solid var(--hair-2);border-radius:20px;
+  padding:2px 9px;font-variant-numeric:tabular-nums;transition:color .35s,border-color .35s}
+.tline .docs a:hover{color:var(--ink);border-color:var(--gold)}
+.tline .docs a.bad{border-color:rgba(150,63,41,.32);color:var(--attention)}
+
+/* ── responsive ───────────────────────────────────────────────────────── */
+@media (max-width:1080px){
+  body{overflow:auto}
+  html,body{height:auto}
+  .frame{height:auto;min-height:100dvh;padding-bottom:calc(var(--footh,76px) + 16px)}
+  .stage{grid-template-columns:1fr;gap:10px}
+  .plate{order:1;height:min(70vh,600px)}
+  .report{order:2;border-left:0;padding-left:0;border-top:1px solid var(--hair-2)}
+  .report .body{overflow:visible}
+  .sheet{width:min(600px,100vw)}
+  .report{scroll-margin-top:16px}
+  .p-foot.live{position:sticky;top:0;order:-1;z-index:5;background:var(--paper);
+    margin:0 0 16px;padding:8px 0;border-top:0;border-bottom:1px solid var(--hair)}
+  body.hovering .sysg:not(.on),body.peeking .sysg:not(.on){opacity:.6}
+}
+@media (max-width:560px){
+  header.top{flex-direction:column;align-items:flex-start;gap:14px}
+  .overall{text-align:left;width:100%} .overall .segs{margin-left:0}
+  .ctl{justify-content:flex-end}        /* still the top-right corner, stacked */
+  .cols{columns:1}
+  .irow{grid-template-columns:9px minmax(0,1fr) auto;min-height:48px}
+  .irow .tr{grid-column:2;grid-row:2;white-space:normal;letter-spacing:.06em}
+  .irow .pct{grid-column:3;grid-row:1}
+  .tline{grid-template-columns:1fr;gap:6px}
+  .vrow{grid-template-columns:1fr;gap:4px}
+  .trow{grid-template-columns:18px minmax(0,1fr)}
+  .trow .pr{grid-column:2;white-space:normal}
+  .mrow{grid-template-columns:minmax(0,1fr) auto}
+  .mrow .sub{grid-column:1/-1}
+  .sheet header{align-items:center;gap:8px;padding:16px 18px}
+  .sheet header h2{font-size:22px}
+  .sheet-actions{gap:10px}
+  .status-strip{flex-wrap:wrap;gap:16px 24px}
+  .overview-title{font-size:30px}
+  .plate{height:430px}
+}
+@media (max-width:700px){
+  footer.foot nav{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+  footer.foot nav .tbtn{letter-spacing:.02em;padding:4px;min-height:44px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition-duration:.01ms !important}
+  .bar span{transform:scaleX(var(--w,0))}
+}
+/* Printing: for the appointment. Whatever is open on the right is what prints,
+   plus the doctor's summary sheet if it is the one on screen. */
+@media print{
+  :root{--paper:#fff;--card:#fff}
+  body{overflow:visible;background:#fff;font-size:11.5px}
+  body::before,body::after{display:none}
+  #report,#sheet-body,.legend,footer.foot,.p-foot,.sheet header h2{zoom:1!important}
+  .frame{height:auto;padding:0}
+  .ctl,.overall .segs,.plate,.legend,.p-foot,footer.foot,.scrim{display:none!important}
+  .stage{display:block}
+  /* a drawer open on screen is the thing being printed — print only that,
+     so "for your doctor" comes out as one clean sheet */
+  body.sheeting .stage{display:none!important}
+  .report{border:0;padding:0}
+  .report .body{overflow:visible!important;max-height:none}
+  .report .scroll::after{display:none}
+  .sheet{position:static;width:auto;height:auto;transform:none;box-shadow:none;border:0;
+    display:block}
+  .sheet:not(.open){display:none}
+  .sheet .scroll{overflow:visible;padding:0}
+  .sheet::after{display:none}          /* no fade-out band across the paper */
+  .sheet header{padding:0 0 10px}
+  .sheet-actions,#sheet-back{display:none}
+  .item,.trow,.tline,.mrow,.line,.mile{break-inside:avoid}
+  /* chips lose their outline on paper, so give them room and a separator */
+  .ev{display:block}
+  .ev span{display:inline;border:0;padding:0}
+  .ev span+span::before{content:" · "}
+  a{text-decoration:none;color:#000}
+}
+</style>
+</head>
+<body>
+<div class="frame">
+  <!-- ── masthead ──────────────────────────────────────────────────────── -->
+  <header class="top">
+    <div class="who">
+      <span class="label">littledocter</span>
+      <h1 id="who-name">—</h1>
+      <p class="meta num" id="who-meta"></p>
+    </div>
+    <div class="overall">
+      <div class="ctl">
+        <div class="txt" id="txt" role="group" aria-label="Text size">
+          <button type="button" data-text="m" title="Normal text" aria-pressed="false">A</button>
+          <button type="button" data-text="l" title="Larger text" aria-pressed="false">A</button>
+          <button type="button" data-text="xl" title="Largest text" aria-pressed="false">A</button>
+        </div>
+        <s></s>
+        <div class="lang" id="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en">EN</button><s></s>
+          <button type="button" data-lang="zh">中文</button>
+        </div>
+      </div>
+      <div class="val num"><span id="cert-val">—</span><i id="cert-unit">% on file</i></div>
+      <div class="segs" id="cert-segs"></div>
+      <div class="label cap" id="cert-cap">how complete the record is</div>
+    </div>
+  </header>
+
+  <!-- ── stage ─────────────────────────────────────────────────────────── -->
+  <main class="stage">
+    <!-- the body, on the left ------------------------------------------- -->
+    <div class="plate">
+      <div class="fig-wrap">
+      <svg id="fig" viewBox="55 12 290 590" role="group" aria-label="Interactive body map">
+        <defs>
+          <linearGradient id="skin" x1="0" x2="1" y1="0" y2=".3"><stop stop-color="#DFDDD4"/><stop offset=".48" stop-color="#F8F6EF"/><stop offset="1" stop-color="#D6D9D1"/></linearGradient>
+          <radialGradient id="bodyHalo"><stop stop-color="#D7DDD3" stop-opacity=".55"/><stop offset="1" stop-color="#D7DDD3" stop-opacity="0"/></radialGradient>
+        </defs>
+        <ellipse cx="200" cy="287" rx="139" ry="271" fill="url(#bodyHalo)"/>
+        <path class="sil" d="M200,28 C216,28 229,40 229,59 C229,78 220,94 211,100 C210,108 211,116 218,120 C231,126 258,129 266,144 C275,161 279,188 284,212 C290,238 300,266 304,292 C307,309 313,326 309,336 C305,343 299,338 297,330 C295,320 291,312 290,300 C282,278 274,253 268,232 C261,211 257,185 250,170 C250,200 245,229 240,252 C238,267 244,286 249,305 C255,327 252,352 247,377 C243,404 237,431 237,452 C241,473 237,502 232,523 C229,541 229,557 231,568 C235,575 245,580 242,587 C236,591 214,591 211,586 C207,578 211,566 212,552 C211,526 207,504 210,479 C213,461 207,443 206,425 C205,391 202,364 200,346 C198,364 195,391 194,425 C193,443 187,461 190,479 C193,504 189,526 188,552 C189,566 193,578 189,586 C186,591 164,591 158,587 C155,580 165,575 169,568 C171,557 171,541 168,523 C163,502 159,473 163,452 C163,431 157,404 153,377 C148,352 145,327 151,305 C156,286 162,267 160,252 C155,229 150,200 150,170 C143,185 139,211 132,232 C126,253 118,278 110,300 C109,312 105,320 103,330 C101,338 95,343 91,336 C87,326 93,309 96,292 C100,266 110,238 116,212 C121,188 125,161 134,144 C142,129 169,126 182,120 C189,116 190,108 189,100 C180,94 171,78 171,59 C171,40 184,28 200,28 Z"/>
+        <path class="chrome anatomy" d="M185 121 Q191 135 200 133 Q209 135 215 121 M155 146 Q179 135 196 141 M245 146 Q221 135 204 141 M200 218 L200 247 M179 321 Q186 336 196 340 M221 321 Q214 336 204 340 M169 446 Q179 452 189 446 M211 446 Q221 452 231 446"/>
+        <g class="sysg" data-sys="bone"><path class="organ line" d="M159 311 Q173 328 188 329 M241 311 Q227 328 212 329 M172 342 Q178 392 180 431 M228 342 Q222 392 220 431"/><circle class="node" cx="173" cy="351" r="4"/></g>
+        <g class="sysg" data-sys="respiratory"><path class="organ" d="M191 147 C178 143 162 159 160 185 C157 204 164 219 183 216 C191 214 194 207 194 196 L194 155 Q194 149 191 147 Z"/><path class="organ" d="M209 147 C222 143 238 159 240 185 C243 204 236 219 220 217 C210 215 213 204 215 194 C217 181 205 172 206 157 Q206 150 209 147 Z"/><path class="organ line" d="M200 130 L200 158 M200 154 L183 175 M200 154 L217 175"/><circle class="node" cx="175" cy="187" r="4"/></g>
+        <g class="sysg" data-sys="cardiovascular"><path class="organ" d="M202 176 C201 165 214 162 220 171 C232 163 236 179 231 190 C227 202 215 210 211 209 C209 198 199 188 202 176 Z"/><circle class="node" cx="217" cy="188" r="4"/></g>
+        <g class="sysg" data-sys="liver"><path class="organ" d="M159 226 C175 216 199 219 219 230 C208 237 201 251 182 253 C167 255 157 243 159 226 Z"/><path class="organ line" d="M192 222 Q190 238 181 248"/><circle class="node" cx="177" cy="234" r="4"/></g>
+        <g class="sysg" data-sys="gastrointestinal"><path class="organ" d="M222 222 C221 233 231 230 236 238 C243 250 234 263 224 263 C213 263 210 255 211 249 C211 243 220 245 219 237 L217 221"/><path class="organ line" d="M174 307 L171 282 Q171 274 179 274 L222 274 Q231 274 231 282 L229 311 Q228 317 216 316"/><circle class="node" cx="228" cy="245" r="4"/></g>
+        <g class="sysg" data-sys="kidney"><path class="organ" d="M168.8 257 C176.8 255 180.8 264 177.6 270 C173.6 274 180 278 176 285 C171.2 292 164 283 164 273 C164 265 165.6 260 168.8 257 Z"/><path class="organ" d="M231.2 257 C223.2 255 219.2 264 222.4 270 C226.4 274 220 278 224 285 C228.8 292 236 283 236 273 C236 265 234.4 260 231.2 257 Z"/><circle class="node" cx="169.6" cy="273" r="4"/></g>
+        <g class="sysg" data-sys="metabolic"><path class="organ" d="M182 261 Q193 256 204 261 Q216 263 223 258 Q231 262 219 268 Q203 272 185 267 Q178 265 182 261 Z"/><circle class="node" cx="201" cy="264" r="4"/></g>
+        <g class="sysg" data-sys="nutrition"><path class="organ" d="M183 284 Q197 278 219 285 L219 309 Q203 317 184 309 Z"/><path class="organ line" d="M184 289 C215 280 212 295 191 296 C182 298 185 307 214 302 M201 284 L201 288 M205 306 L205 312"/><circle class="node" cx="190" cy="295" r="4"/></g>
+        <g class="sysg" data-sys="inflammation"><path class="organ" d="M231 223 Q240 228 236 241 Q232 250 229 245 Q225 237 231 223 Z"/><circle class="node" cx="232" cy="232" r="4"/></g>
+        <g class="sysg" data-sys="hormonal"><path class="organ" d="M187 323 Q200 317 213 323 L206 334 L200 341 L194 334 Z"/><path class="organ line" d="M187 325 Q179 317 175 325 M213 325 Q221 317 225 325"/><circle class="node" cx="200" cy="330" r="4"/></g>
+        <g class="sysg" data-sys="thyroid"><path class="organ" d="M197.9 116 C188.1 105 187.4 120 191.6 125 L197.9 122 Z M202.1 116 C211.9 105 212.6 120 208.4 125 L202.1 122 Z"/><circle class="node" cx="200" cy="119" r="4"/></g>
+        <g class="sysg" data-sys="neuro_sleep"><path class="organ" d="M183 47 C190 37 209 36 218 48 C225 59 218 74 208 77 L191 77 C180 74 175 58 183 47 Z"/><path class="organ line" d="M200 42 L200 73 M188 48 Q194 50 190 57 Q184 63 194 69 M211 48 Q205 52 210 58 Q216 65 206 69"/><circle class="node" cx="198" cy="56" r="4"/></g>
+        <g class="sysg" data-sys="senses_dental"><path class="organ line" d="M180 83 Q187 78 193 83 M207 83 Q214 78 220 83"/><circle class="node" cx="213" cy="83" r="4"/></g>
+        <g class="sysg" data-sys="hematology"><path class="organ line" d="M137 179 Q131 199 127 216"/><circle class="node" cx="133" cy="195" r="4"/></g>
+        <g class="sysg dial" data-sys="cancer_screening"><circle class="organ line" cx="307" cy="145" r="13"/><circle class="node" cx="307" cy="145" r="4"/><text class="cap" x="307" y="172">whole body</text></g>
+        <g id="tag" aria-hidden="true"><line id="tag-line"/><text id="tag-text"></text></g>
+        <g id="hits"></g>
+      </svg>
+      </div><!-- /fig-wrap -->
+      <p class="figure-hint" id="figure-hint"></p><div class="legend" id="legend"></div>
+    </div>
+
+    <!-- the report, on the right ---------------------------------------- -->
+    <aside class="report">
+      <div class="scroll"><div class="body" id="report" tabindex="-1"></div></div>
+      <div class="p-foot">
+        <button class="tbtn pin" id="pin-btn" hidden>pin</button>
+        <button class="tbtn" id="reset-btn" hidden>back to summary</button>
+      </div>
+    </aside>
+  </main>
+  <p class="record-meta" id="as-of"></p>
+</div>
+
+  <!-- ── footer ────────────────────────────────────────────────────────── -->
+  <footer class="foot">
+    <nav>
+      <button class="tbtn" id="home-btn"><span></span></button>
+      <button class="tbtn" data-sheet="findings"><span></span><i id="n-find"></i></button>
+      <a class="tbtn" href="archive.html"><span></span><i id="n-doc"></i></a>
+      <button class="tbtn" data-sheet="more"><span></span></button>
+    </nav>
+  </footer>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-labelledby="sheet-title" aria-hidden="true" inert>
+  <header><div><button class="text-link" id="sheet-back" hidden></button><h2 id="sheet-title">—</h2></div><div class="sheet-actions"><button class="tbtn" id="sheet-print" hidden></button><button class="tbtn" id="sheet-close">close</button></div></header>
+  <div class="scroll" id="sheet-body"></div>
+</div>
+
+<script type="application/json" id="littledocter-data">__LITTLEDOCTER_DATA__</script>
+<script>
+(function(){
+"use strict";
+const D = JSON.parse(document.getElementById("littledocter-data").textContent);
+const $  = (s,r)=> (r||document).querySelector(s);
+const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ── language ────────────────────────────────────────────────────────── */
+const LS_KEY = "littledocter-lang";
+let lang = (function(){
+  try { const v = localStorage.getItem(LS_KEY); if (v==="en"||v==="zh") return v; } catch(e){}
+  return /^zh/i.test(navigator.language||"") ? "zh" : "en";
+})();
+const zh = () => lang==="zh";
+const t   = (en,cn) => zh() ? cn : en;      /* one-off strings, translated in place */
+const L   = (o,k) => { const v = o ? ((zh() && o[k+"_zh"]) || o[k]) : ""; return v==null?"":v; };
+
+/* ── reading size ────────────────────────────────────────────────────────
+   Three steps, remembered. Nobody should have to lean towards a screen to
+   read their own results, and nobody should have to ask how to make it
+   bigger. */
+const LS_TEXT = "littledocter-text";
+let textSize = (function(){
+  try { const v = localStorage.getItem(LS_TEXT); if (v==="m"||v==="l"||v==="xl") return v; }
+  catch(e){}
+  return "m";
+})();
+function applyText(){
+  document.documentElement.setAttribute("data-text", textSize);
+  $$("#txt button").forEach(b=>{
+    b.classList.toggle("on", b.dataset.text===textSize);
+    b.setAttribute("aria-pressed", b.dataset.text===textSize ? "true" : "false");
+  });
+}
+
+/* ── vocabulary ──────────────────────────────────────────────────────── */
+/* Plain words, chosen to be true without being frightening. "Needs attention"
+   became "worth a doctor's look": it says what to do instead of how to feel. */
+const STATE_WORD = {attention:["worth a doctor's look","建议请医生看看"],
+                    managed:["known · under care","已知 · 在管理中"],
+                    watch:["worth watching","值得观察"],
+                    steady:["in range","在范围内"],
+                    unknown:["limited data","资料有限"]};
+const stateWord = k => (STATE_WORD[k]||["",""])[zh()?1:0];
+const stateOf = s => s.display_state || s.status;
+const CERT_ZH = {Established:"证据充分", Partial:"证据部分", Sparse:"证据稀少",
+                 Unmapped:"尚无数据"};
+const CERT_EN = {Established:"well documented", Partial:"partly documented",
+                 Sparse:"thinly documented", Unmapped:"nothing on file"};
+const certWord = s => zh() ? (CERT_ZH[s]||s) : (CERT_EN[s]||s);
+const SHORT = {   /* short enough to sit in the margin, never on the body */
+  metabolic:["METABOLIC","代谢"], cardiovascular:["HEART","心脏"], liver:["LIVER","肝胆"],
+  kidney:["KIDNEYS","肾脏"], hematology:["BLOOD","血液"], thyroid:["THYROID","甲状腺"],
+  hormonal:["HORMONES","激素"], bone:["BONE","骨骼"], nutrition:["NUTRIENTS","营养"],
+  inflammation:["IMMUNITY","免疫"], gastrointestinal:["GUT","肠胃"], respiratory:["LUNGS","肺"],
+  neuro_sleep:["SLEEP","睡眠"], senses_dental:["EYES","眼耳齿"],
+  cancer_screening:["SCREENING","筛查"]
+};
+const shortOf = id => (SHORT[id]||["",""])[zh()?1:0];
+const SIDE = {  /* which way the on-figure label reaches */
+  metabolic:"right", cardiovascular:"right", liver:"left", kidney:"left",
+  hematology:"left", thyroid:"right", hormonal:"right", bone:"left",
+  nutrition:"left", inflammation:"right", gastrointestinal:"right",
+  respiratory:"left", neuro_sleep:"left", senses_dental:"right",
+  cancer_screening:"up"
+};
+const HIT_R = {
+  neuro_sleep:16, senses_dental:11, thyroid:12, respiratory:16, cardiovascular:14,
+  liver:14, gastrointestinal:10, inflammation:9, metabolic:10, kidney:12,
+  nutrition:12, hormonal:12, bone:15, hematology:13, cancer_screening:16
+};
+const IDX_LABEL = { neuro_sleep:"Sleep, Mood & Nerves" };  /* the long one, shortened */
+const WORDS = ["none","one","two","three","four","five","six","seven","eight","nine","ten",
+               "eleven","twelve","thirteen","fourteen","fifteen"];
+const word = n => zh() ? String(n) : (n<WORDS.length ? WORDS[n] : String(n));
+const cap = s => zh() ? s : s.charAt(0).toUpperCase()+s.slice(1);
+const pct = v => Math.round((v||0)*100);
+const yr  = d => String(d||"").slice(0,4);
+/* "84 months ago" is arithmetic; "7 years ago" is what a person actually thinks */
+const mo  = n => {
+  const m = Math.round(n||0);
+  if (m < 1)  return t("this month","本月");
+  if (m < 18) return t(m+(m===1?" month":" months"), m+"个月");
+  const y = m/12;
+  const s = y>=10 ? String(Math.round(y)) : (Math.round(y*10)/10).toString().replace(/\.0$/,"");
+  return t(s+(s==="1"?" year":" years"), s+"年");
+};
+
+const SYS  = {}; D.systems.forEach(s=> SYS[s.id]=s);
+const sysName = s => L(s,"name");
+const idxName = s => zh() ? (s.name_zh||s.name) : (IDX_LABEL[s.id]||s.name);
+const NAME = {};
+Object.entries(D.markers||{}).forEach(([k,v])=> NAME[k]=v);
+Object.entries(D.exams||{}).forEach(([k,v])=> NAME[k]=v);
+(D.actions||[]).forEach(a=> NAME[a.target]=a);
+D.systems.forEach(s=>{
+  (s.unknown_markers||[]).forEach(m=> NAME[m.id]=m);
+  (s.unknown_exams||[]).forEach(m=> NAME[m.id]=m);
+});
+const nameOf = id => L(NAME[id],"name") || String(id||"").replace(/_/g," ");
+/* findings live once in the payload; a system carries their ids */
+const FIND = {}; (D.findings||[]).forEach(f=> FIND[f.id]=f);
+const findingsOf = s => (s.findings||[])
+  .map(f=> typeof f==="string" ? FIND[f] : f).filter(Boolean);
+
+/* which documents speak for which system — so every reading can be traced */
+const DOCS = D.documents||[];
+const SYS_OF_MARKER = {}, SYS_OF_EXAM = {};
+Object.entries(D.markers||{}).forEach(([k,v])=> SYS_OF_MARKER[k]=v.system);
+Object.entries(D.exams||{}).forEach(([k,v])=> SYS_OF_EXAM[k]=v.system);
+const DOCS_BY_SYS = {};
+DOCS.forEach(d=>{
+  const set = {};
+  (d.systems||[]).forEach(s=> set[s]=1);
+  (d.markers||[]).forEach(m=>{ if (SYS_OF_MARKER[m]) set[SYS_OF_MARKER[m]]=1; });
+  (d.exam_ids||[]).forEach(e=>{ if (SYS_OF_EXAM[e]) set[SYS_OF_EXAM[e]]=1; });
+  Object.keys(set).forEach(s=>{ (DOCS_BY_SYS[s] = DOCS_BY_SYS[s]||[]).push(d); });
+});
+
+/* ── masthead ────────────────────────────────────────────────────────── */
+const S = D.summary, P = D.profile||{};
+const segs = $("#cert-segs");
+for (let i=0;i<10;i++){
+  const i_ = document.createElement("i"), sp = document.createElement("span");
+  i_.appendChild(sp); segs.appendChild(i_);
+  const fill = Math.max(0, Math.min(1, S.certainty*10 - i));
+  setTimeout(()=>{ sp.style.transform = "scaleX("+fill+")"; }, 240 + i*70);
+}
+$("#cert-val").textContent = pct(S.certainty);
+
+function paintChrome(){
+  document.documentElement.lang = lang;
+  $("#fig").setAttribute("aria-label",t("Interactive body map — select a system", "人体系统图 — 选择一个系统"));
+  $("#figure-hint").textContent=t("Select a system to explore", "选择一个系统，展开查看");
+  $("#txt").setAttribute("aria-label", t("Text size", "文字大小"));
+  $("#lang").setAttribute("aria-label", t("Language", "语言"));
+  $("footer.foot nav").setAttribute("aria-label", t("Record navigation", "健康记录导航"));
+  $("#sheet-print").textContent = t("Print", "打印");
+  $("#sheet-back").textContent = t("← More", "← 更多");
+  document.title = (P.name ? P.name+" · " : "")+t("littledocter","littledocter");
+  $("#who-name").textContent = P.name || t("littledocter","littledocter");
+  const bits = [];
+  if (P.sex) bits.push(t(cap(P.sex), P.sex==="female"?"女":"男"));
+  if (P.age) bits.push(t(Math.round(P.age)+" years", Math.round(P.age)+"岁"));
+  if (S.first_record) bits.push(yr(S.first_record)+"–"+yr(S.last_record));
+  bits.push(t(S.visits+" visits", S.visits+"次就检"));
+  bits.push(t(S.measurements+" results", S.measurements+"项结果"));
+  $("#who-meta").innerHTML = bits.map(b=>"<b>"+esc(b)+"</b>").join(" &nbsp;·&nbsp; ");
+  $("#cert-unit").textContent = t("% on file","% 已记录");
+  $("#cert-cap").textContent = t("record coverage · not a health score","记录覆盖度 · 非健康评分");
+  /* only the states actually present, so nobody reads a colour they never see */
+  const present = {};
+  D.systems.forEach(s=> present[stateOf(s)] = 1);
+  $("#legend").innerHTML = ["attention","managed","watch","steady","unknown"]
+    .filter(k=>present[k]).map(k=>
+    '<div><i class="mk '+k+'"></i>'+esc(stateWord(k))+'</div>').join("");
+  $("#as-of").textContent = t(
+    "as of "+S.as_of+" · "+S.documents+" documents read · "+
+      S.markers_tracked+" of "+S.markers_catalogued+" markers on file",
+    "数据截至 "+S.as_of+" · 已读 "+S.documents+" 份报告 · "+
+      S.markers_catalogued+" 项指标中已有 "+S.markers_tracked+" 项");
+  const nav = {home:t("Home","首页"), more:t("More","更多"), findings:t("Findings","发现"), tests:t("Next tests","建议检查"),
+               trends:t("Trends","趋势"), visit:t("For your doctor","给医生看"),
+               about:t("About","关于")};
+  $$("footer.foot .tbtn").forEach(b=>{
+    const k = b.id==="home-btn" ? "home" : (b.dataset.sheet || "archive");
+    $("span", b).textContent = k==="archive" ? t("Reports","报告") : nav[k];
+  });
+  $("#n-find").textContent = D.findings.length;
+  $("#n-doc").textContent = DOCS.length;
+  $$("#lang button[data-lang]").forEach(b=>{
+    b.classList.toggle("on", b.dataset.lang===lang);
+    b.setAttribute("aria-pressed", b.dataset.lang===lang ? "true" : "false");
+  });
+  $$("#txt button").forEach((b,i)=> b.title =
+    [t("Normal text","正常字号"), t("Larger text","大字号"),
+     t("Largest text","最大字号")][i]);
+  $$(".sysg.dial .cap").forEach(el=> el.textContent = t("whole body","全身"));
+  $$(".hit").forEach(el=>{
+    const s = SYS[el.dataset.sys];
+    if (s) el.setAttribute("aria-label",
+      sysName(s)+" — "+stateWord(stateOf(s))+", "+certWord(s.certainty_label)+
+      ". "+t("Press Enter to open this system's report",
+             "按回车打开该系统的报告"));
+  });
+}
+
+/* ── figure: state + hit targets ─────────────────────────────────────── */
+const TOUCH = !!(window.matchMedia && matchMedia("(hover:none)").matches);
+const hits = $("#hits"), NS = "http://www.w3.org/2000/svg";
+const anchors = {};
+$$(".sysg").forEach(g=>{
+  const id = g.dataset.sys, s = SYS[id];
+  if (s) g.dataset.state = stateOf(s);
+  const n = $(".node", g);
+  anchors[id] = {x:+n.getAttribute("cx"), y:+n.getAttribute("cy")};
+  const c = document.createElementNS(NS,"circle");
+  c.setAttribute("cx", anchors[id].x); c.setAttribute("cy", anchors[id].y);
+  c.setAttribute("r", HIT_R[id]||14);
+  c.setAttribute("class","hit"); c.dataset.sys = id;
+  /* keyboard reachable: tab through the body, Enter/Space pins */
+  c.setAttribute("tabindex","0");
+  c.setAttribute("role","button");
+  hits.appendChild(c);
+});
+
+/* ── small parts ─────────────────────────────────────────────────────── */
+function spark(hist, bad){
+  const v = (hist||[]).map(h=>h.value).filter(x=>typeof x==="number");
+  if (v.length < 3) return "";
+  const w=38, h=11, lo=Math.min.apply(null,v), hi=Math.max.apply(null,v), r=(hi-lo)||1;
+  const pts = v.map((x,i)=>[ (i/(v.length-1))*w, h-1 - ((x-lo)/r)*(h-2) ]);
+  const d = pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+  const last = pts[pts.length-1], col = bad || "var(--ink-3)";
+  return '<svg class="spark" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'+
+    '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width=".9" opacity=".55"/>'+
+    '<circle cx="'+last[0].toFixed(1)+'" cy="'+last[1].toFixed(1)+'" r="1.5" fill="'+col+'"/></svg>';
+}
+const arrow = m => m.side==="high" ? "↑" : m.side==="low" ? "↓" : "";
+/* the state is printed beside the test already; no need to say it twice */
+const whyOf = a => {
+  const r = (a.reasons||[])[0];
+  return r ? L(r,"text").replace(/^Scheduled screening[^.]*\.\s*/, "")
+                        .replace(/^筛查计划[^。]*。\s*/, "") : "";
+};
+/* a milestone or a quote is only useful if it opens the page it came from */
+const docHref = id => "archive.html?doc="+encodeURIComponent(id);
+const DOC_BY_ID = {}; DOCS.forEach(d=> DOC_BY_ID[d.id]=d);
+const docLabel = id => {
+  const d = DOC_BY_ID[id];
+  if (!d) return "";
+  return (d.date||"")+" · "+(d.modality || (d.exams? t("imaging","影像") : t("lab","化验")));
+};
+
+/* ── report ──────────────────────────────────────────────────────────── */
+const report = $("#report"), pinBtn = $("#pin-btn"), resetBtn = $("#reset-btn");
+const reportBox = $(".report");
+let active = null, pinned = null, peeked = null;
+
+function syncFade(){
+  const over = report.scrollHeight - report.clientHeight > 22;
+  reportBox.classList.toggle("scrolls", over);
+  reportBox.classList.toggle("at-end",
+    over && report.scrollTop + report.clientHeight >= report.scrollHeight - 6);
+}
+report.addEventListener("scroll", syncFade, {passive:true});
+addEventListener("resize", ()=>{ syncFade(); measureChrome(); });
+const afterLayout = fn => requestAnimationFrame(()=> requestAnimationFrame(fn));
+
+function certBlock(s){
+  return '<div class="p-cert"><span class="lbl">'+esc(certWord(s.certainty_label))+' · '+
+    esc(stateWord(stateOf(s)))+'</span><span class="v num">'+pct(s.certainty)+'%</span></div>'+
+    '<div class="bar"><span style="--w:'+(s.certainty||0).toFixed(3)+'"></span></div>';
+}
+
+/* what you already know about yourself, said first ---------------------- */
+function knownBlock(s){
+  const cs = s.conditions||[];
+  if (!cs.length) return "";
+  const list = cs.map(c=>{
+    const since = c.since ? t(" since "+c.since, "，"+c.since+"年起") : "";
+    return '<b>'+esc(L(c,"name"))+'</b>'+esc(since);
+  }).join(t(" · "," · "));
+  const tail = s.under_care
+    ? t("Already diagnosed and being looked after — what follows is the record of "+
+        "how it is holding, not a new alarm.",
+        "这些已经确诊并在管理中——下面是它维持得如何的记录，不是新的警报。")
+    : t("Recorded in your profile as known.", "已在个人资料中记为已知情况。");
+  return '<div class="known"><span class="label">'+t("You already know about","你已知的情况")+
+    '</span><p>'+list+' — '+esc(tail)+'</p></div>';
+}
+
+/* since when, and where is it going ----------------------------------- */
+function trendBlock(s){
+  const t_ = s.story||{};
+  if (!t_.trajectory || t_.trajectory==="unknown")
+    return '<div class="blk"><span class="label">'+t("Trend","趋势")+'</span>'+
+      '<p class="quiet">'+t("Nothing on file yet — a first measurement would start the record.",
+                            "尚无记录 — 做一次检查即可开始建立档案。")+'</p></div>';
+  const arc = [];
+  if (t_.onset) arc.push(t("onset "+yr(t_.onset.date), yr(t_.onset.date)+"年起"));
+  if (t_.visits) arc.push(t(t_.visits+(t_.visits===1?" record":" records"), t_.visits+"次记录"));
+  if (t_.years_tracked) arc.push(t(t_.years_tracked+"y", t_.years_tracked+"年"));
+  const miles = (t_.milestones||[]).map(m=>{
+    const kind = m.tag==="onset" ? t("first sign","首次出现")
+               : m.kind==="exam" ? t("imaging","影像") : t("lab","化验");
+    const inner = '<time>'+esc(m.date)+'</time>'+
+      '<span class="what">'+esc(L(m,"detail")||L(m,"label"))+'<u>'+esc(kind)+'</u></span>';
+    const cls = (m.tag==="onset"?"onset ":"")+"sev"+m.sev;
+    return m.doc
+      ? '<a class="mile '+cls+'" href="'+docHref(m.doc)+'" title="'+esc(docLabel(m.doc))+'">'+
+          inner+'</a>'
+      : '<div class="mile '+cls+'">'+inner+'</div>';
+  }).join("");
+  const quotes = (t_.quotes||[]).slice(-3).reverse().map(q=>
+    '<div class="quote '+esc(q.status)+'"><time>'+esc(q.date)+' · '+
+      esc(q.modality||q.file||t("report","报告"))+'</time>'+esc(q.text)+
+      (q.doc? '<br><a href="'+docHref(q.doc)+'">'+t("open this report →","查看这份报告 →")+'</a>' : '')+
+    '</div>').join("");
+  return '<div class="blk"><span class="label">'+t("Trend","趋势")+'</span>'+
+    '<div class="traj '+esc(t_.trajectory)+'"><span class="word">'+
+      esc(L(t_,"trajectory_word"))+'</span><span class="arc">'+esc(arc.join(" · "))+'</span></div>'+
+    '<p class="story">'+(L(t_,"story")||[]).map(x=>'<span>'+esc(x)+'</span>').join("")+'</p>'+
+    (miles? '<div style="margin-top:14px">'+miles+'</div>' : '')+
+    (quotes? '<div style="margin-top:14px">'+quotes+'</div>' : '')+
+    '</div>';
+}
+
+function markerRows(s){
+  const flag = m => m.status==="out_of_range" ? 2 : m.status==="suboptimal" ? 1 : 0;
+  const ms = (s.markers||[]).filter(m=>flag(m)>0)
+              .sort((a,b)=> flag(b)-flag(a) || (a.tier==="core"?-1:1));
+  if (!ms.length) return "";
+  const col = m => m.status==="out_of_range" ? "var(--attention)" : "var(--watch)";
+  return '<div class="blk"><span class="label">'+t("Outside its range","超出范围")+'<i>'+ms.length+
+    '</i></span>'+
+    ms.map(m=>{
+      const st = m.story||{};
+      const sub = [m.derived ? t("derived", "计算值") : "", L(m,"band"), L(st,"sentence"),
+                   m.freshness!=="fresh" ? t("measured "+mo(m.months_since)+" ago",
+                                             mo(m.months_since)+"前测的") : ""]
+                   .filter(Boolean).join(" · ");
+      return '<div class="mrow '+(m.status==="out_of_range"?"out":"sub-opt")+
+        (m.freshness!=="fresh"?" stale":"")+'">'+
+        '<span class="nm">'+esc(L(m,"name"))+'</span>'+
+        '<span class="vv num">'+arrow(m)+' '+esc(m.display||"—")+
+          (m.unit?'<u>'+esc(m.unit)+'</u>':'')+'</span>'+
+        '<span class="sub">'+esc(sub)+'</span>'+
+        spark(m.history, col(m))+'</div>';
+    }).join("")+'</div>';
+}
+
+function settledRows(s){
+  /* "context" markers (height, and anything with no band at all) are facts, not
+     reassurance — they do not belong under a heading that says Confirmed */
+  const ms = (s.markers||[]).filter(m=>m.status==="optimal"||m.status==="steady");
+  const ex = (s.exams||[]).filter(e=>e.status==="normal");
+  const ctx = (s.markers||[]).filter(m=>m.status==="context");
+  if (!ms.length && !ex.length && !ctx.length) return "";
+  const chips = (list, extra) => list.map(x=>'<span class="chip'+(extra||"")+'">'+
+    esc(L(x,"name"))+' '+esc(x.display||x.qualitative||"")+
+    (x.status==="context" && x.band ? ' · '+esc(L(x,"band")) : '')+
+    (x.derived ? ' · '+t("derived", "计算值") : "")+'</span>').join("");
+  return (ms.length||ex.length
+    ? '<div class="blk"><span class="label">'+t("Looked at, in range","已查，正常")+'<i>'+
+      (ms.length+ex.length)+'</i></span><div class="chips">'+
+      chips(ms)+
+      ex.map(e=>'<span class="chip">'+esc(L(e,"name"))+' · '+
+        t("clear "+yr(e.date), yr(e.date)+"年正常")+'</span>').join("")+
+      '</div></div>' : '')+
+    (ctx.length
+    ? '<div class="blk"><span class="label">'+t("For context","参考信息")+'</span>'+
+      '<div class="chips">'+chips(ctx," dash")+'</div></div>' : '');
+}
+
+function unknownBlock(s){
+  /* Never measured and measured-a-long-time-ago are different problems with
+     different answers, so they are two lists, not one bag of grey chips. */
+  const core = {};
+  (s.core_missing||[]).forEach(m=>{ core[m.id||m] = 1; });
+  const missing = [], seenChip = {};
+  const push = (list, n, isCore) => {
+    const k = String(n||"").toLowerCase();
+    if (!k || seenChip[k]) return;
+    seenChip[k] = 1; list.push({n:n, core:isCore});
+  };
+  (s.unknown_markers||[]).forEach(m=> push(missing, L(m,"name"), !!core[m.id]));
+  (s.unknown_exams||[]).forEach(m=> push(missing, L(m,"name"), !!core[m.id]));
+  (s.core_missing||[]).forEach(m=> push(missing, nameOf(m.id||m), true));
+  missing.sort((a,b)=> (b.core?1:0)-(a.core?1:0));
+  const stale = [];
+  (s.markers||[]).filter(m=>m.freshness!=="fresh")
+    .forEach(m=> stale.push({n:L(m,"name"), age:mo(m.months_since)}));
+  (s.exams||[]).filter(e=>e.freshness!=="fresh")
+    .forEach(e=> stale.push({n:L(e,"name"), age:mo(e.months_since)}));
+  if (!missing.length && !stale.length) return "";
+  return (missing.length
+    ? '<div class="blk"><span class="label">'+t("Not in this record","本记录未提供")+'<i>'+
+      missing.length+'</i></span><div class="chips">'+ missing.map(x=>
+        '<span class="chip dash"'+(x.core?' title="'+t("a core test for this system",
+          "该系统的核心项目")+'"':'')+'>'+esc(x.n)+(x.core?' ·':'')+'</span>').join("")+
+      '</div></div>' : '')+
+    (stale.length
+    ? '<div class="blk"><span class="label">'+t("Worth a fresh reading","建议复查")+'<i>'+
+      stale.length+'</i></span><div class="chips">'+ stale.map(x=>
+        '<span class="chip">'+esc(x.n)+' · '+esc(x.age)+'</span>').join("")+
+      '</div></div>' : '');
+}
+
+function nextBlock(s){
+  const seen = {}, out = [];
+  findingsOf(s).forEach(f=> (f.next||[]).forEach(n=>{
+    if (seen[n.test]) return; seen[n.test]=1;
+    out.push({name:nameOf(n.test), why:L(n,"why")});
+  }));
+  (D.actions||[]).filter(a=>a.system===s.id).forEach(a=>{
+    if (seen[a.target]) return; seen[a.target]=1;
+    out.push({name:L(a,"name"), why:whyOf(a)});
+  });
+  if (!out.length) return "";
+  return '<div class="blk"><span class="label">'+t("Worth asking about","可以问医生")+'<i>'+
+    out.length+'</i></span>'+
+    out.map(x=>'<div class="line col"><b>'+esc(x.name)+'</b><span class="why">'+
+      esc(x.why)+'</span></div>').join("")+'</div>';
+}
+
+function findingsBlock(s){
+  const f = findingsOf(s);
+  if (!f.length) return "";
+  return '<div class="blk"><span class="label">'+t("What this means","这说明什么")+
+    '<i>'+f.length+'</i></span>'+
+    f.map(x=>'<div class="line"><i class="dot '+x.severity+'"></i><span><b>'+
+      esc(L(x,"title"))+'</b><br><span class="quiet">'+esc(L(x,"says"))+
+      '</span></span></div>').join("")+
+    '</div>';
+}
+
+function upkeepBlock(s){
+  const m = L(s,"maintenance")||[];
+  if (!m.length) return "";
+  return '<div class="blk"><span class="label">'+t("Day to day","日常保养")+'</span>'+
+    m.map(x=>'<div class="line"><span>'+esc(x)+'</span></div>').join("")+'</div>';
+}
+
+function sourceBlock(s){
+  const ds = (DOCS_BY_SYS[s.id]||[]).slice().sort((a,b)=>String(b.date).localeCompare(a.date));
+  if (!ds.length) return "";
+  return '<div class="blk"><span class="label">'+t("Where this came from","证据来源")+'<i>'+
+    ds.length+'</i></span><div class="srcs">'+ds.slice(0,10).map(d=>
+      '<a href="'+docHref(d.id)+'">'+esc(d.date||"—")+' · '+
+      esc(d.title||d.name||d.file)+'</a>').join("")+
+    '<a href="archive.html?sys='+encodeURIComponent(s.id)+'">'+
+      t("search all of them →","搜索全部 →")+'</a>'+
+    '</div></div>';
+}
+
+/* Supporting material stays in the document and opens only on request. */
+const expandedLayers = new Set();
+function layer(key, title, hint, content, open=false){
+  if (!content) return "";
+  return '<details class="layer" data-layer="'+esc(key)+'"'+
+    (expandedLayers.has(key)||open ? ' open' : '')+'><summary><span>'+esc(title)+
+    '</span><small>'+esc(hint||"")+'</small><i aria-hidden="true">+</i></summary>'+
+    '<div class="layer-content">'+content+'</div></details>';
+}
+report.addEventListener("toggle", e=>{
+  if (!e.target.matches("details[data-layer]")) return;
+  const key=e.target.dataset.layer;
+  e.target.open ? expandedLayers.add(key) : expandedLayers.delete(key);
+  afterLayout(syncFade);
+},true);
+let printLayers=[];
+addEventListener("beforeprint",()=>{
+  printLayers=$$("details[data-layer]",report).map(d=>[d,d.open]);
+  printLayers.forEach(([d])=>d.open=true);
+});
+addEventListener("afterprint",()=>{
+  printLayers.forEach(([d,open])=>d.open=open);
+  printLayers=[];
+});
+function renderSystem(id){
+  const s = SYS[id];
+  if (!s) { renderSummary(); return; }
+  report.className = "body fade-in";
+  reportBox.classList.toggle("managed", stateOf(s)==="managed");
+  const st=s.story||{}, fs=findingsOf(s), ms=s.markers||[];
+  const bad=ms.filter(m=>m.status==="out_of_range"||m.status==="suboptimal").length;
+  const missing=(s.unknown_markers||[]).length+(s.unknown_exams||[]).length;
+  const stale=ms.filter(m=>m.freshness!=="fresh").length+(s.exams||[]).filter(e=>e.freshness!=="fresh").length;
+  report.innerHTML =
+    '<span class="label">'+t("Selected system","当前系统")+'</span>'+
+    '<h2 class="p-name">'+esc(sysName(s))+'</h2>'+
+    '<p class="system-status"><i class="mk '+stateOf(s)+'"></i>'+esc(stateWord(stateOf(s)))+'</p>'+
+    certBlock(s)+knownBlock(s)+
+    '<div class="system-glance"><span>'+esc(L(st,"trajectory_word")||t("No trend yet","暂无趋势"))+'</span><span>'+
+      esc(t(missing+" not on file · "+stale+" older results",missing+" 项未记录 · "+stale+" 项较早结果"))+'</span></div>'+
+    layer(id+"-results",t("Results & findings","结果与发现"),t(bad+" flagged · "+fs.length+" findings",bad+" 项需关注 · "+fs.length+" 条发现"),markerRows(s)+findingsBlock(s)+settledRows(s),fs.some(f=>f.severity==="urgent"))+
+    layer(id+"-history",t("History & trends","历史与趋势"),t("Dated changes and original wording","历次变化与报告原文"),trendBlock(s))+
+    layer(id+"-next",t("Next steps & gaps","下一步与信息缺口"),t("Suggested tests, missing and older results","建议检查、未查项目与过往结果"),nextBlock(s)+unknownBlock(s))+
+    layer(id+"-context",t("About this system","了解这个系统"),t("Daily care and source reports","日常保养与证据来源"),'<p class="quiet">'+esc(zh()?s.name:s.name_zh)+'</p><p class="p-ess">'+esc(L(s,"essence"))+'</p>'+upkeepBlock(s)+sourceBlock(s));
+  report.scrollTop = 0;
+  afterLayout(syncFade);
+}
+
+function indexRows(){
+  return '<div class="blk"><span class="label">'+t("Every system","全部系统")+'<i>'+
+    D.systems.length+'</i></span>'+
+    '<div class="idx">'+ D.systems.map(s=>{
+      const st = s.story||{}, state = stateOf(s);
+      /* a drift that is already being treated is coloured as care, not as alarm */
+      const moving = st.trajectory==="worsening"||st.trajectory==="new"||st.trajectory==="mixed";
+      const cls = moving ? (state==="managed" ? " care" : " worse") : "";
+      const trw = L(st,"trajectory_word");
+      return '<button class="irow'+cls+'" type="button" data-sys="'+s.id+'" title="'+
+        esc(sysName(s)+" — "+stateWord(state))+'">'+
+        '<i class="mk '+state+'"></i>'+
+        '<span class="nm">'+esc(idxName(s))+'</span>'+
+        '<span class="tr">'+esc(st.onset? trw+" · "+yr(st.onset.date) : (trw||""))+'</span>'+
+        '<span class="pct num">'+pct(s.certainty)+'</span></button>';
+    }).join("")+'</div></div>';
+}
+
+function renderSummaryDetail(){
+
+  const c = S.systems||{};
+  /* The opening sentence is built from the parts that are actually non-zero, so
+     nobody is told "0 systems need attention" or greeted by a list of alarms
+     that does not apply to them. */
+  const rest = [];
+  if (c.managed) rest.push(t(word(c.managed)+" already under care", c.managed+"个已在管理中"));
+  if (c.watch)   rest.push(t(word(c.watch)+" worth watching", c.watch+"个值得观察"));
+  if (c.steady)  rest.push(t(word(c.steady)+" in range", c.steady+"个在范围内"));
+  if (c.unknown) rest.push(t(word(c.unknown)+" with limited data", c.unknown+"个资料有限"));
+  const sentence = c.attention
+    ? t(cap(word(c.attention))+" "+(c.attention===1?"system":"systems")+
+        " could use a doctor's eye.",
+        c.attention+"个系统建议请医生看看。")
+    : (rest.length ? t("No automated finding was generated; this does not assess urgent symptoms.","未生成自动发现；本页不评估急症。")
+                   : t("Nothing measured yet — add a report to begin.",
+                       "还没有任何记录 — 放入一份报告即可开始。"));
+  const tally = rest.length
+    ? cap(rest.join(t(", ","，"))) + t(".","。") + " " : "";
+  const moving = D.systems.filter(s=>{
+    const st = s.story||{};
+    return st.trajectory==="worsening"||st.trajectory==="new"||st.trajectory==="mixed";
+  });
+  const top = D.findings.slice(0,3);
+  const tests = (D.actions||[]).slice(0,2);
+  return '<span class="label">'+t("Where things stand","目前的情况")+'</span>'+
+    '<h2 class="p-name" style="max-width:26ch">'+esc(cap(sentence))+'</h2>'+
+    '<p class="p-ess">'+esc(tally)+t(
+      S.counts.out_of_range+' results sit outside their range, '+S.counts.suboptimal+
+        ' are drifting, '+S.counts.optimal+' are within the stored reference intervals. '+
+        (TOUCH?'Tap':'Hover')+' an organ to read that system on its own; '+
+        (TOUCH?'tap once':'click an organ, or any row below,')+' to hold it open. '+
+        'Nothing here changes without your click.',
+      S.counts.out_of_range+'项结果超出范围，'+S.counts.suboptimal+'项正在漂移，'+
+        S.counts.optimal+'项在内置参考范围内。'+(TOUCH?'点按':'悬停')+
+        '器官即可单独查看该系统，'+(TOUCH?'点按一次':'点击器官或下方任意一行')+
+        '可固定打开。没有你的点击，这里不会自行跳转。')+'</p>'+
+    '<div class="cols">'+
+    (top.length? '<div class="blk"><span class="label">'+t("Worth reading first","先看这几条")+
+      '<i>'+t(top.length+" of "+D.findings.length, top.length+" / "+D.findings.length)+
+      '</i></span>'+ top.map(x=>
+      '<div class="line"><i class="dot '+x.severity+'"></i><span><b>'+
+        esc(L(x,"title"))+'</b> <span class="quiet">'+esc(sysName(SYS[x.system]||{}))+
+        '</span></span></div>').join("")+'</div>' : '')+
+    (tests.length? '<div class="blk"><span class="label">'+
+      t("Two to ask about first","先问这两项")+'</span>'+
+      tests.map(x=>'<div class="line col"><b>'+esc(L(x,"name"))+'</b><span class="why">'+
+        esc(whyOf(x))+'</span></div>').join("")+'</div>' : '')+
+    (moving.length? '<div class="blk"><span class="label">'+t("Changing","正在变化")+'<i>'+
+      moving.length+'</i></span>'+
+      moving.slice(0,3).map(s=>{
+        const st = s.story||{};
+        const w = L(st,"trajectory_word");
+        return '<button class="line col" type="button" data-sys="'+s.id+
+          '" style="width:100%;background:none;border:0;border-top:1px solid var(--hair-2);'+
+          'text-align:left;cursor:pointer;font-family:var(--sans);padding:6px 0">'+
+          '<b>'+esc(sysName(s))+' — '+esc(zh()? w : w.toLowerCase())+
+          (st.onset? esc(t(" since "+yr(st.onset.date), "，"+yr(st.onset.date)+"年起")) : "")+'</b>'+
+          '<span class="why">'+esc((L(st,"story")||[])[1]||(L(st,"story")||[])[0]||"")+
+          '</span></button>';
+      }).join("")+'</div>' : '')+
+    '</div>';
+
+}
+
+function renderSummary(){
+  reportBox.classList.remove("managed");
+  report.className="body fade-in";
+  const counts=S.systems||{};
+  const priorities=D.findings.filter(f=>f.severity==="urgent");
+  D.findings.slice(0,3).forEach(f=>{ if(!priorities.includes(f)) priorities.push(f); });
+  const headline=counts.attention ? t("A few things to follow up.","有几件事，值得跟进。") :
+    t("Your record, at a glance.","你的健康记录，一目了然。");
+  const stats=[['attention',t("Follow up","需跟进")],['watch',t("Watch","观察")],
+    ['managed',t("Under care","管理中")],['steady',t("In range","范围内")],['unknown',t("Limited data","资料有限")]];
+  report.innerHTML='<span class="label">'+t("Your overview","健康概览")+'</span>'+
+    '<h2 class="overview-title">'+headline+'</h2>'+
+    '<div class="status-strip">'+stats.filter(([k])=>counts[k]).map(([k,label])=>
+      '<div><strong>'+counts[k]+'</strong><span><i class="mk '+k+'"></i>'+label+'</span></div>').join('')+'</div>'+
+    '<div class="priority-head"><span class="label">'+t("Start here","先看这里")+'</span><button class="text-link" data-open-sheet="findings">'+t("All findings","全部发现")+' '+D.findings.length+' ↗</button></div>'+
+    (priorities.length?'<div class="priority-list">'+priorities.map((f,i)=>
+      '<button class="priority-card" data-sys="'+esc(f.system)+'"><span class="priority-number">'+String(i+1).padStart(2,'0')+'</span><span><small>'+esc(sysName(SYS[f.system]||{}))+'</small><b>'+esc(L(f,'title'))+'</b></span><span aria-hidden="true">↗</span></button>').join('')+'</div>' : '<p class="quiet">'+t("No findings on file. Explore a system to see what is known and missing.","暂无发现。选择一个系统，查看已知信息与缺口。")+'</p>')+
+    '<div class="overview-actions"><button class="text-link" data-open-sheet="tests">'+t("Next tests","建议检查")+' · '+D.actions.length+' ↗</button><button class="text-link" data-open-sheet="visit">'+t("For your doctor","给医生看")+' ↗</button></div>'+
+    layer("overview-systems",t("Explore all systems","浏览全部系统"),t(D.systems.length+" systems · select to explore",D.systems.length+" 个系统 · 点击查看"),indexRows())+
+    layer("overview-detail",t("Full record overview","完整记录概览"),t("Result totals, priorities and changing trends","结果统计、优先事项与趋势变化"),renderSummaryDetail());
+  report.scrollTop=0;
+  afterLayout(syncFade);
+}
+report.addEventListener("click",e=>{
+  const b=e.target.closest("[data-open-sheet]");
+  if(b) openSheet(b.dataset.openSheet);
+});
+
+/* ── the tag on the figure ───────────────────────────────────────────── */
+const tag = $("#tag"), tagLine = $("#tag-line"), tagText = $("#tag-text");
+function showTag(id){
+  const a = anchors[id]; if (!a) return;
+  const side = SIDE[id] || "right";
+  if (side === "up"){                     /* the margin dial labels itself upward */
+    tagLine.setAttribute("x1", a.x); tagLine.setAttribute("y1", a.y - 18);
+    tagLine.setAttribute("x2", a.x); tagLine.setAttribute("y2", a.y - 31);
+    tagText.setAttribute("x", a.x);  tagText.setAttribute("y", a.y - 38);
+    tagText.setAttribute("text-anchor", "middle");
+  } else {
+    const left = side === "left";
+    const stop = left ?  104 : 287;
+    const dir  = left ? -1 : 1;
+    tagLine.setAttribute("x1", a.x + dir*9);  tagLine.setAttribute("y1", a.y);
+    tagLine.setAttribute("x2", stop);         tagLine.setAttribute("y2", a.y);
+    tagText.setAttribute("x", stop + dir*5);  tagText.setAttribute("y", a.y + 3.2);
+    tagText.setAttribute("text-anchor", left ? "end" : "start");
+  }
+  tagText.textContent = shortOf(id);
+  tag.classList.add("show");
+}
+
+/* ── activation ──────────────────────────────────────────────────────── */
+function mark(id){
+  $$(".sysg").forEach(g=> g.classList.toggle("on", g.dataset.sys===id));
+  $$(".irow").forEach(r=> r.classList.toggle("on", r.dataset.sys===id));
+}
+function activate(id){
+  if (active === id) return;
+  active = id; peeked = null;
+  document.body.classList.remove("peeking");
+  document.body.classList.add("hovering");
+  mark(id);
+  showTag(id);
+  renderSystem(id);
+  pinBtn.hidden = false; resetBtn.hidden = false;
+  pinBtn.parentNode.classList.add("live");
+  pinBtn.textContent = pinned===id ? t("unpin","取消固定") : t("pin open","固定");
+  resetBtn.textContent = t("back to summary","返回总览");
+}
+function deactivate(){
+  if (pinned) { active = null; activate(pinned); return; }
+  active = null; peeked = null;
+  document.body.classList.remove("hovering");
+  mark(null);
+  tag.classList.remove("show");
+  renderSummary();
+  pinBtn.hidden = true; resetBtn.hidden = true;
+  pinBtn.parentNode.classList.remove("live");
+}
+function pin(id){
+  pinned = id;
+  document.body.classList.add("pinned");
+  active = null; activate(id);
+  report.focus({preventScroll:true});
+  if (innerWidth<=1080) reportBox.scrollIntoView({block:"start",behavior:"instant"});
+}
+function unpin(){
+  pinned = null;
+  document.body.classList.remove("pinned");
+  deactivate();
+  report.focus({preventScroll:true});
+  if (innerWidth<=1080) reportBox.scrollIntoView({block:"start",behavior:"instant"});
+}
+
+/* organs on the figure */
+$$(".hit").forEach(el=>{
+  const id = el.dataset.sys;
+  el.addEventListener("mouseenter", ()=>{ if (!pinned && matchMedia("(hover:hover)").matches) activate(id); });
+  el.addEventListener("mouseleave", ()=>{ if (!pinned && matchMedia("(hover:hover)").matches) deactivate(); });
+  el.addEventListener("focus",      ()=>{ if (!pinned && matchMedia("(hover:hover)").matches) activate(id); });
+  el.addEventListener("click", e=>{ e.preventDefault(); pinned===id ? unpin() : pin(id); });
+  el.addEventListener("keydown", e=>{
+    if (e.key==="Enter" || e.key===" " || e.key==="Spacebar"){
+      e.preventDefault(); pinned===id ? unpin() : pin(id);
+    }
+  });
+});
+/* Rows inside the report are rebuilt on every render, so delegate.
+   Passing over a row only points at the organ on the figure — reading the
+   summary must never swap the panel out from under the cursor. The panel
+   changes on click alone. */
+function peek(id){
+  if (peeked === id || active === id) return;
+  peeked = id;
+  document.body.classList.add("peeking");   /* points at the organ, dims nothing else */
+  mark(id); showTag(id);
+}
+function unpeek(){
+  if (!peeked) return;
+  peeked = null;
+  document.body.classList.remove("peeking");
+  if (active){ mark(active); showTag(active); return; }
+  mark(null);
+  tag.classList.remove("show");
+}
+report.addEventListener("mouseover", e=>{
+  const el = e.target.closest("button[data-sys]");
+  if (el) peek(el.dataset.sys);
+});
+report.addEventListener("mouseout", e=>{
+  const el = e.target.closest("button[data-sys]");
+  if (el && !e.relatedTarget?.closest?.("button[data-sys]")) unpeek();
+});
+report.addEventListener("click", e=>{
+  const el = e.target.closest("button[data-sys]");
+  if (!el) return;
+  e.preventDefault();
+  if(el.classList.contains("priority-card")) expandedLayers.add(el.dataset.sys+"-results");
+  pinned===el.dataset.sys ? unpin() : pin(el.dataset.sys);
+});
+pinBtn.addEventListener("click", ()=>{ pinned ? unpin() : pin(active); });
+resetBtn.addEventListener("click", unpin);
+
+/* ── sheets ──────────────────────────────────────────────────────────── */
+const sheet = $("#sheet"), scrim = $("#scrim"), sBody = $("#sheet-body"), sTitle = $("#sheet-title");
+const SEV_ORDER = {urgent:0, act:1, watch:2, info:3};
+
+function sheetFindings(){
+  const fs = D.findings.slice().sort((a,b)=>SEV_ORDER[a.severity]-SEV_ORDER[b.severity]);
+  const SEV = {urgent:t("urgent","紧急"), act:t("act","需处理"), watch:t("watch","观察"),
+               info:t("info","参考")};
+  if (!fs.length) return '<p class="quiet">'+t("No automated findings from the interpretable records. This does not rule out illness or assess urgent symptoms.","可解读记录未生成自动发现。这不代表排除疾病，也不评估急症。")+'</p>';
+  return fs.map(f=>'<div class="item">'+
+    '<h3><i class="dot '+f.severity+'"></i><span>'+esc(L(f,"title"))+'</span></h3>'+
+    '<div class="sys">'+esc(sysName(SYS[f.system]||{})||f.system)+' · '+
+      esc(SEV[f.severity]||f.severity)+'</div>'+
+    '<p>'+esc(L(f,"says"))+'</p>'+
+    ((f.evidence||[]).length? '<div class="ev">'+f.evidence.map(e=>
+      '<span class="'+(e.status==="out_of_range"?"bad":"")+'">'+esc(L(e,"name"))+' '+
+      esc(e.display)+' '+esc(e.unit||"")+' · '+esc(e.date||"")+
+      (e.doc ? ' <a href="'+docHref(e.doc)+'">↗</a>' : '')+'</span>').join("")+'</div>' : '')+
+    ((L(f,"do")||[]).length? '<ul>'+L(f,"do").map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>' : '')+
+    ((f.next||[]).length? '<ul style="margin-top:10px">'+f.next.map(n=>
+      '<li><b style="font-weight:400">'+esc(nameOf(n.test))+'</b> — '+esc(L(n,"why"))+
+      '</li>').join("")+'</ul>' : '')+
+    '</div>').join("");
+}
+function sheetTests(){
+  const PRIO = {essential:t("discuss first","优先讨论"), recommended:t("recommended","建议"),
+                optional:t("optional","可选")};
+const mode=(D.release||{}).screening||"off";
+  const intro='<p class="quiet">'+(mode==="off" ? t("Screening reminders are off. These are discussion prompts from the available records, not a complete testing plan.","筛查提醒已关闭。以下仅是基于现有记录的讨论事项，并非完整检查计划。") : t("Screening reference: "+mode+". Eligibility and timing need individual review.","筛查参考："+mode+"。适用条件及时机需个体化复核。"))+'</p>';
+  return intro+(D.actions||[]).map(a=>'<div class="trow '+esc(a.priority)+'">'+
+    '<span class="rk num">'+(a.order||"")+'</span>'+
+    '<span class="nm">'+esc(L(a,"name"))+'</span>'+
+    '<span class="pr">'+esc(PRIO[a.priority]||a.priority)+'</span>'+
+    '<span class="why">'+esc(whyOf(a))+'</span>'+
+    '<span class="st">'+esc(sysName(SYS[a.system]||{})||a.system)+' · '+
+      (a.state==="never" ? t("not in this record","本记录未提供")
+       : a.state==="stale" ? t("last "+(a.last||"?"), "上次 "+(a.last||"?"))
+       : a.state==="recheck" ? t("recheck","复查")
+       : t("refresh","更新"))+'</span></div>').join("");
+}
+function sheetTrends(){
+  const order = {worsening:0, new:1, mixed:2, drifting:3, stable:4, improving:5,
+                 resolved:6, single:7, unknown:8};
+  const ss = D.systems.slice().sort((a,b)=>
+    (order[(a.story||{}).trajectory]??9) - (order[(b.story||{}).trajectory]??9));
+  return ss.map(s=>{
+    const st = s.story||{};
+    /* every dated piece of evidence behind the story, as a link to the original */
+    const seen = {}, links = [];
+    (st.milestones||[]).forEach(m=>{
+      if (!m.doc || seen[m.doc]) return;
+      seen[m.doc] = 1;
+      links.push({doc:m.doc, date:m.date, bad:m.sev>1,
+                  what:m.kind==="exam" ? t("imaging","影像") : t("lab","化验")});
+    });
+    (st.quotes||[]).forEach(q=>{
+      if (!q.doc || seen[q.doc]) return;
+      seen[q.doc] = 1;
+      links.push({doc:q.doc, date:q.date, bad:q.status==="abnormal",
+                  what:q.modality || t("report","报告")});
+    });
+    links.sort((a,b)=> String(b.date).localeCompare(a.date));
+    const docs = links.length ? '<span class="docs">'+links.map(l=>
+      '<a href="'+docHref(l.doc)+'" class="'+(l.bad?"bad":"")+'" title="'+
+      esc(docLabel(l.doc))+'">'+esc(l.date)+' · '+esc(l.what)+'</a>').join("")+'</span>' : "";
+    const last = (st.quotes||[])[ (st.quotes||[]).length-1 ];
+    return '<div class="tline">'+
+      '<span class="nm">'+esc(sysName(s))+'<em>'+esc(L(st,"trajectory_word")||"—")+'</em></span>'+
+      '<span class="st">'+esc((L(st,"story")||[]).join(" "))+
+      (last? '<em>“'+esc(last.text)+'” · '+esc(last.date)+'</em>' : '')+
+      docs+'</span></div>';
+  }).join("")+
+  '<p class="note">'+t(
+    "A trajectory is read from your own records only: the first record that showed something, "+
+    "every crossing since, and the direction of the last few years. Two points make a line, "+
+    "not a trend — anything marked “single record” is waiting for a second measurement. "+
+    "Every date is a link to the report it came from.",
+    "趋势只来自你自己的记录：第一次出现异常的那份报告、之后每一次跨过界线的时刻，以及最近几年的方向。"+
+    "两个点只能连成线，还算不上趋势——标注为“单次记录”的项目在等第二次测量。每个日期都可点击，直接打开对应的原始报告。")+
+  '</p>';
+}
+/* ── one page to take to the appointment ─────────────────────────────────
+   Elders rarely want a screen in the consulting room; they want a sheet of
+   paper. This is that sheet: who, what is known and treated, what is out of
+   range with dates, what is not in this record, and the questions to ask.
+   Printing prints exactly this. */
+function sheetVisit(){
+  const P_ = D.profile||{};
+  const known = [];
+  D.systems.forEach(s=> (s.conditions||[]).forEach(c=>
+    known.push(L(c,"name")+(c.since? t(" (since "+c.since+")","（"+c.since+"年起）") : ""))));
+  const meds = (P_.medications||[]).map(m=> typeof m==="string" ? m : (m.name||""))
+                                   .filter(Boolean);
+  const out = [], drift = [], seen = {};
+  D.systems.forEach(s=> (s.markers||[]).forEach(m=>{
+    if (seen[m.id]) return;
+    if (m.status!=="out_of_range" && m.status!=="suboptimal") return;
+    seen[m.id] = 1;
+    const row = {sys:sysName(s), name:L(m,"name")+(m.derived ? t(" (derived)", "（计算值）") : ""), val:(m.display||"")+(m.unit? " "+m.unit : ""),
+                 date:m.date||"", side:m.side, band:L(m,"band")||"",
+                 word:L((m.story||{}),"trajectory_word")||""};
+    (m.status==="out_of_range" ? out : drift).push(row);
+  }));
+  const bySys = (a,b)=> a.sys.localeCompare(b.sys) || a.name.localeCompare(b.name);
+  out.sort(bySys); drift.sort(bySys);
+  const never = [];
+  D.systems.forEach(s=> (s.core_missing||[]).forEach(m=>
+    never.push(nameOf(m.id||m)+" ("+sysName(s)+")")));
+  /* six questions is what one appointment can hold; the rest live under
+     "next tests", already in the same order of importance */
+  const askAll = (D.actions||[]).filter(a=>a.priority!=="optional");
+  const asks = askAll.slice(0,6);
+  const row = (label, body) => body
+    ? '<div class="vrow"><time>'+esc(label)+'</time><span class="what">'+body+'</span></div>' : '';
+  const rows = (list, cap_) => list.slice(0, cap_).map(x=>
+    '<div class="vrow"><time>'+esc(x.date)+'</time>'+
+    '<span class="what"><b style="font-weight:400">'+esc(x.name)+'</b> '+
+    (x.side==="high"?"↑":x.side==="low"?"↓":"")+' '+esc(x.val)+
+    '<em>'+esc([x.sys, x.band, x.word].filter(Boolean).join(" · "))+'</em></span></div>').join("")+
+    (list.length > cap_ ? '<p class="quiet">'+t("+"+(list.length-cap_)+" more, on the page itself",
+                                                "另有 "+(list.length-cap_)+" 项，见页面本身")+'</p>' : '');
+  const who = [P_.name||t("—","—"),
+               P_.sex ? t(cap(P_.sex), P_.sex==="female"?"女":"男") : "",
+               P_.age ? t(Math.round(P_.age)+"y", Math.round(P_.age)+"岁") : ""]
+              .filter(Boolean).join(" · ");
+  return '<div class="item" style="border:0;padding-top:6px">'+
+    '<p class="quiet">'+t(
+      "One page, in plain order: what is already known, what the last results "+
+      "actually said, what is not in this record, and what to ask. Print this "+
+      "page (Ctrl/⌘+P) and take it with you.",
+      "一页纸，按最实用的顺序排列：已知的情况、最近结果的实际数字、本记录未提供的检查、以及要问的问题。"+
+      "直接打印本页（Ctrl/⌘+P）带去就诊即可。")+'</p></div>'+
+    row(t("Person","本人"), esc(who))+
+    row(t("As of","数据截至"), esc(S.as_of+" · "+S.documents+t(" reports read"," 份报告")))+
+    (known.length ? row(t("Known","已知诊断"), esc(known.join(t("; ","；")))) : "")+
+    (meds.length  ? row(t("Taking","用药"), esc(meds.join(t("; ","；")))) : "")+
+    '<div class="blk" style="margin-top:26px"><span class="label">'+
+      t("Outside its reference range","超出参考范围")+'<i>'+out.length+'</i></span>'+
+      (out.length ? rows(out, 30)
+       : '<p class="quiet">'+t("None on the latest results.","最近结果中没有。")+'</p>')+
+    '</div>'+
+    (drift.length ? '<div class="blk"><span class="label">'+
+      t("Inside the reference range, short of the ideal one","在参考范围内但未达理想区间")+
+      '<i>'+drift.length+'</i></span>'+ rows(drift, 20)+'</div>' : '')+
+    '<div class="blk"><span class="label">'+t("Not in this record","本记录未提供")+'<i>'+
+      never.length+'</i></span>'+
+      (never.length ? '<div class="ev">'+never.map(n=>'<span>'+esc(n)+'</span>').join("")+'</div>'
+       : '<p class="quiet">'+t("Nothing core is missing.","核心项目没有缺口。")+'</p>')+
+    '</div>'+
+    '<div class="blk"><span class="label">'+t("Questions to ask","要问的问题")+'<i>'+
+      asks.length+'</i></span>'+
+      (asks.length ? '<ul class="ask">'+asks.map(a=>'<li>'+
+        esc(t('"Do I need ','“我需要做')+L(a,"name")+t('?"','吗？”'))+
+        ' <em>'+esc(whyOf(a))+'</em></li>').join("")+'</ul>'+
+        (askAll.length > asks.length
+          ? '<p class="quiet">'+t((askAll.length-asks.length)+" more are listed under "+
+              "\u201cnext tests\u201d — these six come first.",
+              "另有 "+(askAll.length-asks.length)+" 项列在“建议检查”里——这六项最优先。")+'</p>'
+          : "")
+       : '<p class="quiet">'+t("Nothing outstanding.","暂无。")+'</p>')+
+    '</div>'+
+    '<p class="note">'+t(
+      "This sheet was assembled from your own reports by a program, not by a "+
+      "clinician. It may have misread a number; the original reports are in the "+
+      "archive and they are the record that counts.",
+      "这页由程序根据你自己的报告整理，不是医生的结论。它可能读错某个数字；原始报告都在报告库里，那才是最终依据。")+
+    '</p>';
+}
+
+function sheetAbout(){
+  const en = '<p>This is an adult record-review aid, not a diagnosis or emergency triage service. It cannot establish the cause of a result, decide treatment, or rule out illness.</p>'+
+    '<p>Coverage is a weighted checklist of available records. It is not a health score, a probability of disease, or a list of tests everyone needs. “Not in this record” does not mean a test was never performed.</p>'+
+    '<p>Stored reference intervals are examples, not individualized treatment targets. Printed laboratory ranges and clinical context take precedence; simple printed numeric ranges are used after unit conversion; ambiguous ranges are retained for review without automatic classification. Narrow “optimal” bands no longer generate findings.</p>'+
+    '<p>Trends describe recorded measurements. Sparse samples, different methods, biological variation and treatment can change them. The first recorded abnormal result is not the date a disease began.</p>'+
+    '<p>Screening needs a local guideline and an eligibility review. The bundled USPSTF reference is inactive unless explicitly selected. Nutrition, medicines, supplements and mental-health care require individual assessment. A PHQ-9 total cannot assess self-harm risk.</p>'+
+    '<p>If you have severe or rapidly worsening symptoms, seek appropriate urgent care regardless of the colours here. This page has not been clinically validated.</p>';
+  const cn = '<p>本页用于成人健康记录复核，不用于确诊或急诊分诊，不能确定异常原因、决定治疗或排除疾病。</p>'+
+    '<p>覆盖度是已提供记录的加权清单，不是健康评分、患病概率，也不是人人都需要完成的检查清单。“本记录未提供”不等于从未做过。</p>'+
+    '<p>内置参考范围只是示例，不是个体化治疗目标。应优先核对原实验室范围及临床背景；清晰的数字参考范围在单位换算后使用；含糊范围保留供复核，不自动分类。狭窄的“理想区间”不再触发发现。</p>'+
+    '<p>趋势只描述已记录测量。稀疏采样、不同方法、生物变异及治疗均可影响结果；首次记录异常不等于疾病开始时间。</p>'+
+    '<p>筛查需选择当地指南并核实适用条件。内置USPSTF参考方案须显式选择后才启用。饮食、药物、补充剂及心理健康照护需个体化评估；PHQ-9总分不能评估自伤风险。</p>'+
+    '<p>如有严重或迅速加重的症状，无论页面颜色如何都应及时寻求适当的紧急医疗帮助。本页尚未经过临床验证。</p>';
+  /* Anything the reader needs in order to read the page correctly — a missing
+     sex, an unmatched condition — is said here, plainly, not hidden in a log. */
+  const notes = (D.notes||[]);
+  return '<div class="item" style="border:0"><p class="quiet">'+t("Version ","版本 ")+
+    esc((D.release||{}).version||"1.0.0")+' · '+t("Adult record review","成人记录复核")+'</p>'+ t(en, cn)+
+    (notes.length ? '<div class="blk"><span class="label">'+
+      t("Worth knowing while you read this","阅读时需要知道的")+'<i>'+notes.length+
+      '</i></span>'+ notes.map(n=>'<div class="line"><i class="dot info"></i><span>'+
+      esc(n)+'</span></div>').join("")+'</div>' : '')+
+    '<p class="quiet">'+t(
+      "Generated "+S.generated_at+" · "+S.measurements+" measurements, "+S.derived+
+        " derived · "+S.years_covered+" years.",
+      "生成于 "+S.generated_at+" · "+S.measurements+" 项测量（其中 "+S.derived+
+        " 项为推算）· 覆盖 "+S.years_covered+" 年。")+'</p></div>';
+}
+function sheetMore(){
+  const entries=[['tests',t("Next tests","建议检查"),D.actions.length],
+    ['trends',t("Trends","趋势"),D.systems.length],
+    ['visit',t("For your doctor","给医生看"),t("Printable summary","可打印摘要")],
+    ['about',t("About this page","关于本页"),t("Sources and reading notes","来源与阅读说明")]];
+  return '<div class="more-menu">'+entries.map(([key,label,hint])=>
+    '<button class="priority-card" data-go-sheet="'+key+'"><span><b>'+label+'</b><small>'+hint+'</small></span><span aria-hidden="true">→</span></button>').join('')+'</div>';
+}
+const SHEETS = {
+  more:{t:()=>t("More","更多"),f:sheetMore},
+  findings:{t:()=>t("Findings","检查发现"), f:sheetFindings},
+  tests:{t:()=>t("Next tests","建议检查"), f:sheetTests},
+  trends:{t:()=>t("Trajectories","趋势走向"), f:sheetTrends},
+  visit:{t:()=>t("For your doctor","给医生看"), f:sheetVisit},
+  about:{t:()=>t("About this page","关于本页"), f:sheetAbout}
+};
+let openKey = null;
+let sheetOpener = null;
+const sheetPositions = {};
+/* Keep the drawer inside the page's own band: below the name, above the tabs.
+   On a short or narrow screen there is no room for that courtesy, so the
+   drawer takes the whole height instead. */
+function measureChrome(){
+  const f = $("footer.foot"), h = $("header.top");
+  const fh = f ? Math.ceil(f.getBoundingClientRect().height) : 0;
+  let hh = h ? Math.max(0,Math.round(h.getBoundingClientRect().bottom)) : 0;
+  if (innerHeight - hh - fh < 260) hh = 0;
+  const root = document.documentElement.style;
+  root.setProperty("--footh", fh+"px");
+  root.setProperty("--headh", hh+"px");
+  if (openKey) h.inert = hh===0;
+}
+function markTabs(){
+  $("#home-btn").classList.toggle("on",!openKey);
+  $("#home-btn").setAttribute("aria-pressed",String(!openKey));
+  $$("footer.foot .tbtn[data-sheet]").forEach(b=>{
+    const on = b.dataset.sheet===openKey || (b.dataset.sheet==="more" && openKey && openKey!=="findings");
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+    b.setAttribute("aria-expanded", on ? "true" : "false");
+    b.setAttribute("aria-controls", "sheet");
+  });
+}
+function openSheet(k){
+  const c = SHEETS[k]; if (!c) return;
+  const wasClosed = !openKey;
+  if (openKey) sheetPositions[openKey]=sBody.scrollTop;
+  if (wasClosed) sheetOpener = document.activeElement;
+  else if (document.activeElement.matches("[data-sheet]")) sheetOpener=document.activeElement;
+  openKey = k;
+  sTitle.textContent = c.t(); sBody.innerHTML = c.f();
+  $("#sheet-print").hidden = k!=="visit";
+  $("#sheet-back").hidden = k==="findings" || k==="more";
+  sBody.scrollTop = sheetPositions[k]||0;
+  measureChrome();
+  sheet.classList.add("open"); scrim.classList.add("open");
+  document.body.classList.add("sheeting");
+  $(".stage").inert = true;
+  sheet.inert = false;
+  sheet.setAttribute("aria-hidden","false");
+  if (wasClosed) $("#sheet-close").focus({preventScroll:true});
+  markTabs();
+}
+function closeSheet(){
+  if(openKey) sheetPositions[openKey]=sBody.scrollTop;
+  openKey = null;
+  sheet.classList.remove("open"); scrim.classList.remove("open");
+  document.body.classList.remove("sheeting");
+  $(".stage").inert = false;
+  $("header.top").inert = false;
+  if (sheet.contains(document.activeElement) && sheetOpener) sheetOpener.focus({preventScroll:true});
+  sheet.inert = true;
+  sheet.setAttribute("aria-hidden","true");
+  markTabs();
+}
+/* one click opens, the same click again puts it away — nothing else moves */
+function toggleSheet(k){ openKey===k ? closeSheet() : openSheet(k); }
+$$("[data-sheet]").forEach(b=> b.addEventListener("click", ()=>toggleSheet(b.dataset.sheet)));
+$("#home-btn").addEventListener("click",()=>{
+  closeSheet();
+  expandedLayers.clear();
+  unpin();
+  window.scrollTo({top:0,behavior:"instant"});
+  try { history.replaceState(null,"",location.pathname); } catch(e) {}
+  markTabs();
+});
+sBody.addEventListener("click",e=>{
+  const b=e.target.closest("[data-go-sheet]");
+  if(b){openSheet(b.dataset.goSheet);$("#sheet-close").focus({preventScroll:true});}
+});
+$("#sheet-close").addEventListener("click", closeSheet);
+$("#sheet-back").addEventListener("click",()=>{openSheet("more");$("#sheet-close").focus({preventScroll:true});});
+$("#sheet-print").addEventListener("click", ()=>window.print());
+scrim.addEventListener("click", closeSheet);
+document.addEventListener("keydown", e=>{
+  if (e.key==="Escape"){ sheet.classList.contains("open") ? closeSheet() : unpin(); }
+});
+
+/* ── the language switch ─────────────────────────────────────────────── */
+function paint(){
+  const sheetY = sBody.scrollTop;
+  $$("details[data-layer]",report).forEach(d=>{d.open ? expandedLayers.add(d.dataset.layer) : expandedLayers.delete(d.dataset.layer);});
+  paintChrome();
+  active ? renderSystem(active) : renderSummary();
+  if (active) { mark(active); showTag(active); }
+  if (openKey) { openSheet(openKey); sBody.scrollTop = sheetY; }
+  $("#sheet-close").textContent = t("close","关闭");
+  pinBtn.textContent = pinned ? t("unpin","取消固定") : t("pin open","固定");
+  resetBtn.textContent = t("back to summary","返回总览");
+}
+$("#txt").addEventListener("click", e=>{
+  const b = e.target.closest("button[data-text]");
+  if (!b || b.dataset.text===textSize) return;
+  textSize = b.dataset.text;
+  try { localStorage.setItem(LS_TEXT, textSize); } catch(err){}
+  applyText();
+  afterLayout(()=>{ syncFade(); measureChrome(); });
+});
+$("#lang").addEventListener("click", e=>{
+  const b = e.target.closest("button[data-lang]");
+  if (!b || b.dataset.lang===lang) return;
+  lang = b.dataset.lang;
+  try { localStorage.setItem(LS_KEY, lang); } catch(err){}
+  const y = report.scrollTop;            /* switching language shouldn't lose your place */
+  paint();
+  report.scrollTop = y;
+});
+
+/* ── go ──────────────────────────────────────────────────────────────── */
+applyText();
+paint();
+measureChrome();
+markTabs();
+new ResizeObserver(measureChrome).observe($("footer.foot"));
+/* a system may be requested by link: index.html#liver */
+let want = location.hash.slice(1);
+try { want = decodeURIComponent(want); } catch(e) { want = ""; }
+if (want && SYS[want]) pin(want);
+const requestedSheet=new URLSearchParams(location.search).get("sheet");
+if(requestedSheet && SHEETS[requestedSheet]) openSheet(requestedSheet);
+})();
+</script>
+</body>
+</html>

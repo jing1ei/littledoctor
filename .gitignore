@@ -1,0 +1,13 @@
+# your own reports, and everything derived from them, stay on this machine
+reports/*
+!reports/README.md
+
+# generated — rebuilt in a second by `python3 health.py run`
+data/*
+!data/profile.example.yaml
+site/
+
+__pycache__/
+*.pyc
+.DS_Store
+.venv/

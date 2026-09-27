@@ -1,0 +1,2021 @@
+version: 1
+markers:
+- id: glucose_fasting
+  name: Fasting Glucose
+  name_zh: 空腹血糖
+  system: metabolic
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 空腹血糖
+  - 血糖
+  - 葡萄糖
+  - 空腹葡萄糖
+  - GLU
+  - FPG
+  - FBG
+  - Glucose
+  - Glu
+  - 血清葡萄糖
+  units_alt:
+    mg/dL:
+      factor: 0.05551
+  ref:
+    low: 3.9
+    high: 6.1
+  direction: both_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: glucose_2h
+  name: 2-h Post-load Glucose
+  name_zh: 餐后2小时血糖
+  system: metabolic
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 餐后2小时血糖
+  - 餐后两小时血糖
+  - OGTT2h
+  - 2小时血糖
+  - 糖耐量2h
+  units_alt:
+    mg/dL:
+      factor: 0.05551
+  ref:
+    high: 7.8
+  direction: high_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: hba1c
+  name: HbA1c
+  name_zh: 糖化血红蛋白
+  system: metabolic
+  unit: '%'
+  decimals: 1
+  aliases:
+  - 糖化血红蛋白
+  - 糖化血红蛋白A1c
+  - HbA1c
+  - HBA1C
+  - GHbA1c
+  - A1c
+  - 糖化血红蛋白(HbA1c)
+  units_alt:
+    mmol/mol:
+      factor: 0.0915
+      offset: 2.15
+  ref:
+    low: 4.0
+    high: 6.0
+  direction: high_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: insulin_fasting
+  name: Fasting Insulin
+  name_zh: 空腹胰岛素
+  system: metabolic
+  unit: mIU/L
+  decimals: 1
+  aliases:
+  - 空腹胰岛素
+  - 胰岛素
+  - INS
+  - Insulin
+  - 空腹血清胰岛素
+  units_alt:
+    pmol/L:
+      factor: 0.1439
+  ref:
+    low: 2.6
+    high: 24.9
+  direction: high_bad
+  tier: extended
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: c_peptide
+  name: C-peptide
+  name_zh: C肽
+  system: metabolic
+  unit: ng/mL
+  decimals: 2
+  aliases:
+  - C肽
+  - C-肽
+  - C peptide
+  - CP
+  ref:
+    low: 0.8
+    high: 4.2
+  direction: both_bad
+  tier: extended
+  fresh_months: 24
+  note: Reflects how much insulin the pancreas is actually secreting.
+  note_zh: 反映胰腺实际分泌胰岛素的量。
+- id: uric_acid
+  name: Uric Acid
+  name_zh: 尿酸
+  system: metabolic
+  unit: umol/L
+  decimals: 0
+  aliases:
+  - 尿酸
+  - 血尿酸
+  - UA
+  - URIC
+  - Uric acid
+  - URIC ACID
+  units_alt:
+    mg/dL:
+      factor: 59.48
+  ref_by_sex:
+    female:
+      low: 155
+      high: 357
+    male:
+      low: 208
+      high: 428
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: bmi
+  name: BMI
+  name_zh: 体质指数
+  system: metabolic
+  unit: kg/m²
+  decimals: 1
+  aliases:
+  - BMI
+  - 体质指数
+  - 体重指数
+  - 身体质量指数
+  ref:
+    low: 18.5
+    high: 24.9
+  direction: both_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: weight
+  name: Weight
+  name_zh: 体重
+  system: metabolic
+  unit: kg
+  decimals: 1
+  aliases:
+  - 体重
+  - Weight
+  - WT
+  direction: context
+  tier: extended
+  fresh_months: 6
+  note: Context for everything else; direction of travel is what matters.
+  note_zh: 其他指标的背景信息，变化方向才是重点。
+- id: height
+  name: Height
+  name_zh: 身高
+  system: metabolic
+  unit: cm
+  decimals: 1
+  aliases:
+  - 身高
+  - Height
+  - HT
+  direction: context
+  tier: extended
+  fresh_months: 120
+  note: Used to derive BMI; late-life loss of >3 cm suggests vertebral change.
+  note_zh: 用于计算BMI；晚年身高下降>3cm提示椎体改变。
+- id: waist
+  name: Waist Circumference
+  name_zh: 腰围
+  system: metabolic
+  unit: cm
+  decimals: 1
+  aliases:
+  - 腰围
+  - Waist
+  - WC
+  ref_by_sex:
+    female:
+      high: 80
+    male:
+      high: 90
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: total_cholesterol
+  name: Total Cholesterol
+  name_zh: 总胆固醇
+  system: cardiovascular
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 总胆固醇
+  - 胆固醇
+  - TC
+  - CHOL
+  - TCHO
+  - Cholesterol
+  - 血清总胆固醇
+  units_alt:
+    mg/dL:
+      factor: 0.02586
+  ref:
+    high: 5.2
+  direction: high_bad
+  tier: core
+  fresh_months: 12
+  note: A crude composite — always read alongside LDL, HDL and triglycerides.
+  note_zh: 较粗略的综合值，须结合LDL、HDL与甘油三酯解读。
+- id: ldl_c
+  name: LDL Cholesterol
+  name_zh: 低密度脂蛋白胆固醇
+  system: cardiovascular
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 低密度脂蛋白胆固醇
+  - 低密度脂蛋白
+  - LDL-C
+  - LDLC
+  - LDL
+  - LDL Cholesterol
+  - 低密度脂蛋白-胆固醇
+  units_alt:
+    mg/dL:
+      factor: 0.02586
+  ref:
+    high: 3.4
+  direction: high_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: hdl_c
+  name: HDL Cholesterol
+  name_zh: 高密度脂蛋白胆固醇
+  system: cardiovascular
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 高密度脂蛋白胆固醇
+  - 高密度脂蛋白
+  - HDL-C
+  - HDLC
+  - HDL
+  - HDL Cholesterol
+  units_alt:
+    mg/dL:
+      factor: 0.02586
+  ref_by_sex:
+    female:
+      low: 1.3
+    male:
+      low: 1.0
+  direction: low_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: triglycerides
+  name: Triglycerides
+  name_zh: 甘油三酯
+  system: cardiovascular
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 甘油三酯
+  - 三酰甘油
+  - TG
+  - TRIG
+  - Triglyceride
+  - 血清甘油三酯
+  units_alt:
+    mg/dL:
+      factor: 0.01129
+  ref:
+    high: 1.7
+  direction: high_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: apo_b
+  name: Apolipoprotein B
+  name_zh: 载脂蛋白B
+  system: cardiovascular
+  unit: g/L
+  decimals: 2
+  aliases:
+  - 载脂蛋白B
+  - 载脂蛋白B100
+  - ApoB
+  - APO-B
+  - APOB
+  - Apolipoprotein B
+  ref:
+    high: 1.0
+  direction: high_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: apo_a1
+  name: Apolipoprotein A1
+  name_zh: 载脂蛋白A1
+  system: cardiovascular
+  unit: g/L
+  decimals: 2
+  aliases:
+  - 载脂蛋白A1
+  - 载脂蛋白A-1
+  - ApoA1
+  - APOA1
+  - APO-A1
+  ref:
+    low: 1.0
+    high: 1.6
+  direction: low_bad
+  tier: extended
+  fresh_months: 24
+  note: The structural protein of HDL particles.
+  note_zh: HDL颗粒的结构蛋白。
+- id: lp_a
+  name: Lipoprotein(a)
+  name_zh: 脂蛋白(a)
+  system: cardiovascular
+  unit: mg/dL
+  decimals: 1
+  aliases:
+  - 脂蛋白a
+  - 脂蛋白(a)
+  - Lp(a)
+  - LPA
+  - LP-a
+  - 脂蛋白（a）
+  units_alt:
+    nmol/L:
+      factor: 0.4167
+    mg/L:
+      factor: 0.1
+  ref:
+    high: 30
+  direction: high_bad
+  tier: extended
+  fresh_months: 600
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: hs_crp
+  name: hs-CRP
+  name_zh: 超敏C反应蛋白
+  system: inflammation
+  unit: mg/L
+  decimals: 2
+  aliases:
+  - 超敏C反应蛋白
+  - 高敏C反应蛋白
+  - hs-CRP
+  - hsCRP
+  - HSCRP
+  - C反应蛋白
+  - CRP
+  ref:
+    high: 3.0
+  direction: high_bad
+  tier: core
+  fresh_months: 12
+  note: Background inflammation. Interpret only when you are not acutely ill.
+  note_zh: 反映基础炎症水平，仅在无急性疾病时解读。
+- id: homocysteine
+  name: Homocysteine
+  name_zh: 同型半胱氨酸
+  system: cardiovascular
+  unit: umol/L
+  decimals: 1
+  aliases:
+  - 同型半胱氨酸
+  - 血同
+  - Hcy
+  - HCY
+  - Homocysteine
+  ref:
+    high: 15.0
+  direction: high_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: bp_systolic
+  name: Systolic BP
+  name_zh: 收缩压
+  system: cardiovascular
+  unit: mmHg
+  decimals: 0
+  aliases:
+  - 收缩压
+  - 高压
+  - SBP
+  - Systolic
+  - 血压收缩压
+  ref:
+    low: 90
+    high: 130
+  direction: both_bad
+  tier: core
+  fresh_months: 6
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: bp_diastolic
+  name: Diastolic BP
+  name_zh: 舒张压
+  system: cardiovascular
+  unit: mmHg
+  decimals: 0
+  aliases:
+  - 舒张压
+  - 低压
+  - DBP
+  - Diastolic
+  - 血压舒张压
+  ref:
+    low: 60
+    high: 85
+  direction: both_bad
+  tier: core
+  fresh_months: 6
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: resting_hr
+  name: Resting Heart Rate
+  name_zh: 静息心率
+  system: cardiovascular
+  unit: bpm
+  decimals: 0
+  aliases:
+  - 静息心率
+  - 心率
+  - 脉搏
+  - HR
+  - Pulse
+  - Heart rate
+  ref:
+    low: 55
+    high: 100
+  direction: high_bad
+  tier: extended
+  fresh_months: 6
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: alt
+  name: ALT
+  name_zh: 谷丙转氨酶
+  system: liver
+  unit: U/L
+  decimals: 0
+  aliases:
+  - 谷丙转氨酶
+  - 丙氨酸氨基转移酶
+  - ALT
+  - GPT
+  - ALT(GPT)
+  - 谷丙转氨酶(ALT)
+  - 丙氨酸转氨酶
+  ref:
+    low: 7
+    high: 40
+  direction: high_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: ast
+  name: AST
+  name_zh: 谷草转氨酶
+  system: liver
+  unit: U/L
+  decimals: 0
+  aliases:
+  - 谷草转氨酶
+  - 天门冬氨酸氨基转移酶
+  - AST
+  - GOT
+  - AST(GOT)
+  - 谷草转氨酶(AST)
+  - 天冬氨酸转氨酶
+  ref:
+    low: 13
+    high: 35
+  direction: high_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: ggt
+  name: GGT
+  name_zh: γ-谷氨酰转肽酶
+  system: liver
+  unit: U/L
+  decimals: 0
+  aliases:
+  - γ-谷氨酰转肽酶
+  - 谷氨酰转肽酶
+  - r-谷氨酰转肽酶
+  - GGT
+  - γ-GT
+  - GGT(γ-GT)
+  - γ-谷氨酰基转移酶
+  ref_by_sex:
+    female:
+      low: 7
+      high: 45
+    male:
+      low: 10
+      high: 60
+  direction: high_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: alp
+  name: Alkaline Phosphatase
+  name_zh: 碱性磷酸酶
+  system: liver
+  unit: U/L
+  decimals: 0
+  aliases:
+  - 碱性磷酸酶
+  - ALP
+  - AKP
+  - ALP(AKP)
+  ref:
+    low: 35
+    high: 100
+  direction: both_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: bilirubin_total
+  name: Total Bilirubin
+  name_zh: 总胆红素
+  system: liver
+  unit: umol/L
+  decimals: 1
+  aliases:
+  - 总胆红素
+  - TBIL
+  - T-BIL
+  - TBil
+  - 总胆红素(TBIL)
+  units_alt:
+    mg/dL:
+      factor: 17.1
+  ref:
+    low: 3.4
+    high: 20.5
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: albumin
+  name: Albumin
+  name_zh: 白蛋白
+  system: liver
+  unit: g/L
+  decimals: 1
+  aliases:
+  - 白蛋白
+  - 血清白蛋白
+  - ALB
+  - Albumin
+  ref:
+    low: 40
+    high: 55
+  direction: low_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: total_protein
+  name: Total Protein
+  name_zh: 总蛋白
+  system: liver
+  unit: g/L
+  decimals: 1
+  aliases:
+  - 总蛋白
+  - 血清总蛋白
+  - TP
+  - TPRO
+  ref:
+    low: 65
+    high: 85
+  direction: both_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: hbsag
+  name: HBsAg
+  name_zh: 乙肝表面抗原
+  system: liver
+  unit: ''
+  aliases:
+  - 乙肝表面抗原
+  - HBsAg
+  - HBSAG
+  - 表面抗原
+  direction: qualitative
+  expected: negative
+  tier: extended
+  fresh_months: 600
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: hbsab
+  name: HBsAb (immunity)
+  name_zh: 乙肝表面抗体
+  system: liver
+  unit: ''
+  aliases:
+  - 乙肝表面抗体
+  - HBsAb
+  - HBSAB
+  - 表面抗体
+  direction: qualitative
+  expected: positive
+  tier: extended
+  fresh_months: 120
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: anti_hcv
+  name: Anti-HCV
+  name_zh: 丙肝抗体
+  system: liver
+  unit: ''
+  aliases:
+  - 丙肝抗体
+  - 抗HCV
+  - Anti-HCV
+  - HCV-Ab
+  - HCV抗体
+  direction: qualitative
+  expected: negative
+  tier: extended
+  fresh_months: 600
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: creatinine
+  name: Creatinine
+  name_zh: 肌酐
+  system: kidney
+  unit: umol/L
+  decimals: 1
+  aliases:
+  - 肌酐
+  - 血肌酐
+  - 肌酸酐
+  - CREA
+  - Cr
+  - CRE
+  - Creatinine
+  - 血清肌酐
+  units_alt:
+    mg/dL:
+      factor: 88.4
+  ref_by_sex:
+    female:
+      low: 41
+      high: 73
+    male:
+      low: 57
+      high: 97
+  direction: high_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: egfr
+  name: eGFR
+  name_zh: 估算肾小球滤过率
+  system: kidney
+  unit: mL/min/1.73m²
+  decimals: 0
+  aliases:
+  - eGFR
+  - 估算肾小球滤过率
+  - 肾小球滤过率
+  - GFR
+  - EGFR
+  ref:
+    low: 60
+  direction: low_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: urea
+  name: Urea
+  name_zh: 尿素
+  system: kidney
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 尿素
+  - 尿素氮
+  - 血尿素氮
+  - UREA
+  - BUN
+  - Urea
+  units_alt:
+    mg/dL:
+      factor: 0.357
+  ref:
+    low: 2.9
+    high: 8.2
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: cystatin_c
+  name: Cystatin C
+  name_zh: 胱抑素C
+  system: kidney
+  unit: mg/L
+  decimals: 2
+  aliases:
+  - 胱抑素C
+  - 半胱氨酸蛋白酶抑制剂C
+  - Cys-C
+  - CysC
+  - Cystatin C
+  ref:
+    low: 0.51
+    high: 1.09
+  direction: high_bad
+  tier: extended
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: urine_protein
+  name: Urine Protein
+  name_zh: 尿蛋白
+  system: kidney
+  unit: ''
+  aliases:
+  - 尿蛋白
+  - 蛋白质
+  - PRO
+  - PROTEIN
+  - 尿蛋白定性
+  - 尿常规-蛋白
+  direction: qualitative
+  expected: negative
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: urine_blood
+  name: Urine Blood
+  name_zh: 尿红细胞/隐血
+  system: kidney
+  unit: ''
+  aliases:
+  - 尿隐血
+  - 隐血
+  - 红细胞(尿)
+  - BLD
+  - 尿红细胞
+  - 尿常规-隐血
+  direction: qualitative
+  expected: negative
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: urine_acr
+  name: Urine Albumin/Creatinine
+  name_zh: 尿微量白蛋白/肌酐比
+  system: kidney
+  unit: mg/g
+  decimals: 1
+  aliases:
+  - 尿微量白蛋白/肌酐
+  - 尿白蛋白肌酐比
+  - ACR
+  - UACR
+  - 尿微量白蛋白肌酐比值
+  ref:
+    high: 30
+  direction: high_bad
+  tier: extended
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: potassium
+  name: Potassium
+  name_zh: 钾
+  system: kidney
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 钾
+  - 血钾
+  - K
+  - K+
+  - Potassium
+  ref:
+    low: 3.5
+    high: 5.3
+  direction: both_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: sodium
+  name: Sodium
+  name_zh: 钠
+  system: kidney
+  unit: mmol/L
+  decimals: 1
+  aliases:
+  - 钠
+  - 血钠
+  - Na
+  - Na+
+  - Sodium
+  ref:
+    low: 137
+    high: 147
+  direction: both_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: hemoglobin
+  name: Hemoglobin
+  name_zh: 血红蛋白
+  system: hematology
+  unit: g/L
+  decimals: 0
+  aliases:
+  - 血红蛋白
+  - HGB
+  - Hb
+  - HB
+  - 血红蛋白浓度
+  - Hemoglobin
+  units_alt:
+    g/dL:
+      factor: 10.0
+  ref_by_sex:
+    female:
+      low: 115
+      high: 150
+    male:
+      low: 130
+      high: 175
+  direction: low_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: rbc
+  name: Red Blood Cells
+  name_zh: 红细胞计数
+  system: hematology
+  unit: 10^12/L
+  decimals: 2
+  aliases:
+  - 红细胞计数
+  - 红细胞
+  - RBC
+  - 红细胞数目
+  ref_by_sex:
+    female:
+      low: 3.8
+      high: 5.1
+    male:
+      low: 4.3
+      high: 5.8
+  direction: both_bad
+  tier: extended
+  fresh_months: 12
+  note: Read with MCV to classify any anaemia.
+  note_zh: 需结合MCV对贫血分类。
+- id: hematocrit
+  name: Hematocrit
+  name_zh: 红细胞压积
+  system: hematology
+  unit: '%'
+  decimals: 1
+  aliases:
+  - 红细胞压积
+  - 血细胞比容
+  - HCT
+  - PCV
+  ref_by_sex:
+    female:
+      low: 35
+      high: 45
+    male:
+      low: 40
+      high: 50
+  direction: both_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: mcv
+  name: MCV
+  name_zh: 平均红细胞体积
+  system: hematology
+  unit: fL
+  decimals: 1
+  aliases:
+  - 平均红细胞体积
+  - MCV
+  - 红细胞平均体积
+  ref:
+    low: 82
+    high: 100
+  direction: both_bad
+  tier: core
+  fresh_months: 12
+  note: Small cells point to iron or thalassaemia; large cells to B12/folate or alcohol.
+  note_zh: 偏小提示缺铁或地中海贫血，偏大提示B12/叶酸不足或饮酒。
+- id: mch
+  name: MCH
+  name_zh: 平均血红蛋白量
+  system: hematology
+  unit: pg
+  decimals: 1
+  aliases:
+  - 平均血红蛋白量
+  - 平均血红蛋白含量
+  - MCH
+  ref:
+    low: 27
+    high: 34
+  direction: both_bad
+  tier: extended
+  fresh_months: 12
+  note: Falls early in iron deficiency, often before haemoglobin.
+  note_zh: 缺铁时下降较早，常先于血红蛋白。
+- id: rdw
+  name: RDW
+  name_zh: 红细胞分布宽度
+  system: hematology
+  unit: '%'
+  decimals: 1
+  aliases:
+  - 红细胞分布宽度
+  - RDW
+  - RDW-CV
+  ref:
+    low: 11.5
+    high: 15.0
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: A widened distribution is an early, non-specific stress signal for the marrow.
+  note_zh: 分布增宽是骨髓早期、非特异的压力信号。
+- id: wbc
+  name: White Blood Cells
+  name_zh: 白细胞计数
+  system: hematology
+  unit: 10^9/L
+  decimals: 2
+  aliases:
+  - 白细胞计数
+  - 白细胞
+  - WBC
+  - 白细胞数目
+  - 白细胞总数
+  ref:
+    low: 3.5
+    high: 9.5
+  direction: both_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: neutrophils
+  name: Neutrophils
+  name_zh: 中性粒细胞
+  system: hematology
+  unit: 10^9/L
+  decimals: 2
+  aliases:
+  - 中性粒细胞
+  - 中性粒细胞计数
+  - NEUT
+  - NEU
+  - 中性粒细胞绝对值
+  ref:
+    low: 1.8
+    high: 6.3
+  direction: both_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: lymphocytes
+  name: Lymphocytes
+  name_zh: 淋巴细胞
+  system: hematology
+  unit: 10^9/L
+  decimals: 2
+  aliases:
+  - 淋巴细胞
+  - 淋巴细胞计数
+  - LYMPH
+  - LY
+  - 淋巴细胞绝对值
+  ref:
+    low: 1.1
+    high: 3.2
+  direction: both_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: platelets
+  name: Platelets
+  name_zh: 血小板
+  system: hematology
+  unit: 10^9/L
+  decimals: 0
+  aliases:
+  - 血小板
+  - 血小板计数
+  - PLT
+  - 血小板数目
+  ref:
+    low: 125
+    high: 350
+  direction: both_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: ferritin
+  name: Ferritin
+  name_zh: 铁蛋白
+  system: hematology
+  unit: ng/mL
+  decimals: 1
+  aliases:
+  - 铁蛋白
+  - 血清铁蛋白
+  - FER
+  - Ferritin
+  - SF
+  units_alt:
+    ug/L:
+      factor: 1.0
+  ref_by_sex:
+    female:
+      low: 13
+      high: 150
+    male:
+      low: 30
+      high: 400
+  direction: low_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: serum_iron
+  name: Serum Iron
+  name_zh: 血清铁
+  system: hematology
+  unit: umol/L
+  decimals: 1
+  aliases:
+  - 血清铁
+  - 铁
+  - Fe
+  - SI
+  - Serum iron
+  ref:
+    low: 7.8
+    high: 32.2
+  direction: both_bad
+  tier: extended
+  fresh_months: 12
+  note: Swings hour to hour and with meals; ferritin is the more stable measure.
+  note_zh: 随时段与进餐大幅波动，铁蛋白更稳定。
+- id: transferrin_sat
+  name: Transferrin Saturation
+  name_zh: 转铁蛋白饱和度
+  system: hematology
+  unit: '%'
+  decimals: 1
+  aliases:
+  - 转铁蛋白饱和度
+  - 铁饱和度
+  - TSAT
+  - TS
+  ref:
+    low: 20
+    high: 50
+  direction: both_bad
+  tier: extended
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: b12
+  name: Vitamin B12
+  name_zh: 维生素B12
+  system: nutrition
+  unit: pg/mL
+  decimals: 0
+  aliases:
+  - 维生素B12
+  - VitB12
+  - B12
+  - VB12
+  - 钴胺素
+  units_alt:
+    pmol/L:
+      factor: 1.355
+  ref:
+    low: 180
+    high: 914
+  direction: low_bad
+  tier: extended
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: folate
+  name: Folate
+  name_zh: 叶酸
+  system: nutrition
+  unit: ng/mL
+  decimals: 1
+  aliases:
+  - 叶酸
+  - 血清叶酸
+  - Folate
+  - FA
+  - 维生素B9
+  ref:
+    low: 3.1
+    high: 20.0
+  direction: low_bad
+  tier: extended
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: esr
+  name: ESR
+  name_zh: 血沉
+  system: inflammation
+  unit: mm/h
+  decimals: 0
+  aliases:
+  - 血沉
+  - 红细胞沉降率
+  - ESR
+  - 血沉(ESR)
+  ref:
+    high: 20
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Slow and non-specific; useful mainly alongside hs-CRP.
+  note_zh: 变化慢且非特异，主要与hs-CRP同看。
+- id: tsh
+  name: TSH
+  name_zh: 促甲状腺激素
+  system: thyroid
+  unit: mIU/L
+  decimals: 2
+  aliases:
+  - 促甲状腺激素
+  - TSH
+  - 甲状腺刺激素
+  - 促甲状腺素
+  ref:
+    low: 0.27
+    high: 4.2
+  direction: both_bad
+  tier: core
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: ft4
+  name: Free T4
+  name_zh: 游离甲状腺素
+  system: thyroid
+  unit: pmol/L
+  decimals: 2
+  aliases:
+  - 游离甲状腺素
+  - 游离T4
+  - FT4
+  - FT-4
+  - 游离四碘甲状腺原氨酸
+  ref:
+    low: 12.0
+    high: 22.0
+  direction: both_bad
+  tier: extended
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: ft3
+  name: Free T3
+  name_zh: 游离三碘甲状腺原氨酸
+  system: thyroid
+  unit: pmol/L
+  decimals: 2
+  aliases:
+  - 游离三碘甲状腺原氨酸
+  - 游离T3
+  - FT3
+  - FT-3
+  ref:
+    low: 3.1
+    high: 6.8
+  direction: both_bad
+  tier: extended
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: tpo_ab
+  name: TPO Antibody
+  name_zh: 甲状腺过氧化物酶抗体
+  system: thyroid
+  unit: IU/mL
+  decimals: 1
+  aliases:
+  - 甲状腺过氧化物酶抗体
+  - 抗TPO抗体
+  - TPOAb
+  - TPO-Ab
+  - A-TPO
+  - 抗甲状腺过氧化物酶抗体
+  ref:
+    high: 34
+  direction: high_bad
+  tier: extended
+  fresh_months: 600
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: tg_ab
+  name: Thyroglobulin Antibody
+  name_zh: 甲状腺球蛋白抗体
+  system: thyroid
+  unit: IU/mL
+  decimals: 1
+  aliases:
+  - 甲状腺球蛋白抗体
+  - 抗甲状腺球蛋白抗体
+  - TgAb
+  - TG-Ab
+  - A-TG
+  ref:
+    high: 115
+  direction: high_bad
+  tier: extended
+  fresh_months: 600
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: prolactin
+  name: Prolactin
+  name_zh: 泌乳素
+  system: thyroid
+  unit: ng/mL
+  decimals: 1
+  aliases:
+  - 泌乳素
+  - 催乳素
+  - PRL
+  - Prolactin
+  ref_by_sex:
+    female:
+      low: 4.8
+      high: 23.3
+    male:
+      low: 4.0
+      high: 15.2
+  direction: high_bad
+  tier: extended
+  fresh_months: 24
+  note: Stress, sleep and nipple stimulation raise it — repeat before investigating.
+  note_zh: 压力、睡眠与乳头刺激均可使其升高，先复查再深究。
+- id: cortisol_am
+  name: Morning Cortisol
+  name_zh: 晨起皮质醇
+  system: thyroid
+  unit: ug/dL
+  decimals: 1
+  aliases:
+  - 皮质醇
+  - 晨皮质醇
+  - Cortisol
+  - COR
+  - 8点皮质醇
+  units_alt:
+    nmol/L:
+      factor: 0.0363
+  ref:
+    low: 6.2
+    high: 19.4
+  direction: both_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: estradiol
+  name: Estradiol
+  name_zh: 雌二醇
+  system: hormonal
+  unit: pg/mL
+  decimals: 1
+  aliases:
+  - 雌二醇
+  - E2
+  - Estradiol
+  - 雌激素
+  units_alt:
+    pmol/L:
+      factor: 0.2724
+  phase_dependent: true
+  ref:
+    low: 20
+    high: 400
+  direction: context
+  tier: extended
+  fresh_months: 24
+  note: Only meaningful with the cycle day recorded next to it.
+  note_zh: 须同时记录月经周期日才有意义。
+- id: fsh
+  name: FSH
+  name_zh: 促卵泡激素
+  system: hormonal
+  unit: mIU/mL
+  decimals: 2
+  aliases:
+  - 促卵泡激素
+  - 促卵泡生成素
+  - FSH
+  - 卵泡刺激素
+  phase_dependent: true
+  ref:
+    low: 3.5
+    high: 12.5
+  direction: both_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: lh
+  name: LH
+  name_zh: 促黄体生成素
+  system: hormonal
+  unit: mIU/mL
+  decimals: 2
+  aliases:
+  - 促黄体生成素
+  - 黄体生成素
+  - LH
+  phase_dependent: true
+  ref:
+    low: 2.4
+    high: 12.6
+  direction: context
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: progesterone
+  name: Progesterone
+  name_zh: 孕酮
+  system: hormonal
+  unit: ng/mL
+  decimals: 2
+  aliases:
+  - 孕酮
+  - 黄体酮
+  - PROG
+  - Progesterone
+  phase_dependent: true
+  direction: context
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: amh
+  name: AMH
+  name_zh: 抗缪勒管激素
+  system: hormonal
+  unit: ng/mL
+  decimals: 2
+  aliases:
+  - 抗缪勒管激素
+  - 抗穆勒管激素
+  - AMH
+  - 抗缪勒氏管激素
+  direction: low_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: testosterone_total
+  name: Total Testosterone
+  name_zh: 总睾酮
+  system: hormonal
+  unit: nmol/L
+  decimals: 2
+  aliases:
+  - 睾酮
+  - 总睾酮
+  - T
+  - TESTO
+  - Testosterone
+  ref_by_sex:
+    female:
+      low: 0.29
+      high: 1.67
+    male:
+      low: 8.6
+      high: 29.0
+  direction: both_bad
+  tier: extended
+  fresh_months: 24
+  note: In women, elevation with irregular cycles suggests PCOS.
+  note_zh: 女性升高并伴月经不规律时提示PCOS。
+- id: shbg
+  name: SHBG
+  name_zh: 性激素结合球蛋白
+  system: hormonal
+  unit: nmol/L
+  decimals: 1
+  aliases:
+  - 性激素结合球蛋白
+  - SHBG
+  ref_by_sex:
+    female:
+      low: 32
+      high: 128
+    male:
+      low: 18
+      high: 54
+  direction: low_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: dheas
+  name: DHEA-S
+  name_zh: 硫酸脱氢表雄酮
+  system: hormonal
+  unit: ug/dL
+  decimals: 1
+  aliases:
+  - 硫酸脱氢表雄酮
+  - DHEA-S
+  - DHEAS
+  ref_by_sex:
+    female:
+      low: 98
+      high: 340
+    male:
+      low: 160
+      high: 450
+  direction: both_bad
+  tier: extended
+  fresh_months: 36
+  note: Adrenal androgen reserve; declines steadily with age.
+  note_zh: 肾上腺雄激素储备，随年龄稳步下降。
+- id: cycle_regularity
+  name: Cycle Regularity
+  name_zh: 月经规律性
+  system: hormonal
+  unit: ''
+  aliases:
+  - 月经规律
+  - 月经周期
+  - cycle regularity
+  direction: qualitative
+  expected: normal
+  tier: core
+  fresh_months: 12
+  note: Self-reported, and still one of the most informative endocrine signals available.
+  note_zh: 虽为自述，仍是最有信息量的内分泌信号之一。
+- id: vitamin_d
+  name: Vitamin D (25-OH)
+  name_zh: 25-羟基维生素D
+  system: bone
+  unit: ng/mL
+  decimals: 1
+  aliases:
+  - 25羟维生素D
+  - 25-羟基维生素D
+  - 维生素D
+  - 25(OH)D
+  - VitD
+  - Vitamin D
+  - 25-OH-VD
+  units_alt:
+    nmol/L:
+      factor: 0.4
+  ref:
+    low: 20
+    high: 100
+  direction: low_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: calcium
+  name: Calcium
+  name_zh: 钙
+  system: bone
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 钙
+  - 血钙
+  - 总钙
+  - Ca
+  - CA
+  - Calcium
+  units_alt:
+    mg/dL:
+      factor: 0.25
+  ref:
+    low: 2.11
+    high: 2.52
+  direction: both_bad
+  tier: core
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: phosphorus
+  name: Phosphorus
+  name_zh: 磷
+  system: bone
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 磷
+  - 血磷
+  - 无机磷
+  - PHOS
+  ref:
+    low: 0.85
+    high: 1.51
+  direction: both_bad
+  tier: extended
+  fresh_months: 18
+  note: Read with calcium and PTH, never alone.
+  note_zh: 需与钙和PTH同看，不可单独解读。
+- id: magnesium
+  name: Magnesium
+  name_zh: 镁
+  system: bone
+  unit: mmol/L
+  decimals: 2
+  aliases:
+  - 镁
+  - 血镁
+  - Mg
+  - MG
+  ref:
+    low: 0.75
+    high: 1.02
+  direction: low_bad
+  tier: extended
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: pth
+  name: PTH
+  name_zh: 甲状旁腺激素
+  system: bone
+  unit: pg/mL
+  decimals: 1
+  aliases:
+  - 甲状旁腺激素
+  - PTH
+  - iPTH
+  ref:
+    low: 15
+    high: 65
+  direction: both_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: bmd_tscore
+  name: Bone Density T-score
+  name_zh: 骨密度T值
+  system: bone
+  unit: T
+  decimals: 1
+  aliases:
+  - 骨密度T值
+  - T值
+  - T-score
+  - 骨密度
+  - BMD
+  direction: low_bad
+  tier: extended
+  fresh_months: 36
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: h_pylori
+  name: H. pylori
+  name_zh: 幽门螺杆菌
+  system: gastrointestinal
+  unit: ''
+  aliases:
+  - 幽门螺杆菌
+  - 幽门螺旋杆菌
+  - HP
+  - H.pylori
+  - C13呼气试验
+  - C14呼气试验
+  - 尿素呼气试验
+  - HP抗体
+  direction: qualitative
+  expected: negative
+  tier: core
+  fresh_months: 60
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: fecal_occult_blood
+  name: Fecal Occult Blood
+  name_zh: 大便隐血
+  system: gastrointestinal
+  unit: ''
+  aliases:
+  - 大便隐血
+  - 粪便隐血
+  - 便隐血
+  - FOB
+  - FOBT
+  - OB
+  direction: qualitative
+  expected: negative
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: amylase
+  name: Amylase
+  name_zh: 淀粉酶
+  system: gastrointestinal
+  unit: U/L
+  decimals: 0
+  aliases:
+  - 淀粉酶
+  - 血淀粉酶
+  - AMY
+  - Amylase
+  ref:
+    low: 25
+    high: 125
+  direction: high_bad
+  tier: extended
+  fresh_months: 24
+  note: Relevant mainly for pancreatic symptoms.
+  note_zh: 主要在有胰腺症状时才有意义。
+- id: calprotectin
+  name: Fecal Calprotectin
+  name_zh: 粪便钙卫蛋白
+  system: gastrointestinal
+  unit: ug/g
+  decimals: 0
+  aliases:
+  - 钙卫蛋白
+  - 粪便钙卫蛋白
+  - Calprotectin
+  ref:
+    high: 50
+  direction: high_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: spo2
+  name: SpO₂
+  name_zh: 血氧饱和度
+  system: respiratory
+  unit: '%'
+  decimals: 0
+  aliases:
+  - 血氧饱和度
+  - SpO2
+  - SPO2
+  - 血氧
+  ref:
+    low: 95
+  direction: low_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: fev1_fvc
+  name: FEV1/FVC
+  name_zh: 一秒率
+  system: respiratory
+  unit: '%'
+  decimals: 0
+  aliases:
+  - FEV1/FVC
+  - 一秒率
+  - FEV1%
+  ref:
+    low: 70
+  direction: low_bad
+  tier: extended
+  fresh_months: 36
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: sleep_duration
+  name: Sleep Duration
+  name_zh: 睡眠时长
+  system: neuro_sleep
+  unit: h
+  decimals: 1
+  aliases:
+  - 睡眠时长
+  - 睡眠时间
+  - sleep duration
+  ref:
+    low: 7.0
+    high: 9.0
+  direction: low_bad
+  tier: core
+  fresh_months: 6
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: sleep_quality
+  name: Sleep Quality (self)
+  name_zh: 睡眠质量自评
+  system: neuro_sleep
+  unit: /10
+  decimals: 1
+  aliases:
+  - 睡眠质量
+  - sleep quality
+  direction: low_bad
+  tier: core
+  fresh_months: 6
+  note: A questionnaire or device reading is not a diagnosis. Review function, duration, context and support
+    needs. PHQ-9 total alone cannot assess self-harm risk; individual answers and direct assessment matter.
+  note_zh: 问卷或设备读数不等于诊断，需评估功能、持续时间、背景及支持需求。PHQ-9总分不能单独评估自伤风险，需了解单项回答并直接评估。
+- id: hrv
+  name: HRV (RMSSD)
+  name_zh: 心率变异性
+  system: neuro_sleep
+  unit: ms
+  decimals: 0
+  aliases:
+  - 心率变异性
+  - HRV
+  - RMSSD
+  direction: low_bad
+  tier: extended
+  fresh_months: 6
+  note: A questionnaire or device reading is not a diagnosis. Review function, duration, context and support
+    needs. PHQ-9 total alone cannot assess self-harm risk; individual answers and direct assessment matter.
+  note_zh: 问卷或设备读数不等于诊断，需评估功能、持续时间、背景及支持需求。PHQ-9总分不能单独评估自伤风险，需了解单项回答并直接评估。
+- id: phq9
+  name: PHQ-9
+  name_zh: 抑郁自评
+  system: neuro_sleep
+  unit: score
+  decimals: 0
+  aliases:
+  - PHQ-9
+  - PHQ9
+  - 抑郁自评量表
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: A questionnaire or device reading is not a diagnosis. Review function, duration, context and support
+    needs. PHQ-9 total alone cannot assess self-harm risk; individual answers and direct assessment matter.
+  note_zh: 问卷或设备读数不等于诊断，需评估功能、持续时间、背景及支持需求。PHQ-9总分不能单独评估自伤风险，需了解单项回答并直接评估。
+- id: gad7
+  name: GAD-7
+  name_zh: 焦虑自评
+  system: neuro_sleep
+  unit: score
+  decimals: 0
+  aliases:
+  - GAD-7
+  - GAD7
+  - 焦虑自评量表
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: A questionnaire or device reading is not a diagnosis. Review function, duration, context and support
+    needs. PHQ-9 total alone cannot assess self-harm risk; individual answers and direct assessment matter.
+  note_zh: 问卷或设备读数不等于诊断，需评估功能、持续时间、背景及支持需求。PHQ-9总分不能单独评估自伤风险，需了解单项回答并直接评估。
+- id: afp
+  name: AFP
+  name_zh: 甲胎蛋白
+  system: cancer_screening
+  unit: ng/mL
+  decimals: 2
+  aliases:
+  - 甲胎蛋白
+  - AFP
+  ref:
+    high: 7.0
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Useful for liver surveillance in hepatitis carriers; weak as a general screen.
+  note_zh: 适用于肝炎携带者的肝脏随访，作为普筛价值有限。
+- id: cea
+  name: CEA
+  name_zh: 癌胚抗原
+  system: cancer_screening
+  unit: ng/mL
+  decimals: 2
+  aliases:
+  - 癌胚抗原
+  - CEA
+  ref:
+    high: 5.0
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Smoking raises it. Mild elevation alone is rarely cancer.
+  note_zh: 吸烟会使其升高。单纯轻度升高极少是癌症。
+- id: ca125
+  name: CA-125
+  name_zh: 糖类抗原125
+  system: cancer_screening
+  unit: U/mL
+  decimals: 2
+  aliases:
+  - CA125
+  - CA-125
+  - 糖类抗原125
+  ref:
+    high: 35
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Rises with menstruation and endometriosis; not an ovarian cancer screen.
+  note_zh: 月经与子宫内膜异位症时升高，不是卵巢癌筛查手段。
+- id: ca153
+  name: CA-153
+  name_zh: 糖类抗原153
+  system: cancer_screening
+  unit: U/mL
+  decimals: 2
+  aliases:
+  - CA153
+  - CA-153
+  - 糖类抗原153
+  ref:
+    high: 25
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Breast imaging beats this marker for screening, every time.
+  note_zh: 筛查乳腺，影像学始终优于该指标。
+- id: ca199
+  name: CA-199
+  name_zh: 糖类抗原199
+  system: cancer_screening
+  unit: U/mL
+  decimals: 2
+  aliases:
+  - CA199
+  - CA19-9
+  - 糖类抗原199
+  ref:
+    high: 27
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Frequently mildly elevated in healthy people; interpret with imaging only.
+  note_zh: 健康人也常轻度升高，须结合影像解读。
+- id: psa
+  name: PSA
+  name_zh: 前列腺特异抗原
+  system: cancer_screening
+  unit: ng/mL
+  decimals: 2
+  aliases:
+  - 前列腺特异性抗原
+  - PSA
+  - tPSA
+  ref:
+    high: 4.0
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  sex: male
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: intraocular_pressure
+  name: Intraocular Pressure
+  name_zh: 眼压
+  system: senses_dental
+  unit: mmHg
+  decimals: 1
+  aliases:
+  - 眼压
+  - IOP
+  - 眼内压
+  ref:
+    low: 10
+    high: 21
+  direction: high_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。

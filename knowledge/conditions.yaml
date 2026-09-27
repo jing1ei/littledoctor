@@ -1,0 +1,90 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Conditions a person already knows about.
+#
+# Someone who has lived with hypertension for fifteen years does not need a page
+# shouting at them about their blood pressure; they need to know whether it is
+# holding, and whether anything *new* has appeared. This file is how a plain
+# sentence in the profile — "hypertension, since 2011, on amlodipine" — becomes a
+# system on the record that reads "known · under care" instead of an alarm.
+#
+# `match` is a list of substrings, matched case-insensitively against the
+# condition text after light normalisation. Longer matches win, so "fatty liver"
+# beats "liver". Nothing here diagnoses anything; it only files what the person
+# has already told us under the right organ.
+# ─────────────────────────────────────────────────────────────────────────────
+map:
+  - system: cardiovascular
+    match: [hypertension, high blood pressure, raised blood pressure, 高血压,
+            hyperlipid, dyslipidaem, dyslipidem, high cholesterol, 高血脂, 高胆固醇,
+            coronary, angina, ischaemic heart, ischemic heart, stent, bypass,
+            atrial fibrillation, arrhythmia, heart failure, 冠心病, 心衰, 房颤,
+            心律不齐, 心脏支架, stroke, 中风, 脑卒中, 脑梗]
+
+  - system: metabolic
+    match: [diabetes, diabetic, type 2, type ii, prediabet, pre-diabet,
+            insulin resistance, metabolic syndrome, 糖尿病, 糖尿病前期, 胰岛素抵抗,
+            代谢综合征, obesity, 肥胖, gout, 痛风, hyperuricaem, hyperuricem, 高尿酸]
+
+  - system: liver
+    match: [fatty liver, hepatic steatosis, nafld, mafld, hepatitis, cirrhosis,
+            gallstone, cholelithiasis, cholecystitis, 脂肪肝, 肝炎, 肝硬化, 胆结石,
+            胆囊炎, 肝功能异常]
+
+  - system: kidney
+    match: [kidney disease, renal insufficiency, ckd, nephropathy, nephritis,
+            kidney stone, proteinuria, dialysis, 慢性肾病, 肾功能不全, 肾炎, 肾结石,
+            蛋白尿, 透析]
+
+  - system: thyroid
+    match: [hypothyroid, hyperthyroid, hashimoto, graves, thyroid nodule,
+            thyroiditis, goitre, goiter, 甲减, 甲亢, 甲状腺结节, 甲状腺炎, 桥本,
+            甲状腺功能异常]
+
+  - system: hematology
+    match: [anaemia, anemia, iron deficiency, thalassaem, thalassem, leukopenia,
+            thrombocytopenia, 贫血, 缺铁, 地中海贫血, 白细胞低, 血小板低]
+
+  - system: bone
+    match: [osteoporos, osteopeni, fracture, vertebral compression, 骨质疏松,
+            骨量减少, 骨折, arthritis, osteoarthritis, 骨关节炎, 关节炎]
+
+  - system: respiratory
+    match: [asthma, copd, emphysema, bronchitis, bronchiectasis, pulmonary
+            fibrosis, tuberculosis, sleep apnoea, sleep apnea, 哮喘, 慢阻肺,
+            肺气肿, 支气管炎, 肺纤维化, 肺结核, 睡眠呼吸暂停]
+
+  - system: gastrointestinal
+    match: [gastritis, reflux, gerd, ulcer, helicobacter, h. pylori, colitis,
+            crohn, ibs, irritable bowel, diverticul, polyp, constipation,
+            haemorrhoid, hemorrhoid, 胃炎, 反流, 胃食管反流, 胃溃疡, 幽门螺杆菌,
+            肠炎, 肠易激, 结肠息肉, 便秘, 痔]
+
+  - system: inflammation
+    match: [rheumatoid, lupus, sjogren, ankylosing, psoriasis, autoimmune,
+            immunodeficiency, vasculitis, 风湿, 类风湿, 红斑狼疮, 干燥综合征,
+            强直性脊柱炎, 银屑病, 自身免疫]
+
+  - system: neuro_sleep
+    match: [insomnia, depression, anxiety, dementia, alzheimer, parkinson,
+            neuropathy, migraine, epilepsy, vertigo, 失眠, 抑郁, 焦虑, 痴呆,
+            阿尔茨海默, 帕金森, 周围神经病, 偏头痛, 癫痫, 眩晕]
+
+  - system: senses_dental
+    match: [cataract, glaucoma, macular, retinopathy, hearing loss, tinnitus,
+            presbyopia, dry eye, periodontal, periodontitis, tooth loss,
+            白内障, 青光眼, 眼底, 视网膜, 听力下降, 耳鸣, 老花, 干眼, 牙周,
+            缺牙]
+
+  - system: hormonal
+    match: [menopause, perimenopause, pcos, polycystic, endometriosis, fibroid,
+            prostate hyperplasia, bph, hypogonadism, erectile, 更年期, 绝经,
+            多囊卵巢, 子宫内膜异位, 子宫肌瘤, 前列腺增生, 前列腺肥大]
+
+  - system: nutrition
+    match: [vitamin d deficiency, b12 deficiency, malnutrition, sarcopenia,
+            维生素d缺乏, b12缺乏, 营养不良, 肌少症]
+
+  - system: cancer_screening
+    match: [cancer, carcinoma, tumour, tumor, lymphoma, leukaemia, leukemia,
+            malignan, chemotherapy, radiotherapy, in remission, 癌, 恶性肿瘤,
+            淋巴瘤, 白血病, 化疗, 放疗, 缓解期]

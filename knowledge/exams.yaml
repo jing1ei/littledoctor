@@ -1,0 +1,301 @@
+version: 1
+exams:
+- id: ecg
+  name: Resting ECG
+  name_zh: 静息心电图
+  system: cardiovascular
+  aliases:
+  - 心电图
+  - ECG
+  - EKG
+  - 十二导联心电图
+  - 静息心电图
+  validity_months: 24
+  note: Baseline rhythm and conduction; cheap and worth having on file.
+  note_zh: 基线心律与传导情况；价格便宜，值得留档。
+- id: carotid_ultrasound
+  name: Carotid Ultrasound
+  name_zh: 颈动脉超声
+  system: cardiovascular
+  aliases:
+  - 颈动脉超声
+  - 颈动脉彩超
+  - 颈动脉血管超声
+  - carotid ultrasound
+  validity_months: 36
+  note: Use only when clinical risk and the relevant guideline support the examination; an image is not
+    a substitute for overall risk assessment.
+  note_zh: 仅在临床风险及相关指南支持时使用；影像不能替代整体风险评估。
+- id: echocardiogram
+  name: Echocardiogram
+  name_zh: 心脏超声
+  system: cardiovascular
+  aliases:
+  - 心脏超声
+  - 心脏彩超
+  - 超声心动图
+  - echocardiogram
+  - UCG
+  validity_months: 60
+  note: Structure and function; indicated for murmurs, breathlessness or abnormal ECG.
+  note_zh: 评估结构与功能；心脏杂音、气短或ECG异常时适用。
+- id: coronary_cta
+  name: Coronary CTA / CAC
+  name_zh: 冠脉CTA/钙化评分
+  system: cardiovascular
+  aliases:
+  - 冠脉CTA
+  - 冠状动脉CTA
+  - 钙化评分
+  - CAC
+  - coronary CTA
+  validity_months: 60
+  note: Only for elevated risk profiles; a zero calcium score is powerfully reassuring.
+  note_zh: 仅用于风险升高者；钙化评分为0是有力的安心依据。
+- id: abdominal_ultrasound
+  name: Abdominal Ultrasound
+  name_zh: 腹部超声
+  system: liver
+  aliases:
+  - 腹部超声
+  - 腹部彩超
+  - 肝胆脾胰超声
+  - 上腹部超声
+  - 肝胆脾超声
+  - abdominal ultrasound
+  validity_months: 24
+  note: Detects fatty liver, gallstones and renal cysts in one ten-minute pass.
+  note_zh: 一次10分钟检查即可发现脂肪肝、胆结石与肾囊肿。
+- id: liver_elastography
+  name: Liver Elastography
+  name_zh: 肝脏弹性成像
+  system: liver
+  aliases:
+  - 肝脏弹性成像
+  - FibroScan
+  - 肝脏硬度检测
+  - 瞬时弹性成像
+  validity_months: 36
+  note: Quantifies fat and stiffness — the follow-up when ultrasound says "fatty liver".
+  note_zh: 量化脂肪与硬度；超声提示脂肪肝后的进一步检查。
+- id: urinary_ultrasound
+  name: Urinary Tract Ultrasound
+  name_zh: 泌尿系超声
+  system: kidney
+  aliases:
+  - 泌尿系超声
+  - 肾脏超声
+  - 双肾超声
+  - 肾输尿管膀胱超声
+  validity_months: 36
+  note: Structural check for stones, cysts and obstruction.
+  note_zh: 结构性检查，查结石、囊肿与梗阻。
+- id: thyroid_ultrasound
+  name: Thyroid Ultrasound
+  name_zh: 甲状腺超声
+  system: thyroid
+  aliases:
+  - 甲状腺超声
+  - 甲状腺彩超
+  - 甲状腺及颈部淋巴结超声
+  - thyroid ultrasound
+  validity_months: 24
+  note: Nodules are extremely common; what matters is their pattern, not their presence.
+  note_zh: 结节非常常见；关键在于形态特征，而非有无。
+- id: pelvic_ultrasound
+  name: Pelvic Ultrasound
+  name_zh: 妇科/盆腔超声
+  system: hormonal
+  aliases:
+  - 妇科超声
+  - 盆腔超声
+  - 经阴道超声
+  - 子宫附件超声
+  - 阴超
+  validity_months: 24
+  note: Uterus, endometrium and ovaries; also counts antral follicles.
+  note_zh: 查子宫、内膜与卵巢；也可计数窦卵泡。
+- id: breast_ultrasound
+  name: Breast Ultrasound
+  name_zh: 乳腺超声
+  system: cancer_screening
+  aliases:
+  - 乳腺超声
+  - 乳腺彩超
+  - breast ultrasound
+  validity_months: 12
+  sex: female
+  note: The first-line breast screen for dense Asian breast tissue under 40.
+  note_zh: 40岁以下亚洲致密乳腺的一线筛查手段。
+- id: mammography
+  name: Mammography
+  name_zh: 乳腺钼靶
+  system: cancer_screening
+  aliases:
+  - 乳腺钼靶
+  - 钼靶
+  - 乳腺X线
+  - mammography
+  validity_months: 24
+  sex: female
+  note: Adds calcification detection that ultrasound misses; from ~40–45.
+  note_zh: 可发现超声易漏的钙化；约40–45岁起做。
+- id: cervical_cytology
+  name: Cervical Cytology (TCT)
+  name_zh: 宫颈细胞学TCT
+  system: cancer_screening
+  aliases:
+  - TCT
+  - 液基细胞学
+  - 宫颈细胞学
+  - 巴氏涂片
+  - 薄层液基细胞学
+  validity_months: 36
+  sex: female
+  note: Best paired with HPV testing — together they extend the safe interval to 5 years.
+  note_zh: 最好与HPV检测联合；联合筛查可将间隔延长至5年。
+- id: hpv_test
+  name: HPV Test
+  name_zh: HPV检测
+  system: cancer_screening
+  aliases:
+  - HPV
+  - HPV检测
+  - 人乳头状瘤病毒
+  - HPV-DNA
+  - 高危型HPV
+  validity_months: 60
+  sex: female
+  note: Cervical cancer is the one cancer we can nearly eliminate through screening.
+  note_zh: 宫颈癌是几乎可以通过筛查消除的癌症。
+- id: gastroscopy
+  name: Gastroscopy
+  name_zh: 胃镜
+  system: gastrointestinal
+  aliases:
+  - 胃镜
+  - 上消化道内镜
+  - 无痛胃镜
+  - gastroscopy
+  - EGD
+  validity_months: 60
+  note: One baseline scope after 40 in East Asia is high-yield; gastric cancer is curable when early.
+  note_zh: 东亚人群40岁后做一次基线胃镜收益高；胃癌早期可治愈。
+- id: colonoscopy
+  name: Colonoscopy
+  name_zh: 肠镜
+  system: gastrointestinal
+  aliases:
+  - 肠镜
+  - 结肠镜
+  - 无痛肠镜
+  - colonoscopy
+  validity_months: 120
+  note: The rare screen that also treats — removing a polyp removes the future cancer.
+  note_zh: 少有的兼顾治疗的筛查：切除息肉即去除未来的癌。
+- id: chest_xray
+  name: Chest X-ray
+  name_zh: 胸片
+  system: respiratory
+  aliases:
+  - 胸片
+  - 胸部X线
+  - 胸部正位片
+  - chest X-ray
+  - DR胸片
+  validity_months: 24
+  note: Low information density; a low-dose CT is the modern choice when indicated.
+  note_zh: 信息量有限；有指征时更宜选择低剂量CT。
+- id: low_dose_ct
+  name: Low-dose Chest CT
+  name_zh: 低剂量胸部CT
+  system: cancer_screening
+  aliases:
+  - 胸部CT
+  - 低剂量CT
+  - 肺部CT
+  - LDCT
+  - chest CT
+  - 肺癌筛查
+  - 低剂量螺旋CT
+  - 肺癌筛查CT
+  validity_months: 24
+  note: Use only when clinical risk and the relevant guideline support the examination; an image is not
+    a substitute for overall risk assessment.
+  note_zh: 仅在临床风险及相关指南支持时使用；影像不能替代整体风险评估。
+- id: spirometry
+  name: Spirometry
+  name_zh: 肺功能
+  system: respiratory
+  aliases:
+  - 肺功能
+  - 肺功能检查
+  - spirometry
+  - 通气功能
+  validity_months: 60
+  note: A one-time baseline is useful if you have any chronic cough or asthma history.
+  note_zh: 有慢性咳嗽或哮喘史者，做一次基线检查有价值。
+- id: dxa_scan
+  name: DXA Bone Density
+  name_zh: 双能X线骨密度
+  system: bone
+  aliases:
+  - 骨密度检查
+  - DXA
+  - DEXA
+  - 双能X线骨密度
+  - 骨密度测定
+  validity_months: 36
+  note: The reference method; heel ultrasound at checkups is only a rough screen.
+  note_zh: 骨密度的参考方法；体检的足跟超声只是粗筛。
+- id: sleep_study
+  name: Sleep Study
+  name_zh: 睡眠呼吸监测
+  system: neuro_sleep
+  aliases:
+  - 睡眠监测
+  - 多导睡眠图
+  - PSG
+  - 睡眠呼吸监测
+  - sleep study
+  validity_months: 60
+  note: Untreated apnoea quietly drives blood pressure, glucose and daytime cognition.
+  note_zh: 未治疗的呼吸暂停会悄悄影响血压、血糖与日间认知。
+- id: dilated_eye_exam
+  name: Dilated Eye Exam
+  name_zh: 散瞳眼底检查
+  system: senses_dental
+  aliases:
+  - 眼底检查
+  - 散瞳眼底
+  - 眼底照相
+  - fundus exam
+  - OCT
+  validity_months: 24
+  note: Retina, optic nerve and macula — and the only place vessels are directly visible.
+  note_zh: 查视网膜、视神经与黄斑，也是唯一能直视血管的部位。
+- id: dental_exam
+  name: Dental Exam & Cleaning
+  name_zh: 口腔检查与洁牙
+  system: senses_dental
+  aliases:
+  - 口腔检查
+  - 洁牙
+  - 牙科检查
+  - dental cleaning
+  - 牙周检查
+  validity_months: 12
+  note: Periodontal inflammation is measurable in your systemic inflammatory markers.
+  note_zh: 牙周炎症可在全身炎症指标中体现出来。
+- id: hearing_test
+  name: Audiometry
+  name_zh: 听力测试
+  system: senses_dental
+  aliases:
+  - 听力测试
+  - 纯音测听
+  - audiometry
+  - 电测听
+  validity_months: 60
+  note: Especially relevant with headphone-heavy work; loss is gradual and unnoticed.
+  note_zh: 长时间使用耳机者尤需关注；听力下降缓慢而不易察觉。

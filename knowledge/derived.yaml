@@ -1,0 +1,273 @@
+version: 1
+markers:
+- id: homa_ir
+  name: HOMA-IR
+  name_zh: 胰岛素抵抗指数
+  system: metabolic
+  unit: index
+  decimals: 2
+  derived: true
+  aliases:
+  - HOMA-IR
+  - HOMA
+  - 胰岛素抵抗指数
+  direction: high_bad
+  tier: extended
+  fresh_months: 18
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: non_hdl_c
+  name: Non-HDL Cholesterol
+  name_zh: 非高密度脂蛋白胆固醇
+  system: cardiovascular
+  unit: mmol/L
+  decimals: 2
+  derived: true
+  aliases:
+  - 非HDL胆固醇
+  - non-HDL-C
+  - 非高密度脂蛋白胆固醇
+  ref:
+    high: 4.1
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: tc_hdl_ratio
+  name: TC / HDL Ratio
+  name_zh: 总胆固醇/高密度脂蛋白比值
+  system: cardiovascular
+  unit: ratio
+  decimals: 2
+  derived: true
+  aliases:
+  - TC/HDL
+  - 胆固醇/HDL
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: tg_hdl_ratio
+  name: TG / HDL Ratio
+  name_zh: 甘油三酯/高密度脂蛋白比值
+  system: cardiovascular
+  unit: ratio
+  decimals: 2
+  derived: true
+  aliases:
+  - TG/HDL
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: ast_alt_ratio
+  name: AST / ALT Ratio
+  name_zh: AST/ALT比值
+  system: liver
+  unit: ratio
+  decimals: 2
+  derived: true
+  aliases:
+  - AST/ALT
+  - De Ritis
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: fib4
+  name: FIB-4
+  name_zh: 肝纤维化FIB-4
+  system: liver
+  unit: index
+  decimals: 2
+  derived: true
+  aliases:
+  - FIB-4
+  - FIB4
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: neutrophil_lymphocyte_ratio
+  name: Neutrophil / Lymphocyte Ratio
+  name_zh: 中性粒/淋巴比值
+  system: inflammation
+  unit: ratio
+  decimals: 2
+  derived: true
+  aliases:
+  - NLR
+  - 中性粒细胞/淋巴细胞
+  direction: high_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: ige
+  name: Total IgE
+  name_zh: 总IgE
+  system: inflammation
+  unit: IU/mL
+  decimals: 1
+  aliases:
+  - 总IgE
+  - IgE
+  - 免疫球蛋白E
+  ref:
+    high: 100
+  direction: high_bad
+  tier: extended
+  fresh_months: 36
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: ana
+  name: ANA
+  name_zh: 抗核抗体
+  system: inflammation
+  unit: ''
+  aliases:
+  - 抗核抗体
+  - ANA
+  direction: qualitative
+  expected: negative
+  tier: extended
+  fresh_months: 60
+  note: Low-titre positives are common in healthy women; only order it with real symptoms.
+  note_zh: 健康女性常见低滴度阳性；仅在有明确症状时检测。
+- id: rf
+  name: Rheumatoid Factor
+  name_zh: 类风湿因子
+  system: inflammation
+  unit: IU/mL
+  decimals: 1
+  aliases:
+  - 类风湿因子
+  - RF
+  ref:
+    high: 20
+  direction: high_bad
+  tier: extended
+  fresh_months: 60
+  note: Only meaningful alongside joint symptoms.
+  note_zh: 只有伴关节症状时才有意义。
+- id: complement_c3
+  name: Complement C3
+  name_zh: 补体C3
+  system: inflammation
+  unit: g/L
+  decimals: 2
+  aliases:
+  - 补体C3
+  - C3
+  ref:
+    low: 0.79
+    high: 1.52
+  direction: both_bad
+  tier: extended
+  fresh_months: 36
+  note: Falls in active autoimmune consumption; otherwise stable.
+  note_zh: 自身免疫活动消耗时下降，其余时候稳定。
+- id: prealbumin
+  name: Prealbumin
+  name_zh: 前白蛋白
+  system: nutrition
+  unit: mg/L
+  decimals: 0
+  aliases:
+  - 前白蛋白
+  - 前清蛋白
+  - PA
+  - PAB
+  ref:
+    low: 200
+    high: 400
+  direction: low_bad
+  tier: extended
+  fresh_months: 12
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: lipase
+  name: Lipase
+  name_zh: 脂肪酶
+  system: gastrointestinal
+  unit: U/L
+  decimals: 0
+  aliases:
+  - 脂肪酶
+  - LPS
+  - Lipase
+  ref:
+    low: 13
+    high: 60
+  direction: high_bad
+  tier: extended
+  fresh_months: 24
+  note: More pancreas-specific than amylase.
+  note_zh: 比淀粉酶更具胰腺特异性。
+- id: visual_acuity
+  name: Visual Acuity
+  name_zh: 视力
+  system: senses_dental
+  unit: decimal
+  decimals: 1
+  aliases:
+  - 视力
+  - 裸眼视力
+  - 矫正视力
+  ref:
+    low: 0.8
+  direction: low_bad
+  tier: extended
+  fresh_months: 24
+  note: Track corrected acuity; a drop between checks always deserves an explanation.
+  note_zh: 追踪矫正视力；两次之间下降总需要一个解释。
+- id: zinc
+  name: Zinc
+  name_zh: 锌
+  system: nutrition
+  unit: umol/L
+  decimals: 1
+  aliases:
+  - 锌
+  - 血锌
+  - Zn
+  - ZN
+  ref:
+    low: 11.0
+    high: 23.0
+  direction: low_bad
+  tier: extended
+  fresh_months: 24
+  note: Interpret with the original laboratory reference interval, date, symptoms and clinical context.
+    This marker alone does not establish a diagnosis.
+  note_zh: 请结合原实验室参考范围、日期、症状及临床背景解读；单项指标本身不能确诊。
+- id: stress_score
+  name: Stress (self)
+  name_zh: 压力自评
+  system: neuro_sleep
+  unit: /10
+  decimals: 1
+  aliases:
+  - 压力自评
+  - 压力评分
+  - stress
+  direction: high_bad
+  tier: extended
+  fresh_months: 6
+  note: A questionnaire or device reading is not a diagnosis. Review function, duration, context and support
+    needs. PHQ-9 total alone cannot assess self-harm risk; individual answers and direct assessment matter.
+  note_zh: 问卷或设备读数不等于诊断，需评估功能、持续时间、背景及支持需求。PHQ-9总分不能单独评估自伤风险，需了解单项回答并直接评估。

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>__TITLE__ · Archive</title>
+<style>
+/* ─────────────────────────────────────────────────────────────────────────
+   littledocter — the archive.
+   Every original document, searchable: what it said, in its own words.
+   ───────────────────────────────────────────────────────────────────────── */
+:root{
+  --paper:#F4F1EB;   --paper-2:#EDE8E0;   --card:#FAF8F4;
+  --ink:#17150F;     --ink-2:#453F34;     --ink-3:#625C50;   --ink-4:#71695C;
+  --hair:rgba(23,21,15,.12); --hair-2:rgba(23,21,15,.06);
+  --gold:#8E6E3E;
+  --steady:#5F7154;  --watch:#9E7838;     --attention:#963F29;  --unknown:#A29B8E;
+  --serif:"Cormorant Garamond",Cormorant,Georgia,"Songti SC","Noto Serif SC",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Helvetica Neue","PingFang SC",sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --pad:clamp(18px,3.2vw,52px);
+}
+*{box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:300;
+  font-size:14px;line-height:1.6;letter-spacing:.004em;min-height:100%}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.03;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>")}
+::selection{background:rgba(154,122,74,.18)}
+h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;letter-spacing:-.014em}
+.label{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-4);font-weight:400}
+.num{font-variant-numeric:lining-nums tabular-nums}
+a{color:inherit;text-decoration:none}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:2px}
+.txt button,.lang button{min-width:32px;min-height:36px}
+.back,.acts button,.acts a{min-height:36px;display:inline-flex;align-items:center}
+.frame{max-width:1180px;margin:0 auto;padding:0 var(--pad) calc(var(--footh,116px) + 32px);position:relative;z-index:2}
+
+/* ── masthead ─────────────────────────────────────────────────────────── */
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap;
+  padding:clamp(24px,4vh,44px) 0 clamp(14px,2vh,22px);border-bottom:1px solid var(--hair-2)}
+header.top h1{font-size:clamp(24px,3vw,36px);line-height:1;margin-top:10px}
+header.top .meta{margin-top:10px;color:var(--ink-4);font-size:10.5px;letter-spacing:.1em}
+header.top .meta b{color:var(--ink-3);font-weight:400}
+.back{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1px solid transparent;transition:color .4s,border-color .4s;white-space:nowrap}
+.back:hover{color:var(--ink);border-color:var(--gold)}
+.corner{display:flex;align-items:center;gap:clamp(14px,2vw,26px);flex:0 0 auto}
+.ctl{display:flex;align-items:center;gap:8px}
+.txt{display:flex;align-items:baseline;gap:9px}
+.txt button{appearance:none;background:none;border:0;padding:0 1px;cursor:pointer;
+  font-family:var(--serif);color:var(--ink-4);line-height:1;transition:color .4s var(--ease)}
+.txt button:nth-child(1){font-size:11px}
+.txt button:nth-child(2){font-size:14px}
+.txt button:nth-child(3){font-size:17px}
+.txt button:hover{color:var(--ink-2)}
+.txt button.on{color:var(--ink)}
+.txt button:focus-visible,.lang button:focus-visible{outline:1px dashed var(--ink-4);
+  outline-offset:3px}
+/* the same three reading sizes as the body page, remembered together */
+html[data-text="l"] #list,html[data-text="l"] .search{zoom:1.15}
+html[data-text="xl"] #list,html[data-text="xl"] .search{zoom:1.32}
+.lang{display:flex;align-items:center;gap:8px}
+.lang button{appearance:none;background:none;border:0;padding:0;cursor:pointer;
+  font-family:var(--sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-4);transition:color .4s var(--ease)}
+.lang button:hover{color:var(--ink-2)}
+.lang button.on{color:var(--ink)}
+.lang s{width:1px;height:9px;background:var(--hair);text-decoration:none}
+html[lang="zh"] body{font-size:13.6px;letter-spacing:0}
+html[lang="zh"] .label,html[lang="zh"] .back,html[lang="zh"] .f,html[lang="zh"] .tag,
+html[lang="zh"] .acts button,html[lang="zh"] .acts a,html[lang="zh"] .doc .when em,
+html[lang="zh"] .qwrap .count,html[lang="zh"] .clear,
+html[lang="zh"] .lang button{letter-spacing:.1em;text-transform:none}
+/* the card a trend link asked for, briefly lit */
+@keyframes lit{from{background:rgba(142,110,62,.12)}to{background:transparent}}
+.doc.lit{animation:lit 2.6s var(--ease) forwards}
+
+/* ── search ───────────────────────────────────────────────────────────── */
+.search{position:sticky;top:0;z-index:20;background:var(--paper);
+  padding:clamp(18px,3vh,32px) 0 clamp(10px,1.6vh,18px)}
+.filter-panel summary{cursor:pointer;font-size:12px;color:var(--ink-3);padding:12px 0;min-height:40px}
+.filter-panel .filters{padding-top:0}
+/* the fade lives below the bar, so wrapped filter rows stay legible */
+.search::after{content:"";position:absolute;left:0;right:0;top:100%;height:20px;pointer-events:none;
+  background:linear-gradient(rgba(244,241,235,1),rgba(244,241,235,0))}
+.qwrap{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--hair);
+  padding-bottom:10px;transition:border-color .5s var(--ease)}
+.qwrap:focus-within{border-color:var(--gold)}
+#q{flex:1;min-width:0;appearance:none;background:none;border:0;outline:none;color:var(--ink);
+  font-family:var(--serif);font-size:clamp(20px,2.6vw,30px);font-weight:300;letter-spacing:-.01em}
+#q::placeholder{color:var(--ink-4);opacity:.7}
+#q::-webkit-search-cancel-button,#q::-webkit-search-decoration{-webkit-appearance:none;display:none}
+.clear{appearance:none;background:none;border:0;cursor:pointer;color:var(--ink-4);
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:0;opacity:0;
+  transition:opacity .4s,color .4s;pointer-events:none;white-space:nowrap}
+.clear.on{opacity:1;pointer-events:auto}
+.clear{visibility:hidden;min-height:32px}
+.clear.on{visibility:visible}
+.clear:hover{color:var(--ink)}
+.qwrap .count{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-4);
+  white-space:nowrap}
+.filters{display:flex;flex-wrap:wrap;gap:7px 8px;padding-top:14px}
+.f{appearance:none;background:none;cursor:pointer;font-family:var(--sans);font-size:9.6px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4);border:1px solid var(--hair-2);
+  border-radius:20px;padding:3px 11px;transition:color .35s,border-color .35s,background .35s}
+.f:hover{color:var(--ink-2);border-color:var(--hair)}
+.f.on{color:var(--ink);border-color:var(--gold);background:rgba(142,110,62,.06)}
+.f i{font-style:normal;margin-left:6px;opacity:.6}
+.f{min-height:32px}
+.fsep{width:1px;background:var(--hair-2);margin:2px 6px}
+
+/* ── results ──────────────────────────────────────────────────────────── */
+.doc{display:grid;grid-template-columns:92px minmax(0,1fr);gap:0 clamp(18px,2.4vw,36px);
+  padding:clamp(20px,2.6vh,30px) 0;border-bottom:1px solid var(--hair-2)}
+.doc .when{font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums;letter-spacing:.04em;
+  padding-top:5px}
+.doc .when em{font-style:normal;display:block;color:var(--ink-4);font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;margin-top:5px}
+.doc h3{font-size:clamp(16px,1.7vw,20px);line-height:1.24}
+.doc{overflow-wrap:anywhere}
+.doc .name{font-size:10.5px;color:var(--ink-4);margin-top:6px;letter-spacing:.03em;
+  word-break:break-all}
+.tags{display:flex;flex-wrap:wrap;gap:5px 7px;margin-top:11px}
+.tag{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);
+  border:1px solid var(--hair-2);border-radius:20px;padding:2px 9px}
+.tag.bad{border-color:rgba(150,63,41,.35);color:var(--attention)}
+.tag.ok{border-color:rgba(95,113,84,.35);color:var(--steady)}
+.tag.warn{border-color:rgba(158,120,56,.4);color:var(--watch)}
+.said{margin-top:14px}
+.said .q{padding-left:13px;border-left:1px solid var(--hair);font-family:var(--serif);
+  font-size:14.5px;line-height:1.55;color:var(--ink-2);margin-top:8px}
+.said .q.abnormal{border-left-color:rgba(150,63,41,.42)}
+.said .q.normal{border-left-color:rgba(95,113,84,.4)}
+.snip{margin-top:12px;color:var(--ink-3);font-size:12px;line-height:1.7;max-width:74ch}
+.snip mark,.said mark,.doc h3 mark{background:rgba(184,146,74,.24);color:var(--ink);
+  padding:0 1px;border-radius:2px}
+.acts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;align-items:center}
+.acts button,.acts a{appearance:none;background:none;border:0;padding:0;cursor:pointer;
+  font-family:var(--sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-3);border-bottom:1px solid transparent;transition:color .4s,border-color .4s}
+.acts button:hover,.acts a:hover{color:var(--ink);border-color:var(--gold)}
+.full{margin-top:14px;padding:16px 18px;background:var(--card);border:1px solid var(--hair-2);
+  white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
+  line-height:1.72;color:var(--ink-2);max-height:52vh;overflow:auto}
+.shots{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.shots a{display:block;width:112px;border:1px solid var(--hair-2);background:var(--card);
+  padding:5px;transition:border-color .4s}
+.shots a:hover{border-color:var(--gold)}
+.shots img{display:block;width:100%;height:auto;filter:saturate(.9)}
+.warn{margin-top:11px;font-size:11px;color:var(--watch)}
+.empty{padding:64px 0;text-align:center;color:var(--ink-4);font-family:var(--serif);font-size:19px}
+footer.note{padding-top:34px;color:var(--ink-4);font-size:11px;line-height:1.7;max-width:76ch}
+footer.note code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;overflow-wrap:anywhere}
+@media (max-width:640px){
+  .doc{grid-template-columns:1fr;gap:8px}
+  .doc .when{padding-top:0;display:flex;gap:12px;align-items:baseline}
+  .doc .when em{margin-top:0}
+  .corner{flex-wrap:wrap;gap:12px;width:100%;justify-content:space-between}
+  .qwrap{flex-wrap:wrap;gap:8px}
+  #q{flex-basis:70%;font-size:20px;min-height:40px}
+  .qwrap .count{flex-basis:100%;font-size:10px}
+  .search:has(.filter-panel[open]){position:relative}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
+@media (max-height:600px){.search:has(.filter-panel[open]){position:relative}}
+
+.tbtn{display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-3);font-family:var(--sans);text-transform:uppercase}
+footer.foot{position:fixed;inset:auto 0 0;z-index:80;background:var(--card);
+  padding:8px max(12px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+  border-top:1px solid var(--hair);box-shadow:0 -6px 24px rgba(23,21,15,.05)}
+.record-meta{color:var(--ink-4);font-size:9.5px;letter-spacing:.08em;margin:0;padding:10px 0;flex-shrink:0}
+footer.foot nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;max-width:1100px;margin:auto}
+footer.foot nav .tbtn{min-height:44px;padding:4px 8px;border:1px solid transparent;border-radius:6px;letter-spacing:.06em;font-size:12px}
+footer.foot nav .tbtn:hover{background:var(--paper-2)}
+html[data-text="l"] footer.foot nav .tbtn{font-size:13px}
+html[data-text="xl"] footer.foot nav .tbtn{font-size:14px}
+footer.foot nav .tbtn i{font-style:normal;color:var(--ink-4);margin-left:6px;font-size:8.6px}
+/* which drawer is open, said quietly but unmistakably */
+footer.foot nav .tbtn[aria-current="page"]{color:var(--ink);border-color:var(--gold);background:var(--paper-2)}
+
+
+@media (max-width:700px){footer.foot nav{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}footer.foot nav .tbtn{letter-spacing:.02em;padding:4px;min-height:44px}}
+@media print{footer.foot{display:none}}
+</style>
+</head>
+<body>
+<div class="frame">
+  <header class="top">
+    <div>
+      <span class="label" id="eyebrow">littledocter · Archive</span>
+      <h1 id="h1">Everything on file</h1>
+      <p class="meta num" id="meta"></p>
+    </div>
+    <div class="corner">
+      <a class="back" href="index.html" id="back">← back to the body</a>
+      <div class="ctl">
+        <div class="txt" id="txt" role="group" aria-label="Text size">
+          <button type="button" data-text="m" title="Normal text" aria-pressed="false">A</button>
+          <button type="button" data-text="l" title="Larger text" aria-pressed="false">A</button>
+          <button type="button" data-text="xl" title="Largest text" aria-pressed="false">A</button>
+        </div>
+        <s></s>
+        <div class="lang" id="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en">EN</button><s></s>
+          <button type="button" data-lang="zh">中文</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="search">
+    <div class="qwrap">
+      <input id="q" type="search" autocomplete="off" spellcheck="false">
+      <button class="clear" id="clear" type="button">clear</button>
+      <span class="count" id="count" role="status" aria-live="polite"></span>
+    </div>
+    <details class="filter-panel" id="filter-panel"><summary id="filter-label"></summary><div class="filters" id="filters"></div></details>
+  </div>
+
+  <div id="list"></div>
+  <footer class="note" id="foot"></footer>
+</div>
+
+<footer class="foot"><nav>
+  <a class="tbtn" href="index.html" data-destination="home"></a>
+  <a class="tbtn" href="index.html?sheet=findings" data-destination="findings"></a>
+  <a class="tbtn" href="archive.html" data-destination="archive" aria-current="page"></a>
+  <a class="tbtn" href="index.html?sheet=more" data-destination="more"></a>
+</nav></footer>
+
+<script type="application/json" id="littledocter-data">__LITTLEDOCTER_DATA__</script>
+<script>
+(function(){
+"use strict";
+const D = JSON.parse(document.getElementById("littledocter-data").textContent);
+const $  = (s,r)=> (r||document).querySelector(s);
+const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const yr  = d => String(d||"").slice(0,4);
+
+/* ── language ────────────────────────────────────────────────────────── */
+const LS_KEY = "littledocter-lang";
+let lang = (function(){
+  try { const v = localStorage.getItem(LS_KEY); if (v==="en"||v==="zh") return v; } catch(e){}
+  return /^zh/i.test(navigator.language||"") ? "zh" : "en";
+})();
+const zh = () => lang==="zh";
+const t   = (en,cn) => zh() ? cn : en;
+/* ── reading size, shared with the body page ─────────────────────────────── */
+const LS_TEXT = "littledocter-text";
+let textSize = (function(){
+  try { const v = localStorage.getItem(LS_TEXT); if (v==="m"||v==="l"||v==="xl") return v; }
+  catch(e){}
+  return "m";
+})();
+function applyText(){
+  document.documentElement.setAttribute("data-text", textSize);
+  $$("#txt button").forEach(b=>{
+    b.classList.toggle("on", b.dataset.text===textSize);
+    b.setAttribute("aria-pressed", b.dataset.text===textSize ? "true" : "false");
+  });
+}
+applyText();
+const L   = (o,k) => { const v = o ? ((zh() && o[k+"_zh"]) || o[k]) : ""; return v==null?"":v; };
+
+const DOCS = (D.documents||[]).slice().sort((a,b)=>
+  String(b.date||"").localeCompare(String(a.date||"")) || String(a.file).localeCompare(b.file));
+const SYS = {}; (D.systems||[]).forEach(s=> SYS[s.id]=s);
+const MK = D.markers||{}, EX = D.exams||{};
+
+const KIND_WORD = {text:["text","文本"], "pdf-text":["pdf","PDF"], "pdf-scan":["scan","扫描"],
+  image:["photo","照片"], dicom:["dicom","DICOM"], csv:["csv","CSV"], yaml:["entered","手录"],
+  json:["json","JSON"], docx:["word","Word"], unsupported:["unread","未读"],
+  error:["failed","读取失败"]};
+const kindWord = k => (KIND_WORD[k]||[k,k])[zh()?1:0];
+const sysName = s => L(SYS[s]||{}, "name") || s;
+
+/* one searchable string per document: its own words, plus what we made of them */
+DOCS.forEach(d=>{
+  const names = (d.markers||[]).map(m=>[(MK[m]||{}).name, (MK[m]||{}).name_zh, m].join(" "))
+    .concat((d.exam_ids||[]).map(e=>[(EX[e]||{}).name, (EX[e]||{}).name_zh, e].join(" ")))
+    .concat((d.systems||[]).map(s=>[(SYS[s]||{}).name, (SYS[s]||{}).name_zh].join(" ")));
+  d._hay = [d.file, d.name, d.title, d.date, d.kind, d.modality,
+            (KIND_WORD[d.kind]||[]).join(" "),
+            (d.conclusions||[]).map(c=>c.text).join(" "), names.join(" "), d.text||""]
+            .join("  ").toLowerCase();
+  d._bad = (d.conclusions||[]).some(c=>c.status==="abnormal");
+  d._sys = Array.from(new Set((d.systems||[]).concat(
+      (d.markers||[]).map(m=>(MK[m]||{}).system).filter(Boolean),
+      (d.exam_ids||[]).map(e=>(EX[e]||{}).system).filter(Boolean))));
+});
+
+/* ── filters ─────────────────────────────────────────────────────────── */
+const state = {q:"", year:"", kind:"", sys:"", flag:""};
+const years = Array.from(new Set(DOCS.map(d=>yr(d.date)).filter(Boolean))).sort().reverse();
+const kinds = Array.from(new Set(DOCS.map(d=>d.kind))).sort();
+const nSys = {};
+DOCS.forEach(d=> d._sys.forEach(s=> nSys[s] = (nSys[s]||0)+1));
+/* the systems most of the paperwork is about — eight is plenty for one line */
+const systems = Object.keys(nSys).sort((a,b)=> nSys[b]-nSys[a] ||
+  String((SYS[a]||{}).name).localeCompare((SYS[b]||{}).name)).slice(0,8);
+
+function chip(key, val, text, n){
+  return '<button class="f'+(state[key]===val?" on":"")+'" data-k="'+key+'" data-v="'+esc(val)+
+    '" aria-pressed="'+(state[key]===val)+'">'+esc(text)+(n!=null?'<i>'+n+'</i>':'')+'</button>';
+}
+function drawFilters(){
+  const f = $("#filters");
+  const focused = f.contains(document.activeElement) ?
+    {k:document.activeElement.dataset.k,v:document.activeElement.dataset.v} : null;
+  const selected = [state.year,state.kind,state.sys,state.flag].filter(Boolean).length;
+  $("#filter-label").textContent = t("Filters", "筛选")+(selected ? t(" · "+selected+" active", " · 已选 "+selected+" 项") : "");
+  /* a system arriving by deep link keeps its chip even outside the top eight */
+  const shown = systems.indexOf(state.sys) >= 0 || !state.sys
+    ? systems : [state.sys].concat(systems).slice(0, 9);
+  f.innerHTML =
+    chip("flag","", t("all","全部"), would("flag",""))+
+    chip("flag","bad", t("with findings","有异常"), would("flag","bad"))+
+    chip("flag","imaging", t("imaging","影像"), would("flag","imaging"))+
+    chip("flag","scan", t("scanned / photo","扫描/照片"), would("flag","scan"))+
+    '<span class="fsep"></span>'+
+    years.map(y=>chip("year",y,y,would("year",y))).join("")+
+    '<span class="fsep"></span>'+
+    kinds.map(k=>chip("kind",k,kindWord(k),would("kind",k))).join("")+
+    (shown.length? '<span class="fsep"></span>'+
+      shown.map(s=>chip("sys",s,sysName(s), would("sys",s))).join("") : "");
+  if (focused) $$("button",f).find(b=>b.dataset.k===focused.k && b.dataset.v===focused.v)?.focus({preventScroll:true});
+}
+$("#filters").addEventListener("click", e=>{
+  const b = e.target.closest(".f"); if (!b) return;
+  b.focus({preventScroll:true});
+  const k = b.dataset.k, v = b.dataset.v;
+  state[k] = state[k]===v ? "" : v;
+  if (k==="flag" && v==="") state.flag = "";
+  drawFilters(); draw();
+});
+
+/* ── matching ────────────────────────────────────────────────────────── */
+const terms = () => state.q.toLowerCase().split(/\s+/).filter(Boolean);
+function passes(d, st){
+  if (st.year && yr(d.date)!==st.year) return false;
+  if (st.kind && d.kind!==st.kind) return false;
+  if (st.sys && d._sys.indexOf(st.sys)<0) return false;
+  if (st.flag==="bad" && !d._bad) return false;
+  if (st.flag==="imaging" && !d.modality) return false;
+  if (st.flag==="scan" && !(d.kind==="image"||d.kind==="pdf-scan"||d.kind==="dicom")) return false;
+  return terms().every(t=> d._hay.indexOf(t) >= 0);
+}
+const matches = d => passes(d, state);
+/* what a chip would yield if you pressed it — dead ends show as 0 */
+function would(key, val){
+  const probe = Object.assign({}, state); probe[key] = val;
+  return DOCS.filter(d=>passes(d, probe)).length;
+}
+function hl(s){
+  const text = String(s||""), ts = terms();
+  if (!ts.length) return esc(text);
+  const pattern = ts.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|");
+  return text.split(new RegExp("("+pattern+")", "gi"))
+    .map((part,i)=> i%2 ? "<mark>"+esc(part)+"</mark>" : esc(part)).join("");
+}
+/* the passage the search actually hit, with a little room to breathe */
+function readable(d){
+  /* structured files carry comments and keys; show the parts a person wrote */
+  const raw = d.text||"";
+  if (d.kind==="yaml" || d.kind==="json" || d.kind==="csv"){
+    return raw.split(/\r?\n/).filter(l=>l.trim() && !/^\s*#/.test(l)).join(" · ");
+  }
+  /* printed slips are full of rules and dotted leaders — they read as noise */
+  return raw.replace(/[=＝_·—\-\u2500-\u257F\u2014\u2015]{4,}/g, " ")
+            .replace(/[ \t]{2,}/g, " ");
+}
+function snippet(d){
+  const ts = terms();
+  const text = readable(d);
+  if (!text) return "";
+  if (!ts.length) return esc(text.slice(0,240).trim()) + (text.length>240?" …":"");
+  const low = text.toLowerCase();
+  let at = -1;
+  for (const t of ts){ const i = low.indexOf(t); if (i>=0){ at = i; break; } }
+  if (at < 0) return "";
+  const from = Math.max(0, at-140), to = Math.min(text.length, at+220);
+  return (from?"… ":"")+hl(text.slice(from,to).trim())+(to<text.length?" …":"");
+}
+
+/* ── draw ────────────────────────────────────────────────────────────── */
+const open = {};
+let lit = null;                       /* the card a trend link asked for */
+function draw(){
+  const hits = DOCS.filter(matches);
+  const filtered = !!(state.q || state.year || state.kind || state.sys || state.flag);
+  $("#clear").classList.toggle("on", filtered);
+  $("#count").textContent = hits.length===DOCS.length
+    ? t(DOCS.length+" documents", DOCS.length+" 份报告")
+    : t(hits.length+" of "+DOCS.length, DOCS.length+" 份中 "+hits.length+" 份");
+  $("#list").innerHTML = hits.length ? hits.map(card).join("")
+    : '<div class="empty">'+t("No reports match. Clear the search and filters to see all reports.","没有符合的报告。清除搜索和筛选即可查看全部报告。")+'</div>';
+}
+function card(d){
+  const tags = [];
+  tags.push('<span class="tag">'+esc(kindWord(d.kind))+'</span>');
+  if (d.modality) tags.push('<span class="tag">'+esc(d.modality)+'</span>');
+  if (d.pages>1) tags.push('<span class="tag">'+t(d.pages+" pages", d.pages+"页")+'</span>');
+  if (d.measurements) tags.push('<span class="tag ok">'+
+    t(d.measurements+" results", d.measurements+"项结果")+'</span>');
+  if (d.exams) tags.push('<span class="tag warn">'+
+    t(d.exams+" impressions", d.exams+"条结论")+'</span>');
+  if (d._bad) tags.push('<span class="tag bad">'+t("finding","异常")+'</span>');
+  if (d.extraction==="vision") tags.push('<span class="tag">'+
+    t("read by vision","图像识别")+'</span>');
+  d._sys.slice(0,4).forEach(s=> tags.push('<a class="tag" href="index.html#'+esc(s)+'">'+
+    esc(sysName(s))+'</a>'));
+
+  const said = (d.conclusions||[]).slice(0,4).map(c=>
+    '<div class="q '+esc(c.status)+'">'+hl(c.text)+'</div>').join("");
+  const shots = (d.previews||[]).slice(0,6).map(p=>
+    '<a href="'+esc(p)+'" target="_blank" rel="noreferrer"><img src="'+esc(p)+
+    '" alt="'+esc(t("page of ","页面 · ")+d.name)+'" loading="lazy"></a>').join("");
+  const isOpen = !!open[d.id];
+  const source = d.kind==="yaml"||d.kind==="json"||d.kind==="csv"
+      ? t("entered by hand","手工录入")
+    : d.extraction==="vision" ? t("read from the image","从图像读取")
+    : d.date_source==="filename" ? t("date from filename","日期取自文件名")
+    : d.date_source==="none" ? t("no date found","未找到日期")
+    : t("as printed","按原件");
+  return '<article class="doc'+(lit===d.id?" lit":"")+'" id="'+esc(d.id)+'">'+
+    '<div class="when"><span>'+esc(d.date||t("undated","无日期"))+'</span>'+
+      '<em>'+esc(source)+'</em></div>'+
+    '<div>'+
+      '<h3>'+hl(d.title||d.name)+'</h3>'+
+      '<div class="name">'+hl(d.file)+(d.bytes?' · '+Math.round(d.bytes/1024)+' KB':'')+'</div>'+
+      '<div class="tags">'+tags.join("")+'</div>'+
+      (said? '<div class="said"><span class="label">'+t("What it said","报告结论")+'</span>'+
+        said+'</div>' : '')+
+      (snippet(d)? '<p class="snip">'+snippet(d)+'</p>' : '')+
+      (shots? '<div class="shots">'+shots+'</div>' : '')+
+      ((d.warnings||[]).length? '<p class="warn">'+esc(d.warnings.join(" · "))+'</p>' : '')+
+      '<div class="acts">'+
+        (d.text? '<button data-full="'+esc(d.id)+'" aria-expanded="'+isOpen+'" aria-controls="text-'+esc(d.id)+'">'+
+          (isOpen? t("hide full text","收起全文") : t("full text","查看全文"))+
+          ' · '+t((d.chars||0).toLocaleString()+" chars", (d.chars||0).toLocaleString()+"字")+
+          '</button>' : '')+
+        '<a href="'+esc(D.reports_href||"../reports/")+esc(d.file.split("/").map(encodeURIComponent).join("/"))+'" target="_blank" '+
+          'rel="noreferrer">'+t("open original","打开原件")+'</a>'+
+      '</div>'+
+      (isOpen && d.text? '<div class="full" id="text-'+esc(d.id)+'" tabindex="0">'+hl(d.text)+'</div>' : '')+
+    '</div></article>';
+}
+$("#list").addEventListener("click", e=>{
+  const b = e.target.closest("[data-full]"); if (!b) return;
+  const id = b.dataset.full;
+  open[id] = !open[id];
+  draw();
+  const el = document.getElementById(id);
+  $("[data-full]",el)?.focus({preventScroll:true});
+  if (el) el.scrollIntoView({block:"nearest"});
+});
+
+let t0 = null;
+$("#q").addEventListener("input", e=>{
+  state.q = e.target.value;
+  clearTimeout(t0); t0 = setTimeout(()=>{ drawFilters(); draw(); }, 90);
+});
+$("#clear").addEventListener("click", ()=>{
+  state.q = ""; state.year = ""; state.kind = ""; state.sys = ""; state.flag = "";
+  $("#q").value = ""; drawFilters(); draw(); $("#q").focus();
+});
+document.addEventListener("keydown", e=>{
+  if (e.key==="/" && document.activeElement !== $("#q")){ e.preventDefault(); $("#q").focus(); }
+  if (e.key==="Escape"){
+    $("#q").value=""; state.q=""; drawFilters(); draw();
+    if (document.activeElement === $("#q")) $("#q").blur();
+  }
+});
+
+/* ── head and foot ───────────────────────────────────────────────────── */
+const S = D.summary||{};
+const withText = DOCS.filter(d=>d.chars>0).length;
+const nResults = DOCS.reduce((a,d)=>a+(d.measurements||0),0);
+const nImpr = DOCS.reduce((a,d)=>a+(d.exams||0),0);
+
+function paintChrome(){
+  document.documentElement.lang = lang;
+  const destinations={home:t("Home","首页"),more:t("More","更多"),findings:t("Findings","发现"),tests:t("Next tests","建议检查"),trends:t("Trends","趋势"),visit:t("For your doctor","给医生看"),archive:t("Reports","报告"),about:t("About","关于")};
+  $("footer.foot nav").setAttribute("aria-label",t("Record navigation","健康记录导航"));
+  $$("[data-destination]").forEach(a=>a.textContent=destinations[a.dataset.destination]);
+  $("#txt").setAttribute("aria-label", t("Text size", "文字大小"));
+  $("#lang").setAttribute("aria-label", t("Language", "语言"));
+  $("#q").setAttribute("aria-label", t("Search reports", "搜索报告"));
+  const who = D.profile && D.profile.name ? D.profile.name+" · " : "";
+  document.title = who + t("littledocter · Archive","littledocter · 报告库");
+  $("#eyebrow").textContent = t("littledocter · Archive","littledocter · 原始报告");
+  $("#h1").textContent = t("Everything on file","全部在档报告");
+  $("#back").textContent = t("← back to the body","← 返回人体图");
+  $("#q").placeholder = t("Search reports — ferritin, 甲状腺, 2023, ultrasound…",
+                          "搜索报告 — 铁蛋白、甲状腺、2023、超声…");
+  $("#clear").textContent = t("clear","清除");
+  $("#meta").innerHTML = [
+    t(DOCS.length+" documents", DOCS.length+" 份报告"),
+    (S.first_record?yr(S.first_record)+"–"+yr(S.last_record):""),
+    t(nResults+" results read", nResults+" 项结果"),
+    t(nImpr+" impressions", nImpr+" 条结论"),
+    t(withText+" searchable", withText+" 份可全文检索")
+  ].filter(Boolean).map(b=>"<b>"+esc(b)+"</b>").join(" &nbsp;·&nbsp; ");
+  $("#foot").innerHTML = t(
+    'Search covers the printed words, the conclusions, the marker names behind each number, '+
+    'and the file name — type <code>/</code> anywhere to jump to the box. '+
+    'Scans and photographs were read by a vision model; their text is what the model saw, '+
+    'so trust the image over the transcription. <b>Open original</b> resolves to '+
+    '<code>'+esc(D.reports_href||"../reports/")+'</code>, which works when this page is opened '+
+    'locally. To include originals in a shared copy, explicitly use <code>--with-originals</code>.',
+    '搜索范围包括报告原文、结论、每个数字背后的指标名称以及文件名——在任意位置按 <code>/</code> '+
+    '即可跳到搜索框。扫描件与照片由图像模型读取，其文字只是模型所见，如有出入请以图像为准。'+
+    '<b>打开原件</b>指向 <code>'+esc(D.reports_href||"../reports/")+'</code>：'+
+    '在本机打开有效。如需在共享副本中包含原件，请显式使用 <code>--with-originals</code>。');
+  $$("#lang button[data-lang]").forEach(b=>{
+    b.classList.toggle("on", b.dataset.lang===lang);
+    b.setAttribute("aria-pressed", b.dataset.lang===lang ? "true" : "false");
+  });
+  $$("#txt button").forEach((b,i)=> b.title =
+    [t("Normal text","正常字号"), t("Larger text","大字号"),
+     t("Largest text","最大字号")][i]);
+}
+/* focusing a button at the top of the page scrolls the page to it, so the
+   reading position is taken on mousedown — before the browser jumps */
+let markY = null;
+$("#txt").addEventListener("click", e=>{
+  const b = e.target.closest("button[data-text]");
+  if (!b || b.dataset.text===textSize) return;
+  textSize = b.dataset.text;
+  try { localStorage.setItem(LS_TEXT, textSize); } catch(err){}
+  applyText();
+});
+$("#lang").addEventListener("mousedown", ()=>{ markY = scrollY; });
+$("#lang").addEventListener("click", e=>{
+  const b = e.target.closest("button[data-lang]");
+  const y = markY == null ? scrollY : markY;
+  markY = null;
+  if (!b || b.dataset.lang===lang) return;
+  lang = b.dataset.lang;
+  try { localStorage.setItem(LS_KEY, lang); } catch(err){}
+  paintChrome(); drawFilters(); draw();
+  scrollTo({top:y, behavior:"instant"});
+});
+
+/* deep links from a trend or a system report: ?doc=d003, ?sys=liver, ?q=ferritin */
+const params = new URLSearchParams(location.search);
+const wantDoc = params.get("doc") || (location.hash||"").replace("#","");
+const wantSys = params.get("sys") || "";
+if (params.get("q")){ state.q = params.get("q"); $("#q").value = state.q; }
+if (wantSys){ state.sys = wantSys; }
+$("#filter-panel").open = innerWidth>640 || !!wantSys;
+if (wantDoc && DOCS.some(d=>d.id===wantDoc)){ open[wantDoc] = true; lit = wantDoc; }
+paintChrome(); drawFilters(); draw();
+function measureNavigation(){document.documentElement.style.setProperty("--footh",Math.ceil($("footer.foot").getBoundingClientRect().height)+"px");}
+measureNavigation();
+new ResizeObserver(measureNavigation).observe($("footer.foot"));
+if (lit){
+  const el = document.getElementById(lit);
+  if (el) el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches ? "instant" : "smooth", block:"center"});
+  lit = null;                          /* the highlight is a one-off, not a state */
+}
+})();
+</script>
+</body>
+</html>
